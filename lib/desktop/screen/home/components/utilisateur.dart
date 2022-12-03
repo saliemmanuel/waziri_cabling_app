@@ -6,10 +6,16 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_web_data_table/web_data_table.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
+import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 import 'package:waziri_cabling_app/global_widget/card_tips.dart';
 
 import '../../../../global_widget/custom_text.dart';
+import '../widget/utilisateur_table.dart';
 import 'text.dart';
 
 class Utilisateurs extends StatefulWidget {
@@ -22,6 +28,8 @@ class Utilisateurs extends StatefulWidget {
 class _UtilisateursState extends State<Utilisateurs> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
+
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -38,36 +46,37 @@ class _UtilisateursState extends State<Utilisateurs> {
                   const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
               child: AppBar(
                 title:
-                    const CustomText(data: "Utilisateur", color: Colors.black),
+                    const CustomText(data: "Utilisateurs", color: Colors.black),
                 elevation: 0.0,
                 backgroundColor: Palette.scaffold,
                 actions: [
-                  CardTips(
-                    icon: IconlyLight.user,
-                    cardColors: Colors.grey,
-                    iconColors: Colors.black,
-                    title: "SALI EMMANUEL",
-                    titleColors: Colors.black,
-                    onTap: () {},
+                  Consumer(
+                    builder: (context, value, child) => CardTips(
+                      icon: IconlyLight.user,
+                      cardColors: Colors.grey,
+                      iconColors: Colors.black,
+                      title:
+                          "${Provider.of<AuthProvider>(context).user.nomUtilisateur} ${Provider.of<AuthProvider>(context).user.prenomUtilisateur}",
+                      titleColors: Colors.black,
+                      onTap: () {},
+                    ),
                   )
                 ],
               ),
             ),
-            // const Padding(
-            //   padding: EdgeInsets.only(
-            //       top: 20.0, left: 35.0, right: 40.0, bottom: 20.0),
-            //   child: ListTile(
-            //     title: CustomText(data: "Liste utilisateur", fontSize: 15.0),
-            //   ),
-            // ),
-            Expanded(
-                child: Container(
-                    margin: const EdgeInsets.only(
-                        top: 40.0, left: 45.0, right: 45.0, bottom: 40.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18.0)),
-                    child: DataTable2SimpleDemo()))
+            Consumer<HomeProvider>(builder: (context, data, child) {
+              return Expanded(
+                  child: Container(
+                      margin: const EdgeInsets.only(
+                          top: 40.0, left: 45.0, right: 45.0, bottom: 40.0),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18.0)),
+                      child: data.listUtilisateur == null
+                          ? const ShimmerTable()
+                          : UserTable(
+                              userList: data.listUtilisateur['utilisateur'])));
+            })
           ],
         ),
       ),

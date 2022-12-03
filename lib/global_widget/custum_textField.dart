@@ -30,7 +30,7 @@ class CustumTextField extends StatefulWidget {
       this.maxLength,
       this.focusNode,
       this.enabled})
-      : assert(child != null, 'child ne doit être different de null'),
+      : assert(child != null, 'child ne doit pas être null'),
         super(key: key);
 
   @override

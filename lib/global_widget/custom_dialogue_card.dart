@@ -24,6 +24,7 @@ Future simpleDialogueCard(String title, String msg, BuildContext context) {
 Future simpleDialogueCardSansTitle(String msg, BuildContext context) {
   return showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           content: Row(
@@ -151,18 +152,19 @@ Future getCodeAuth(BuildContext context) {
                   Expanded(
                     child: CustumButton(
                         enableButton: true,
-                        bacgroundColor: Colors.red,
-                        child: "Annuler",
+                        bacgroundColor: Palette.teal,
+                        child: "Valider",
                         onPressed: () {
-                          Navigator.pop(context, "Annuler");
+                          Navigator.pop(context, "Valider");
                         }),
                   ),
                   Expanded(
                     child: CustumButton(
                         enableButton: true,
-                        child: "Valider",
+                        bacgroundColor: Colors.red,
+                        child: "Annuler",
                         onPressed: () {
-                          Navigator.pop(context, "Valider");
+                          Navigator.pop(context, "Annuler");
                         }),
                   ),
                 ],

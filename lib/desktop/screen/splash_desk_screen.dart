@@ -25,7 +25,7 @@ class _SplashDeskScreenState extends State<SplashDeskScreen> {
         builder: (context, data, child) {
           var userIslogged = data.userIsLogged;
           if (!userIslogged) return const LoginDeskScreen();
-          return const HomeDeskScreen();
+          return HomeDeskScreen(users: data.user);
         },
       ),
     );

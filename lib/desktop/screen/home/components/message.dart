@@ -37,7 +37,7 @@ class _MessageState extends State<Message> {
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(
-                        left: 45.0, right: 45.0, bottom: 40.0),
+                        left: 45.0, right: 45.0, bottom: 40.0, top: 40.0),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(18.0)),

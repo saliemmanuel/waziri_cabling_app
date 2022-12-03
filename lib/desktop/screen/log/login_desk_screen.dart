@@ -17,7 +17,6 @@ class LoginDeskScreen extends StatefulWidget {
 class _LoginDeskScreenState extends State<LoginDeskScreen> {
   @override
   Widget build(BuildContext context) {
-    var responce = Provider.of<TesteProvide>(context).counter;
     return Scaffold(
       body: Row(children: [
         Expanded(
@@ -45,18 +44,11 @@ class _LoginDeskScreenState extends State<LoginDeskScreen> {
               ),
               const Spacer(),
               const LoginCard(),
-              Text(responce.toString()),
               const Spacer(),
             ],
           ),
         )
       ]),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Provider.of<TesteProvide>(context, listen: false).increment();
-        },
-      ),
     );
   }
 }

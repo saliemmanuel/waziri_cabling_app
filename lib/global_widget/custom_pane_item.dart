@@ -6,6 +6,7 @@ import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
 class CustomPaneItem extends StatelessWidget {
   final Widget? title;
   final Widget icon;
+  final Widget selectedIcon;
   final Widget? infoBadge;
   final Widget? trailing;
   final Widget body;
@@ -20,6 +21,7 @@ class CustomPaneItem extends StatelessWidget {
     Key? key,
     this.title,
     required this.icon,
+    required this.selectedIcon,
     this.infoBadge,
     this.trailing,
     required this.body,
@@ -35,6 +37,7 @@ class CustomPaneItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      borderOnForeground: true,
       child: Row(
         children: [
           Visibility(
@@ -51,7 +54,7 @@ class CustomPaneItem extends StatelessWidget {
           Expanded(
             child: ListTile(
               title: body,
-              leading: icon,
+              leading: isSelected ? selectedIcon : icon,
               trailing: trailing,
               onTap: onPressed,
             ),

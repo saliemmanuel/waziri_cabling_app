@@ -19,7 +19,7 @@ class LoginCard extends StatefulWidget {
 class _LoginCardState extends State<LoginCard> {
   bool checked = false;
   var emailTextEditing = TextEditingController(text: "admin@gmail.com");
-  var passTextEditing = TextEditingController(text: "admin");
+  var passTextEditing = TextEditingController();
   var auth = AuthProvider();
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _LoginCardState extends State<LoginCard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const CustomText(
-              data: "Login To DeskApp",
+              data: "Login To BW - IMAGE",
               color: Palette.primaryColor,
               fontWeight: FontWeight.bold,
               fontSize: 30.0),
@@ -50,10 +50,11 @@ class _LoginCardState extends State<LoginCard> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: ToggleSwitch(
-                checked: checked,
+                checked: Provider.of<AuthProvider>(context).sessionActive,
                 content: const Text("Garder ma session active"),
                 onChanged: (bool value) {
-                  setState(() => checked = value);
+                  Provider.of<AuthProvider>(context, listen: false)
+                      .setSessionActive(session: value);
                 },
               ),
             ),
@@ -61,8 +62,7 @@ class _LoginCardState extends State<LoginCard> {
           const SizedBox(height: 15.0),
           CustumButton(
               enableButton: true,
-              child:
-                  "Se connecter ${Provider.of<AuthProvider>(context).userIsLogged}",
+              child: "Se connecter ",
               onPressed: () async {
                 if (emailTextEditing.text.isEmpty ||
                     passTextEditing.text.isEmpty) {

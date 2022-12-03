@@ -1,4 +1,3 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:waziri_cabling_app/config/config.dart';
@@ -98,51 +97,6 @@ class DataTable2SimpleDemo extends StatelessWidget {
             ],
           ),
           const Divider(),
-          Expanded(
-            child: DataTable2(
-                columnSpacing: 12,
-                horizontalMargin: 12,
-                minWidth: 600,
-                showBottomBorder: true,
-                columns: const [
-                  DataColumn2(
-                      label: CustomText(data: 'N°'), size: ColumnSize.S),
-                  DataColumn2(
-                      label: CustomText(data: 'Nom et prénom'),
-                      size: ColumnSize.L),
-                  DataColumn2(
-                      label: CustomText(
-                        data: 'E-mail',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      size: ColumnSize.L),
-                  DataColumn2(
-                      label: CustomText(data: 'Téléphone'), size: ColumnSize.M),
-                  DataColumn2(
-                      label: CustomText(
-                        data: 'Rôle',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      size: ColumnSize.S),
-                  DataColumn2(
-                      label: CustomText(
-                        data: 'Zone',
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      size: ColumnSize.S),
-                  DataColumn2(
-                      label: CustomText(data: 'Action'), size: ColumnSize.S),
-                ], // DataCell(CustomText(data: e['id'].toString())),
-                rows: list
-                    .map((e) => DataRow(
-                          cells: e.values
-                              .map((value) => DataCell(CustomText(
-                                    data: value.toString(),
-                                  )))
-                              .toList(),
-                        ))
-                    .toList()),
-          ),
         ],
       ),
     );

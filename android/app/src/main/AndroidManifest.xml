@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sali.emmanuel.waziri_cabling_app">
    <application
-        android:label="waziri_cabling_app"
+        android:label="BW - IMAGE App"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

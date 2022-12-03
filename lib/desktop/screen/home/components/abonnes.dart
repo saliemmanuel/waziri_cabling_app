@@ -1,21 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
 
-class Charges extends StatefulWidget {
-  const Charges({super.key});
+class Abonne extends StatelessWidget {
+  const Abonne({super.key});
 
-  @override
-  State<Charges> createState() => _ChargesState();
-}
-
-class _ChargesState extends State<Charges> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.scaffold,
@@ -29,10 +20,13 @@ class _ChargesState extends State<Charges> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
+              padding: const EdgeInsets.only(
+                top: 20.0,
+                left: 45.0,
+                right: 45.0,
+              ),
               child: AppBar(
-                title: const CustomText(data: "Charges", color: Colors.black),
+                title: const CustomText(data: "Abonnés", color: Colors.black),
                 elevation: 0.0,
                 backgroundColor: Palette.scaffold,
               ),

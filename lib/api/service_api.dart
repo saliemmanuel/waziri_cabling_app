@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cherry_toast/cherry_toast.dart';
-import 'package:cherry_toast/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 
 import '../desktop/screen/log/provider/auth_provider.dart';
 import '../global_widget/custom_dialogue_card.dart';
@@ -22,33 +19,6 @@ class ServiceApi {
   }
 
   // inscription
-  getSingIn({String? email, String? mdp, var context}) async {
-    try {
-      simpleDialogueCardSansTitle("Patientez svp ...", context);
-      var data = await http.post(host.baseUrl(endpoint: 'kldks'), body: {
-        "key": 'fifete',
-        'service': 'inscription',
-        "mdp_utilisateur": mdp,
-        "grade_utilisateur": 'internaute'
-      }).timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode == 200) {
-        var response = jsonDecode(data.body);
-        if (response['error'] == '0') {
-        } else {
-          Navigator.pop(context);
-          errorDialogueCard("Erreur !", "${response['message']}", context);
-        }
-      }
-    } catch (e) {
-      errorDialogueCard("Erreur !", "$e", context)
-          .then((value) => Navigator.pop(context));
-    }
-  }
-
-  // inscription
   connexion({String? email, String? password, var context}) async {
     dynamic response;
     try {
@@ -56,7 +26,7 @@ class ServiceApi {
       if (isEmail(email!)) {
         var data = await http.post(
             host.baseUrl(endpoint: "utilisateur/connexion"),
-            headers: host.headers,
+            headers: host.headers(""),
             body: {
               "email": email,
               'password': password,
@@ -74,17 +44,131 @@ class ServiceApi {
         if (data.statusCode == 200) {
           response = jsonDecode(data.body);
           Navigator.pop(context);
-          print(Provider.of<AuthProvider>(context, listen: false).userIsLogged);
-
+          Provider.of<AuthProvider>(context, listen: false)
+              .userData(token: response['token']);
+          print(response);
           return true;
         }
       } else {
         echecTransaction("Entrez un e-mail valide", context!);
+        return false;
       }
     } catch (e) {
       errorDialogueCard("Erreur !", "$e", context)
           .then((value) => Navigator.pop(context));
       return false;
     }
+  }
+
+  getUserData({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "utilisateur/user-data"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return jsonDecode(data.body);
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
+  }
+
+  deconnexion({String? token, var context}) async {
+    try {
+      simpleDialogueCardSansTitle("Déconnexion...", context);
+      var data = await http
+          .get(host.baseUrl(endpoint: "utilisateur/deconnexion"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la déconnexion", context);
+        return true;
+      }
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        return false;
+      }
+    } catch (e) {}
+  }
+
+  addUtilisateur({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "utilisateur/store"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
+  }
+
+  getListUtilisateur({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "utilisateur/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
+  }
+
+  getListSecteur({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "secteur/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
+  }
+
+  addSecteur({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "utilisateur/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
   }
 }

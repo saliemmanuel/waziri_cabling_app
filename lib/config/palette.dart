@@ -7,6 +7,8 @@ class Palette {
   static const Color sideBarColor = Color(0xFF1C212D);
   static const Color backgroundColor = Color.fromARGB(255, 227, 235, 243);
   static const Color fadeColors = Color(0xFFF3F8FC);
+  static const Color teal = Colors.teal;
+  static const Color red = Colors.red;
 
   static const Color primaryColor = Color(0xFF1B00FF);
   static const MaterialColor swatch = MaterialColor(0xFF1B00FF, {
