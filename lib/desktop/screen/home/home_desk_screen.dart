@@ -4,6 +4,7 @@ import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/abonnes.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/secteurs.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/users.dart';
@@ -33,14 +34,14 @@ class HomeDeskScreen extends StatefulWidget {
   State<HomeDeskScreen> createState() => _HomeDeskScreenState();
 }
 
-int topIndex = 0;
+var code = TextEditingController();
 
 class _HomeDeskScreenState extends State<HomeDeskScreen> {
   @override
   Widget build(BuildContext context) {
     var listPage = [
       const Accueil(),
-      const Utilisateurs(),
+      Utilisateurs(user: widget.users!),
       const Materiel(),
       const Pannes(),
       const Factures(),
@@ -60,7 +61,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           selectedIcon:
               const Icon(IconlyBold.home, color: Palette.primaryColor),
           index: 0,
-          onPressed: () => setState(() => topIndex = 0)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 0);
+          }),
       CustomPaneItem(
           body: Text('Utilisateur',
               style: GoogleFonts.cabin(color: Colors.black)),
@@ -69,7 +73,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           selectedIcon:
               const Icon(IconlyBold.user_3, color: Palette.primaryColor),
           index: 1,
-          onPressed: () => setState(() => topIndex = 1)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 1);
+          }),
       CustomPaneItem(
           body: Text('Matériel', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.category, color: Colors.black),
@@ -77,7 +84,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.category, color: Palette.primaryColor),
           isSelected: false,
           index: 2,
-          onPressed: () => setState(() => topIndex = 2)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 2);
+          }),
       CustomPaneItem(
           body: Text('Pannes', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.paper_fail, color: Colors.black),
@@ -85,7 +95,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.paper_fail, color: Palette.primaryColor),
           isSelected: false,
           index: 3,
-          onPressed: () => setState(() => topIndex = 3)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 3);
+          }),
       CustomPaneItem(
           body: Text('Factures', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.document, color: Colors.black),
@@ -93,7 +106,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           selectedIcon:
               const Icon(IconlyBold.document, color: Palette.primaryColor),
           index: 4,
-          onPressed: () => setState(() => topIndex = 4)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 4);
+          }),
       CustomPaneItem(
           body: Text('Abonnés', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.user_1, color: Colors.black),
@@ -101,7 +117,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           selectedIcon:
               const Icon(IconlyBold.user_3, color: Palette.primaryColor),
           index: 5,
-          onPressed: () => setState(() => topIndex = 5)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 5);
+          }),
       CustomPaneItem(
           body:
               Text('Versements', style: GoogleFonts.cabin(color: Colors.black)),
@@ -110,7 +129,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.arrow_down, color: Palette.primaryColor),
           isSelected: false,
           index: 6,
-          onPressed: () => setState(() => topIndex = 6)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 6);
+          }),
       CustomPaneItem(
           body: Text('Comptabilté',
               style: GoogleFonts.cabin(color: Colors.black)),
@@ -119,11 +141,23 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.chart, color: Palette.primaryColor),
           isSelected: false,
           index: 7,
-          onPressed: () async {
-            var res = await getCodeAuth(context);
-            if (res == "Valider") {
-              setState(() => topIndex = 7);
-            }
+          onPressed: () {
+            getCodeAuth(
+                context: context,
+                idAdmin: widget.users!.id.toString(),
+                onCall: () async {
+                  var res =
+                      await Provider.of<AuthProvider>(context, listen: false)
+                          .codeAuth(
+                              idAmin: widget.users!.id.toString(),
+                              code: code.text.toString(),
+                              context: context);
+                  if (res) {
+                    Provider.of<HomeProvider>(context, listen: false)
+                        .changeBody(index: 7);
+                    code.clear();
+                  }
+                });
           }),
       CustomPaneItem(
         body: Text('Charges', style: GoogleFonts.cabin(color: Colors.black)),
@@ -131,7 +165,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
         isSelected: false,
         selectedIcon: const Icon(IconlyBold.buy, color: Palette.primaryColor),
         index: 8,
-        onPressed: () => setState(() => topIndex = 8),
+        onPressed: () {
+          Provider.of<HomeProvider>(context, listen: false)
+              .changeBody(index: 8);
+        },
       ),
       CustomPaneItem(
         body: Text('Message', style: GoogleFonts.cabin(color: Colors.black)),
@@ -140,7 +177,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
             const Icon(IconlyBold.message, color: Palette.primaryColor),
         isSelected: false,
         index: 9,
-        onPressed: () => setState(() => topIndex = 9),
+        onPressed: () {
+          Provider.of<HomeProvider>(context, listen: false)
+              .changeBody(index: 9);
+        },
       ),
       CustomPaneItem(
           body: Text('Secteurs', style: GoogleFonts.cabin(color: Colors.black)),
@@ -149,7 +189,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.graph, color: Palette.primaryColor),
           isSelected: false,
           index: 10,
-          onPressed: () => setState(() => topIndex = 10)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 10);
+          }),
       CustomPaneItem(
           body:
               Text('Paramètres', style: GoogleFonts.cabin(color: Colors.black)),
@@ -158,7 +201,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               const Icon(IconlyBold.setting, color: Palette.primaryColor),
           isSelected: false,
           index: 11,
-          onPressed: () => setState(() => topIndex = 11)),
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 11);
+          }),
     ];
     return Scaffold(
       backgroundColor: Palette.scaffold,
@@ -185,7 +231,9 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                         CustomPaneItem(
                           icon: listItem[i].icon,
                           body: listItem[i].body,
-                          isSelected: topIndex == listItem[i].index,
+                          isSelected:
+                              Provider.of<HomeProvider>(context).topIndex ==
+                                  listItem[i].index,
                           index: listItem[i].index,
                           onPressed: listItem[i].onPressed,
                           selectedIcon: listItem[i].selectedIcon,
@@ -193,7 +241,11 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                     ]),
                   ),
                 ),
-                Expanded(child: listPage[topIndex]),
+                Expanded(child: Consumer<HomeProvider>(
+                  builder: (context, value, child) {
+                    return listPage[value.topIndex];
+                  },
+                )),
               ],
             )),
             Padding(

@@ -15,11 +15,13 @@ import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dar
 import 'package:waziri_cabling_app/global_widget/card_tips.dart';
 
 import '../../../../global_widget/custom_text.dart';
+import '../../../../models/users.dart';
 import '../widget/utilisateur_table.dart';
 import 'text.dart';
 
 class Utilisateurs extends StatefulWidget {
-  const Utilisateurs({super.key});
+  final Users user;
+  const Utilisateurs({super.key, required this.user});
 
   @override
   State<Utilisateurs> createState() => _UtilisateursState();
@@ -29,7 +31,6 @@ class _UtilisateursState extends State<Utilisateurs> {
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
-
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -64,19 +65,25 @@ class _UtilisateursState extends State<Utilisateurs> {
                 ],
               ),
             ),
-            Consumer<HomeProvider>(builder: (context, data, child) {
-              return Expanded(
-                  child: Container(
-                      margin: const EdgeInsets.only(
-                          top: 40.0, left: 45.0, right: 45.0, bottom: 40.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(18.0)),
-                      child: data.listUtilisateur == null
-                          ? const ShimmerTable()
-                          : UserTable(
-                              userList: data.listUtilisateur['utilisateur'])));
-            })
+            Expanded(
+                child: Container(
+                    margin: const EdgeInsets.only(
+                        left: 45.0, right: 45.0, bottom: 40.0, top: 40.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18.0)),
+                    child: Consumer<HomeProvider>(
+                      builder: (context, value, child) {
+                        return SizedBox(
+                          child: value.listUtilisateur == null
+                              ? const ShimmerTable()
+                              : UserTable(
+                                  userList:
+                                      value.listUtilisateur['utilisateur'],
+                                  users: widget.user),
+                        );
+                      },
+                    )))
           ],
         ),
       ),

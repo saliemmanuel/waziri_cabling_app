@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
+import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/widget/secteur_table.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../widget/shimmer_table.dart';
 
 class Secteurs extends StatelessWidget {
   const Secteurs({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -39,7 +43,16 @@ class Secteurs extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(18.0)),
-                    child: DataTable2SimpleDemo()))
+                    child: Consumer<HomeProvider>(
+                      builder: (context, value, child) {
+                        return SizedBox(
+                          child: value.listSecteur == null
+                              ? const ShimmerTable()
+                              : SecteurTable(
+                                  listSecteur: value.listSecteur['secteurs']),
+                        );
+                      },
+                    )))
           ],
         ),
       ),

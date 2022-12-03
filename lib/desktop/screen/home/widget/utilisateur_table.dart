@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/action_dialogue.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/add_new_user.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/edite_user.dart';
@@ -8,10 +10,14 @@ import 'package:waziri_cabling_app/desktop/screen/home/widget/edite_user.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
+import '../../../../models/users.dart';
+import '../../log/provider/auth_provider.dart';
+import '../home_desk_screen.dart';
 
 class UserTable extends StatefulWidget {
   final userList;
-  const UserTable({super.key, required this.userList});
+  final Users users;
+  const UserTable({super.key, required this.userList, required this.users});
 
   @override
   State<UserTable> createState() => _UserTableState();
@@ -26,8 +32,6 @@ class _UserTableState extends State<UserTable> {
 
     super.initState();
   }
-
-  List i = [];
 
   @override
   Widget build(BuildContext context) {
@@ -94,12 +98,12 @@ class _UserTableState extends State<UserTable> {
                       label: CustomText(
                           data: 'E-mail', overflow: TextOverflow.ellipsis)),
                   DataColumn(label: CustomText(data: 'Téléphone')),
-                  DataColumn(
-                      label: CustomText(
-                          data: 'Rôle', overflow: TextOverflow.ellipsis)),
-                  DataColumn(
-                      label: CustomText(
-                          data: 'Secteur', overflow: TextOverflow.ellipsis)),
+                  // DataColumn(
+                  //     label: CustomText(
+                  //         data: 'Rôle', overflow: TextOverflow.ellipsis)),
+                  // DataColumn(
+                  //     label: CustomText(
+                  //         data: 'Secteur', overflow: TextOverflow.ellipsis)),
                   DataColumn(label: CustomText(data: '   Action')),
                 ],
                 rows: [
@@ -123,10 +127,6 @@ class _UserTableState extends State<UserTable> {
                         DataCell(CustomText(
                             data: _foundUsers![index]['telephone_utilisateur']
                                 .toString())),
-                        DataCell(CustomText(
-                            data: _foundUsers![index]['role_utilisateur'])),
-                        DataCell(CustomText(
-                            data: _foundUsers![index]['zone_utilisateur'])),
                         DataCell(Row(children: [
                           Expanded(
                             child: MaterialButton(
@@ -143,12 +143,60 @@ class _UserTableState extends State<UserTable> {
                           const SizedBox(width: 10.0),
                           Expanded(
                             child: MaterialButton(
+                                color: Palette.online,
+                                child: const CustomText(
+                                    data: "Détail", color: Colors.white),
+                                onPressed: () async {}),
+                          ),
+                          const SizedBox(width: 10.0),
+                          Expanded(
+                            child: MaterialButton(
                                 color: Colors.red,
+                                onPressed: widget.userList![index]['id'] ==
+                                        widget.users.id
+                                    ? null
+                                    : () async {
+                                        getCodeAuth(
+                                            context: context,
+                                            idAdmin: widget.users.id.toString(),
+                                            onCall: () async {
+                                              var res = await Provider.of<
+                                                          AuthProvider>(context,
+                                                      listen: false)
+                                                  .codeAuth(
+                                                      idAmin: widget.users.id
+                                                          .toString(),
+                                                      code:
+                                                          code.text.toString(),
+                                                      context: context);
+                                              if (res) {
+                                                // ignore: use_build_context_synchronously
+                                                Provider.of<HomeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .getDeleteUser(
+                                                        email:
+                                                            _foundUsers![index]
+                                                                    ['email']
+                                                                .toString(),
+                                                        idUser:
+                                                            _foundUsers![index]
+                                                                    ['id']
+                                                                .toString(),
+                                                        context: context);
+                                                print("delete");
+                                                print(_foundUsers![index]);
+                                                // ignore: use_build_context_synchronously
+                                                Provider.of<HomeProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .providelistUtilisateur();
+                                              }
+                                              code.clear();
+                                            });
+                                      },
                                 child: const Icon(IconlyBold.delete,
-                                    color: Colors.white),
-                                onPressed: () async {
-                                  var res = await getCodeAuth(context);
-                                }),
+                                    color: Colors.white)),
                           ),
                         ])),
                       ],

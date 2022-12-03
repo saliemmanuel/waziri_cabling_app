@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/models/secteur.dart';
 
 import '../desktop/screen/log/provider/auth_provider.dart';
 import '../global_widget/custom_dialogue_card.dart';
@@ -54,7 +55,7 @@ class ServiceApi {
         return false;
       }
     } catch (e) {
-      errorDialogueCard("Erreur !", "$e", context)
+      errorDialogueCard("Erreur", "$e", context)
           .then((value) => Navigator.pop(context));
       return false;
     }
@@ -154,20 +155,105 @@ class ServiceApi {
     } catch (e) {}
   }
 
-  addSecteur({String? token}) async {
+  addSecteur(
+      {String? token, Secteur? secteur, required BuildContext? context}) async {
     try {
-      var data = await http
-          .get(host.baseUrl(endpoint: "utilisateur/index"),
-              headers: host.headers(token!))
-          .timeout(const Duration(seconds: 10), onTimeout: () {
+      simpleDialogueCardSansTitle("Patientez svp...", context!);
+
+      var data = await http.post(
+          host.baseUrl(endpoint: "secteur/ajout-secteur"),
+          headers: host.headers(token!),
+          body: {
+            "designation_secteur": secteur!.designationSecteur,
+            "description_secteur": secteur.descriptionSecteur
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
+      print(data.statusCode);
+      print(data.body);
       if (data.statusCode > 300) {
-        return [];
+        var response = await jsonDecode(data.body);
+
+        Navigator.pop(context);
+        echecTransaction(
+            "Erreur lors de la création. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
-        return jsonDecode(data.body);
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+      }
+    } catch (e) {}
+  }
+
+  getAuthCode(
+      {String? code,
+      String? idAmin,
+      String? token,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle("Patientez svp...", context!);
+
+      var data = await http.post(host.baseUrl(endpoint: "code/get-code"),
+          headers: host.headers(token!),
+          body: {
+            "code_admin": code,
+            "id_admin": idAmin
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print("*************");
+      print(data.statusCode);
+      print(data.body);
+      print(code);
+      print(idAmin);
+
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          Navigator.pop(context);
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
+      }
+    } catch (e) {}
+  }
+
+  deleteUser(
+      {String? idUser,
+      String? email,
+      String? token,
+      required var context}) async {
+    try {
+      var data = await http.post(
+          host.baseUrl(endpoint: "utilisateur/delete-user"),
+          headers: host.headers(token!),
+          body: {
+            "id": idUser,
+            "email": email
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print("*************");
+      print(data.statusCode);
+      print(data.body);
+      print(email);
+      print(idUser);
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
       }
     } catch (e) {}
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
+import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 
 import 'widget.dart';
 
@@ -136,9 +138,11 @@ Future succesTransaction(String msg, BuildContext context) {
       });
 }
 
-Future getCodeAuth(BuildContext context) {
+Future getCodeAuth(
+    {required BuildContext context,
+    required var idAdmin,
+    required VoidCallback onCall}) {
   return showDialog(
-      //
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -146,7 +150,8 @@ Future getCodeAuth(BuildContext context) {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const CustumTextField(child: "Code", obscureText: true),
+              CustumTextField(
+                  child: "Code", obscureText: true, controller: code),
               Row(
                 children: [
                   Expanded(
@@ -154,9 +159,7 @@ Future getCodeAuth(BuildContext context) {
                         enableButton: true,
                         bacgroundColor: Palette.teal,
                         child: "Valider",
-                        onPressed: () {
-                          Navigator.pop(context, "Valider");
-                        }),
+                        onPressed: onCall),
                   ),
                   Expanded(
                     child: CustumButton(
