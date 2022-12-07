@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/widget.dart';
 import '../../../../models/users.dart';
 
 class Parametres extends StatefulWidget {
@@ -15,6 +17,7 @@ class Parametres extends StatefulWidget {
 }
 
 class _ParametresState extends State<Parametres> {
+  var code = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var user = Provider.of<AuthProvider>(context).user;
@@ -27,8 +30,7 @@ class _ParametresState extends State<Parametres> {
         decoration: BoxDecoration(
             color: Palette.backgroundColor,
             borderRadius: BorderRadius.circular(10.0)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: ListView(
           children: [
             Padding(
               padding:
@@ -44,6 +46,7 @@ class _ParametresState extends State<Parametres> {
                 child: Container(
               margin: const EdgeInsets.only(
                   left: 45.0, right: 45.0, bottom: 40.0, top: 40.0),
+              padding: const EdgeInsets.all(25.0),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18.0)),
@@ -54,19 +57,55 @@ class _ParametresState extends State<Parametres> {
                   ListTile(title: Text(user.prenomUtilisateur.toString())),
                   ListTile(title: Text(user.roleUtilisateur.toString())),
                   ListTile(title: Text(user.telephoneUtilisateur.toString())),
-                  ListTile(title: Text(user.zoneUtilisateur.toString()))
+                  ListTile(title: Text(user.zoneUtilisateur.toString())),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 375.0,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: CustumTextField(
+                                child: "Code",
+                                obscureText: true,
+                                controller: code,
+                              ),
+                            ),
+                          ),
+                          CustumButton(
+                            enableButton: true,
+                            child: "   Enregistrez   ",
+                            bacgroundColor: Colors.teal,
+                            onPressed: () {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .getInsertAdministrationCode(
+                                      idUser: widget.users!.id.toString(),
+                                      codeAdmin: code.text,
+                                      context: context);
+                            },
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ))
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.logout),
-        onPressed: () {
-          Provider.of<AuthProvider>(context, listen: false)
-              .logout(context: context);
-        },
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 50.0, right: 50.0),
+        child: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.logout),
+          onPressed: () {
+            Provider.of<AuthProvider>(context, listen: false)
+                .logout(context: context);
+          },
+        ),
       ),
     );
   }

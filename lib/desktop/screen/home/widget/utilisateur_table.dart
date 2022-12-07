@@ -13,25 +13,13 @@ import '../../../../global_widget/widget.dart';
 import '../../../../models/users.dart';
 import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
+import 'detail_utilisateur.dart';
 
-class UserTable extends StatefulWidget {
+class UserTable extends StatelessWidget {
   final userList;
   final Users users;
+
   const UserTable({super.key, required this.userList, required this.users});
-
-  @override
-  State<UserTable> createState() => _UserTableState();
-}
-
-class _UserTableState extends State<UserTable> {
-  var _foundUsers;
-
-  @override
-  void initState() {
-    _foundUsers = widget.userList;
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +30,7 @@ class _UserTableState extends State<UserTable> {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste des utilisateurs (${_foundUsers.length ?? ""})"),
+                  data: "Liste des utilisateurs (${userList.length ?? ""})"),
               const SizedBox(width: 70.0),
               Container(
                 alignment: Alignment.center,
@@ -53,10 +41,10 @@ class _UserTableState extends State<UserTable> {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: Expanded(
+                child: const Expanded(
                     child: TextField(
-                  onChanged: (value) => runFilter(value),
-                  decoration: const InputDecoration(
+                  // onChanged: (value) => runFilter(value),
+                  decoration: InputDecoration(
                       hintText: "Search", border: InputBorder.none),
                 )),
               ),
@@ -82,7 +70,11 @@ class _UserTableState extends State<UserTable> {
                   ),
                 ),
                 onTap: () {
-                  actionDialogue(context: context, child: const AddNewUser());
+                  actionDialogue(
+                      context: context,
+                      child: AddNewUser(
+                        users: users,
+                      ));
                 },
               ),
             ],
@@ -107,7 +99,7 @@ class _UserTableState extends State<UserTable> {
                   DataColumn(label: CustomText(data: '   Action')),
                 ],
                 rows: [
-                  for (var index = 0; index < widget.userList!.length; index++)
+                  for (var index = 0; index < userList!.length; index++)
                     DataRow(
                       color: index % 2 == 0
                           ? MaterialStateProperty.all(
@@ -118,14 +110,14 @@ class _UserTableState extends State<UserTable> {
                         DataCell(
                           CustomText(
                             data:
-                                "${_foundUsers![index]['nom_utilisateur']} ${_foundUsers![index]['prenom_utilisateur']}",
+                                "${userList![index]['nom_utilisateur']} ${userList![index]['prenom_utilisateur']}",
                           ),
                         ),
                         DataCell(CustomText(
-                          data: _foundUsers![index]['email'],
+                          data: userList![index]['email'],
                         )),
                         DataCell(CustomText(
-                            data: _foundUsers![index]['telephone_utilisateur']
+                            data: userList![index]['telephone_utilisateur']
                                 .toString())),
                         DataCell(Row(children: [
                           Expanded(
@@ -135,8 +127,8 @@ class _UserTableState extends State<UserTable> {
                                     color: Colors.white),
                                 onPressed: () {
                                   actionDialogue(
-                                      child: EditeUser(
-                                          userData: _foundUsers![index]),
+                                      child:
+                                          EditeUser(userData: userList![index]),
                                       context: context);
                                 }),
                           ),
@@ -146,26 +138,45 @@ class _UserTableState extends State<UserTable> {
                                 color: Palette.online,
                                 child: const CustomText(
                                     data: "Détail", color: Colors.white),
-                                onPressed: () async {}),
+                                onPressed: () async {
+                                  actionDialogue(
+                                      child: DetailUtilisateur(
+                                        users: Users(
+                                            prenomUtilisateur: userList![index]
+                                                ['prenom_utilisateur'],
+                                            nomUtilisateur: userList![index]
+                                                ['nom_utilisateur'],
+                                            roleUtilisateur: userList![index]
+                                                ['prenom_utilisateur'],
+                                            email: userList![index]
+                                                ['prenom_utilisateur'],
+                                            telephoneUtilisateur: userList![
+                                                        index]
+                                                    ['telephone_utilisateur']
+                                                .toString(),
+                                            zoneUtilisateur: userList![index]
+                                                ['prenom_utilisateur']),
+                                      ),
+                                      context: context);
+                                }),
                           ),
                           const SizedBox(width: 10.0),
                           Expanded(
                             child: MaterialButton(
                                 color: Colors.red,
-                                onPressed: widget.userList![index]['id'] ==
-                                        widget.users.id
+                                onPressed: userList![index]['id'] == users.id
                                     ? null
                                     : () async {
                                         getCodeAuth(
                                             context: context,
-                                            idAdmin: widget.users.id.toString(),
+                                            idAdmin: users.id.toString(),
                                             onCall: () async {
                                               var res = await Provider.of<
                                                           AuthProvider>(context,
                                                       listen: false)
                                                   .codeAuth(
-                                                      idAmin: widget.users.id
-                                                          .toString(),
+                                                      idAmin:
+                                                          users.id.toString(),
                                                       code:
                                                           code.text.toString(),
                                                       context: context);
@@ -175,17 +186,15 @@ class _UserTableState extends State<UserTable> {
                                                         context,
                                                         listen: false)
                                                     .getDeleteUser(
-                                                        email:
-                                                            _foundUsers![index]
-                                                                    ['email']
-                                                                .toString(),
-                                                        idUser:
-                                                            _foundUsers![index]
-                                                                    ['id']
-                                                                .toString(),
+                                                        email: userList![index]
+                                                                ['email']
+                                                            .toString(),
+                                                        idUser: userList![index]
+                                                                ['id']
+                                                            .toString(),
                                                         context: context);
                                                 print("delete");
-                                                print(_foundUsers![index]);
+                                                print(userList![index]);
                                                 // ignore: use_build_context_synchronously
                                                 Provider.of<HomeProvider>(
                                                         context,
@@ -206,22 +215,5 @@ class _UserTableState extends State<UserTable> {
             ),
           ),
         ]));
-  }
-
-  var results = [];
-  void runFilter(String enteredKeyword) {
-    if (enteredKeyword.isEmpty) {
-      results = _foundUsers;
-      print(results);
-    } else {
-      results = widget.userList.where((user) => user["nom_utilisateur"]
-          .toLowerCase()
-          .contains(enteredKeyword.toLowerCase())
-          .toList());
-    }
-    //
-    _foundUsers = results;
-
-    setState(() {});
   }
 }

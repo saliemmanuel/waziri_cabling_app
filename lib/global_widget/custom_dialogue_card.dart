@@ -23,17 +23,18 @@ Future simpleDialogueCard(String title, String msg, BuildContext context) {
       });
 }
 
-Future simpleDialogueCardSansTitle(String msg, BuildContext context) {
+Future simpleDialogueCardSansTitle(
+    {String? msg, BuildContext? context, bool? barrierDismissible = false}) {
   return showDialog(
-      context: context,
-      barrierDismissible: false,
+      context: context!,
+      barrierDismissible: barrierDismissible!,
       builder: (BuildContext context) {
         return AlertDialog(
           content: Row(
             children: [
               const CircularProgressIndicator(color: Palette.primaryColor),
               const SizedBox(width: 15.0),
-              Text(msg)
+              Text(msg!)
             ],
           ),
         );

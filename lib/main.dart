@@ -14,11 +14,10 @@ void main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-      // minimumSize: Size(1200, 600),
-      center: true,
-      skipTaskbar: false,
-      titleBarStyle: TitleBarStyle.hidden,
-      fullScreen: true);
+    minimumSize: Size(1200, 600),
+    center: true,
+    title: "BW - IMAGE",
+  );
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();

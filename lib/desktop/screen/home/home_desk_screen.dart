@@ -50,7 +50,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       const Comptabilite(),
       const Charges(),
       const Message(),
-      const Secteurs(),
+      Secteurs(users: widget.users!),
       Parametres(users: widget.users),
     ];
     var listItem = [
@@ -212,7 +212,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const CustomWindowsButton(),
+            // const CustomWindowsButton(),
             Expanded(
                 child: Row(
               children: [

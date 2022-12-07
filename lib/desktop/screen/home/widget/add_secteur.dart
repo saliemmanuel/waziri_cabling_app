@@ -1,14 +1,21 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
 
 class AddSecteur extends StatefulWidget {
-  const AddSecteur({super.key});
+  final Users users;
+  const AddSecteur({
+    Key? key,
+    required this.users,
+  }) : super(key: key);
 
   @override
   State<AddSecteur> createState() => _AddSecteurState();
@@ -58,7 +65,10 @@ class _AddSecteurState extends State<AddSecteur> {
                             designationSecteur: designation.text,
                             descriptionSecteur: description.text);
                         Provider.of<HomeProvider>(context, listen: false)
-                            .addSecteur(secteur: secteur, context: context);
+                            .addSecteur(
+                                secteur: secteur,
+                                context: context,
+                                idUser: widget.users.id.toString());
                         Provider.of<HomeProvider>(context, listen: false)
                             .provideListSecteur();
                       }),

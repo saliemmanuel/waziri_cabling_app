@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/secteur_table.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../widget/shimmer_table.dart';
 
 class Secteurs extends StatelessWidget {
-  const Secteurs({super.key});
+  final Users users;
+  const Secteurs({super.key, required this.users});
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,7 @@ class Secteurs extends StatelessWidget {
                           child: value.listSecteur == null
                               ? const ShimmerTable()
                               : SecteurTable(
+                                  users: users,
                                   listSecteur: value.listSecteur['secteurs']),
                         );
                       },

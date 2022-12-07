@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../desktop/screen/log/provider/auth_provider.dart';
 import '../global_widget/custom_dialogue_card.dart';
@@ -23,7 +24,11 @@ class ServiceApi {
   connexion({String? email, String? password, var context}) async {
     dynamic response;
     try {
-      simpleDialogueCardSansTitle("Patientez svp ...", context);
+      simpleDialogueCardSansTitle(
+        msg: "Patientez svp ...",
+        context: context,
+        barrierDismissible: true,
+      );
       if (isEmail(email!)) {
         var data = await http.post(
             host.baseUrl(endpoint: "utilisateur/connexion"),
@@ -81,7 +86,8 @@ class ServiceApi {
 
   deconnexion({String? token, var context}) async {
     try {
-      simpleDialogueCardSansTitle("Déconnexion...", context);
+      simpleDialogueCardSansTitle(
+          msg: "Déconnexion...", context: context, barrierDismissible: true);
       var data = await http
           .get(host.baseUrl(endpoint: "utilisateur/deconnexion"),
               headers: host.headers(token!))
@@ -97,24 +103,6 @@ class ServiceApi {
       if (data.statusCode == 200) {
         Navigator.pop(context);
         return false;
-      }
-    } catch (e) {}
-  }
-
-  addUtilisateur({String? token}) async {
-    try {
-      var data = await http
-          .get(host.baseUrl(endpoint: "utilisateur/store"),
-              headers: host.headers(token!))
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode > 300) {
-        return [];
-      }
-      if (data.statusCode == 200) {
-        return jsonDecode(data.body);
       }
     } catch (e) {}
   }
@@ -156,20 +144,26 @@ class ServiceApi {
   }
 
   addSecteur(
-      {String? token, Secteur? secteur, required BuildContext? context}) async {
+      {String? token,
+      Secteur? secteur,
+      required BuildContext? context,
+      required var idUser}) async {
     try {
-      simpleDialogueCardSansTitle("Patientez svp...", context!);
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
 
       var data = await http.post(
           host.baseUrl(endpoint: "secteur/ajout-secteur"),
           headers: host.headers(token!),
           body: {
             "designation_secteur": secteur!.designationSecteur,
-            "description_secteur": secteur.descriptionSecteur
+            "description_secteur": secteur.descriptionSecteur,
+            "id_users": idUser,
           }).timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
+      print('******************');
       print(data.statusCode);
       print(data.body);
       if (data.statusCode > 300) {
@@ -193,7 +187,8 @@ class ServiceApi {
       String? token,
       required var context}) async {
     try {
-      simpleDialogueCardSansTitle("Patientez svp...", context!);
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
 
       var data = await http.post(host.baseUrl(endpoint: "code/get-code"),
           headers: host.headers(token!),
@@ -255,6 +250,82 @@ class ServiceApi {
           return response['statut'];
         }
       }
+    } catch (e) {}
+  }
+
+  storeAdministrationCode(
+      {String? idUser,
+      String? codeAdmin,
+      String? token,
+      required var context}) async {
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "code/store"),
+          headers: host.headers(token!),
+          body: {
+            "code_admin": codeAdmin,
+            "id_admin": idUser
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      // print("*************");
+      // print(data.statusCode);
+      print(data.body);
+      // print(codeAdmin);
+      // print(idUser);
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
+      }
+    } catch (e) {}
+  }
+
+  addUtilisateur(
+      {String? token,
+      Users? users,
+      required String idUtilisateurInitiateur,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+      var data = await http.post(
+          host.baseUrl(endpoint: "utilisateur/ajout-user"),
+          headers: host.headers(token!),
+          body: {
+            'nom_utilisateur': users!.nomUtilisateur,
+            'prenom_utilisateur': users.prenomUtilisateur,
+            'email': users.email,
+            'telephone_utilisateur': users.telephoneUtilisateur,
+            'role_utilisateur': users.roleUtilisateur,
+            'zone_utilisateur': users.zoneUtilisateur,
+            'id_utilisateur_initiateur': idUtilisateurInitiateur,
+            'password': users.roleUtilisateur
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        var response = await jsonDecode(data.body);
+
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la création.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+      }
+
+      print(data.body);
+      print("*************");
+      print(data.statusCode);
+      print(data.body);
     } catch (e) {}
   }
 }

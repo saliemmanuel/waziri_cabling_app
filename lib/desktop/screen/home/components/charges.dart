@@ -16,7 +16,7 @@ class Charges extends StatefulWidget {
 
 class _ChargesState extends State<Charges> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context2) {
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(

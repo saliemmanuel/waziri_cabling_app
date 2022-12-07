@@ -3,6 +3,7 @@ import 'package:iconly/iconly.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/add_secteur.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
@@ -12,7 +13,9 @@ import 'detail_seteur.dart';
 
 class SecteurTable extends StatelessWidget {
   final listSecteur;
-  const SecteurTable({super.key, required this.listSecteur});
+  final Users users;
+  const SecteurTable(
+      {super.key, required this.listSecteur, required this.users});
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,8 @@ class SecteurTable extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  actionDialogue(context: context, child: const AddSecteur());
+                  actionDialogue(
+                      context: context, child: AddSecteur(users: users));
                 },
               ),
             ],
