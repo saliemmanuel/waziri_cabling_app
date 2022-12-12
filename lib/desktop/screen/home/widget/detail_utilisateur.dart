@@ -50,12 +50,34 @@ class DetailUtilisateur extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: CustomText(
-                          data: "ezeze", fontWeight: FontWeight.bold),
+                          data: "Téléphone", fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Align(
+                  Align(
                       alignment: Alignment.centerLeft,
-                      child: CustomText(data: "ezez")),
+                      child: CustomText(data: users.telephoneUtilisateur!)),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child:
+                          CustomText(data: "Rôle", fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomText(data: users.roleUtilisateur!)),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomText(
+                          data: "Secteur", fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Align(
+                      alignment: Alignment.centerLeft,
+                      child: CustomText(data: users.zoneUtilisateur!)),
                   const Padding(
                     padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
                     child: Align(

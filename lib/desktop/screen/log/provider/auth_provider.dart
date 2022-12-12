@@ -64,6 +64,16 @@ class AuthProvider extends ChangeNotifier {
     _codeIsCorrect = false;
     Provider.of<HomeProvider>(context, listen: false).changeBody(index: 0);
     _storage.deleteAll();
+    _users = Users(
+      id: null,
+      email: null,
+      idUtilisateurInitiateur: null,
+      nomUtilisateur: null,
+      prenomUtilisateur: null,
+      roleUtilisateur: null,
+      telephoneUtilisateur: null,
+      zoneUtilisateur: null,
+    );
     notifyListeners();
   }
 

@@ -144,10 +144,7 @@ class ServiceApi {
   }
 
   addSecteur(
-      {String? token,
-      Secteur? secteur,
-      required BuildContext? context,
-      required var idUser}) async {
+      {String? token, Secteur? secteur, required BuildContext? context}) async {
     try {
       simpleDialogueCardSansTitle(
           msg: "Patientez svp...", context: context!, barrierDismissible: true);
@@ -158,18 +155,18 @@ class ServiceApi {
           body: {
             "designation_secteur": secteur!.designationSecteur,
             "description_secteur": secteur.descriptionSecteur,
-            "id_users": idUser,
+            "nom_chef_secteur": secteur.nomChefSecteur,
           }).timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print('******************');
-      print(data.statusCode);
-      print(data.body);
-      if (data.statusCode > 300) {
-        var response = await jsonDecode(data.body);
 
+      if (data.statusCode > 300) {
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
         echecTransaction(
             "Erreur lors de la création. ${response['message']}", context);
       }
@@ -199,11 +196,6 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print("*************");
-      print(data.statusCode);
-      print(data.body);
-      print(code);
-      print(idAmin);
 
       if (data.statusCode == 200) {
         Navigator.pop(context);
@@ -244,6 +236,7 @@ class ServiceApi {
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         if (response['statut']) {
+          succesTransaction(response['message'], context);
           return response['statut'];
         } else {
           echecTransaction(response['message'], context);
@@ -326,6 +319,73 @@ class ServiceApi {
       print("*************");
       print(data.statusCode);
       print(data.body);
+    } catch (e) {}
+  }
+
+  updateUtilisateur(
+      {String? token,
+      Users? users,
+      required String idUtilisateurInitiateur,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+      var data = await http.post(host.baseUrl(endpoint: "utilisateur/update"),
+          headers: host.headers(token!),
+          body: {
+            'nom_utilisateur': users!.nomUtilisateur,
+            'prenom_utilisateur': users.prenomUtilisateur,
+            'email': users.email,
+            'telephone_utilisateur': users.telephoneUtilisateur,
+            'role_utilisateur': users.roleUtilisateur,
+            'zone_utilisateur': users.zoneUtilisateur,
+            'id_utilisateur_initiateur': idUtilisateurInitiateur
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+      }
+
+      print(data.body);
+      print("*************");
+      print(data.statusCode);
+      print(data.body);
+    } catch (e) {}
+  }
+
+  deleteSecteur({Secteur? secteur, String? token, required var context}) async {
+    try {
+      var data = await http.post(
+          host.baseUrl(endpoint: "secteur/delete-secteur"),
+          headers: host.headers(token!),
+          body: {
+            "id": secteur!.id.toString(),
+            "designation_secteur": secteur.designationSecteur
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+
+      print(data.body);
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          succesTransaction(response['message'], context);
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
+      }
     } catch (e) {}
   }
 }

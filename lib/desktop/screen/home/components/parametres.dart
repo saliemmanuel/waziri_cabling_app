@@ -7,6 +7,8 @@ import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
 import '../../../../models/users.dart';
+import '../widget/action_dialogue.dart';
+import '../widget/edite_user.dart';
 
 class Parametres extends StatefulWidget {
   final Users? users;
@@ -90,6 +92,18 @@ class _ParametresState extends State<Parametres> {
                       ),
                     ),
                   ),
+                  InkWell(
+                    child: const Text("Edite"),
+                    onTap: () {
+                      // actionDialogue(
+                      //     child: EditeUser(userData: userList![index]),
+                      //     context: context);
+                      Provider.of<HomeProvider>(context).updateUtilisateur(
+                        users: Users(),
+                        context: context,
+                      );
+                    },
+                  )
                 ],
               ),
             ))

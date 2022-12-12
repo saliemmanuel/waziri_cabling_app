@@ -41,9 +41,7 @@ class DetailSecteur extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(data: secteur.descriptionSecteur)),
+                  CustomText(data: secteur.descriptionSecteur),
                   const Padding(
                     padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
                     child: Align(
@@ -64,9 +62,9 @@ class DetailSecteur extends StatelessWidget {
                           fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const Align(
+                  Align(
                       alignment: Alignment.centerLeft,
-                      child: CustomText(data: "14")),
+                      child: CustomText(data: secteur.nomChefSecteur)),
                 ]))));
   }
 }

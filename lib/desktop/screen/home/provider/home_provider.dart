@@ -19,7 +19,7 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listUtilisateur = await _service.getListUtilisateur(token: token);
-    print(_listSecteur);
+    // print(_listSecteur);
     notifyListeners();
   }
 
@@ -27,20 +27,15 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listSecteur = await _service.getListSecteur(token: token);
-    print(_listSecteur);
     notifyListeners();
   }
 
-  addSecteur(
-      {Secteur? secteur,
-      required BuildContext? context,
-      required var idUser}) async {
+  addSecteur({Secteur? secteur, required BuildContext? context}) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.addSecteur(
       token: token,
       secteur: secteur!,
-      idUser: idUser,
       context: context,
     );
   }
@@ -86,5 +81,25 @@ class HomeProvider extends ChangeNotifier {
         users: users,
         context: context);
     notifyListeners();
+  }
+
+  updateUtilisateur({required Users? users, required var context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateUtilisateur(
+        idUtilisateurInitiateur: users!.idUtilisateurInitiateur.toString(),
+        token: token,
+        users: users,
+        context: context);
+    notifyListeners();
+  }
+
+  getDeleteSecteur({
+    Secteur? secteur,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.deleteSecteur(context: context, secteur: secteur, token: token);
   }
 }

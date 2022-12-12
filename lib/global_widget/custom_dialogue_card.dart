@@ -140,9 +140,7 @@ Future succesTransaction(String msg, BuildContext context) {
 }
 
 Future getCodeAuth(
-    {required BuildContext context,
-    required var idAdmin,
-    required VoidCallback onCall}) {
+    {required BuildContext context, required VoidCallback onCall}) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {

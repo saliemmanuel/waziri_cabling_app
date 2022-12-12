@@ -71,10 +71,7 @@ class UserTable extends StatelessWidget {
                 ),
                 onTap: () {
                   actionDialogue(
-                      context: context,
-                      child: AddNewUser(
-                        users: users,
-                      ));
+                      context: context, child: AddNewUser(users: users));
                 },
               ),
             ],
@@ -90,12 +87,7 @@ class UserTable extends StatelessWidget {
                       label: CustomText(
                           data: 'E-mail', overflow: TextOverflow.ellipsis)),
                   DataColumn(label: CustomText(data: 'Téléphone')),
-                  // DataColumn(
-                  //     label: CustomText(
-                  //         data: 'Rôle', overflow: TextOverflow.ellipsis)),
-                  // DataColumn(
-                  //     label: CustomText(
-                  //         data: 'Secteur', overflow: TextOverflow.ellipsis)),
+                  DataColumn(label: CustomText(data: 'Rôle')),
                   DataColumn(label: CustomText(data: '   Action')),
                 ],
                 rows: [
@@ -119,26 +111,16 @@ class UserTable extends StatelessWidget {
                         DataCell(CustomText(
                             data: userList![index]['telephone_utilisateur']
                                 .toString())),
+                        DataCell(CustomText(
+                            data: userList![index]['role_utilisateur']
+                                .toString())),
                         DataCell(Row(children: [
-                          Expanded(
-                            child: MaterialButton(
-                                color: Colors.teal,
-                                child: const Icon(IconlyBold.edit,
-                                    color: Colors.white),
-                                onPressed: () {
-                                  actionDialogue(
-                                      child:
-                                          EditeUser(userData: userList![index]),
-                                      context: context);
-                                }),
-                          ),
-                          const SizedBox(width: 10.0),
                           Expanded(
                             child: MaterialButton(
                                 color: Palette.online,
                                 child: const CustomText(
                                     data: "Détail", color: Colors.white),
-                                onPressed: () async {
+                                onPressed: () {
                                   actionDialogue(
                                       child: DetailUtilisateur(
                                         users: Users(
@@ -147,15 +129,14 @@ class UserTable extends StatelessWidget {
                                             nomUtilisateur: userList![index]
                                                 ['nom_utilisateur'],
                                             roleUtilisateur: userList![index]
-                                                ['prenom_utilisateur'],
-                                            email: userList![index]
-                                                ['prenom_utilisateur'],
+                                                ['role_utilisateur'],
+                                            email: userList![index]['email'],
                                             telephoneUtilisateur: userList![
                                                         index]
                                                     ['telephone_utilisateur']
                                                 .toString(),
                                             zoneUtilisateur: userList![index]
-                                                ['prenom_utilisateur']),
+                                                ['zone_utilisateur']),
                                       ),
                                       context: context);
                                 }),
@@ -169,17 +150,16 @@ class UserTable extends StatelessWidget {
                                     : () async {
                                         getCodeAuth(
                                             context: context,
-                                            idAdmin: users.id.toString(),
                                             onCall: () async {
                                               var res = await Provider.of<
-                                                          AuthProvider>(context,
-                                                      listen: false)
-                                                  .codeAuth(
-                                                      idAmin:
-                                                          users.id.toString(),
-                                                      code:
-                                                          code.text.toString(),
-                                                      context: context);
+                                                  AuthProvider>(
+                                                context,
+                                                listen: false,
+                                              ).codeAuth(
+                                                idAmin: users.id.toString(),
+                                                code: code.text.toString(),
+                                                context: context,
+                                              );
                                               if (res) {
                                                 // ignore: use_build_context_synchronously
                                                 Provider.of<HomeProvider>(

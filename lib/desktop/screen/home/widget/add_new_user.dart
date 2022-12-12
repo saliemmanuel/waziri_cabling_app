@@ -26,7 +26,7 @@ class _AddNewUserState extends State<AddNewUser> {
     'Loum',
     'Nkongsamba',
   ];
-  List? listRole = ['Admin', 'chef-secteur'];
+  List? listRole = ['admin', 'chef-secteur'];
   var role = "Rôle utilisateur";
   var secteur = "Selectionner un secteur";
   var name = TextEditingController();

@@ -1,7 +1,10 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../global_widget/custom_dropdow.dart';
 import '../../../../global_widget/custom_text.dart';
@@ -25,19 +28,29 @@ class _EditeUserState extends State<EditeUser> {
     'Loum',
     'Nkongsamba',
   ];
-  List? listRole = ['Admin', 'Chef secteur'];
-  var role = "Rôle utilisateur";
+
+  String? secteur;
+  TextEditingController? name;
+  TextEditingController? secondname;
+  TextEditingController? email;
+  TextEditingController? telephone;
+  List? listRole = ['admin', 'chef-secteur'];
+  String? role;
+  @override
+  void initState() {
+    secteur = widget.userData['zone_utilisateur'];
+    name = TextEditingController(text: widget.userData['nom_utilisateur']);
+    secondname =
+        TextEditingController(text: widget.userData['prenom_utilisateur']);
+    email = TextEditingController(text: widget.userData["email"].toString());
+    telephone = TextEditingController(
+        text: widget.userData["telephone_utilisateur"].toString());
+    role = widget.userData["role_utilisateur"];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var secteur = widget.userData['zone_utilisateur'];
-    var name = TextEditingController(text: widget.userData['nom_utilisateur']);
-    var secondname =
-        TextEditingController(text: widget.userData['prenom_utilisateur']);
-    var email =
-        TextEditingController(text: widget.userData["email"].toString());
-    var telephone = TextEditingController(
-        text: widget.userData["telephone_utilisateur"].toString());
     return Badge(
       badgeContent: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
@@ -126,6 +139,7 @@ class _EditeUserState extends State<EditeUser> {
                               .toList(),
                           onChanged: (newVille) {
                             role = newVille!;
+                            setState(() {});
                           }),
                     ),
                   ),
@@ -161,6 +175,7 @@ class _EditeUserState extends State<EditeUser> {
                               .toList(),
                           onChanged: (newVille) {
                             secteur = newVille!;
+                            setState(() {});
                           }),
                     ),
                   ),
@@ -173,7 +188,9 @@ class _EditeUserState extends State<EditeUser> {
                       enableButton: true,
                       child: "   Enregistrez   ",
                       bacgroundColor: Palette.teal,
-                      onPressed: () async {}),
+                      onPressed: () async {
+                       
+                      }),
                   CustumButton(
                       enableButton: true,
                       child: "   Annuler   ",

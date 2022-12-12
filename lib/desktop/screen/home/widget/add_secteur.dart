@@ -7,6 +7,7 @@ import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.da
 import 'package:waziri_cabling_app/models/secteur.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
+import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
 
@@ -24,6 +25,28 @@ class AddSecteur extends StatefulWidget {
 class _AddSecteurState extends State<AddSecteur> {
   var designation = TextEditingController();
   var description = TextEditingController();
+  List? listUtilisateur = [];
+  Users? users;
+  String nomUtilisateur = 'Nom utilisateur';
+
+  @override
+  void initState() {
+    Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
+    initListUser();
+    super.initState();
+  }
+
+  initListUser() async {
+    List list = await Provider.of<HomeProvider>(context, listen: false)
+        .listUtilisateur["utilisateur"];
+    if (list != []) {
+      for (var i = 0; i < list.length; i++) {
+        listUtilisateur!.add(
+            '${list[i]['id']} - ${list[i]['nom_utilisateur']} ${list[i]['prenom_utilisateur']}');
+      }
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +73,46 @@ class _AddSecteurState extends State<AddSecteur> {
                     obscureText: false,
                     controller: description,
                   ),
+                  Consumer<HomeProvider>(
+                    builder: ((context, value, child) => value
+                                .listUtilisateur ==
+                            null
+                        ? const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(
+                                color: Palette.primaryColor))
+                        : Container(
+                            height: 55.5,
+                            margin: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, bottom: 15.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border:
+                                    Border.all(color: Palette.primaryColor)),
+                            child: Center(
+                              child: DropdownButton<String>(
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  hint: Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 10.0),
+                                      child: CustomText(data: nomUtilisateur)),
+                                  dropdownColor: Colors.white,
+                                  items: listUtilisateur!
+                                      .map((e) => DropdownMenuItem<String>(
+                                            value: e,
+                                            child: Text(e,
+                                                style: const TextStyle(
+                                                    color: Colors.black)),
+                                          ))
+                                      .toList(),
+                                  onChanged: (user) {
+                                    nomUtilisateur = user!;
+                                    setState(() {});
+                                  }),
+                            ),
+                          )),
+                  ),
                 ],
               ),
               Row(
@@ -63,12 +126,10 @@ class _AddSecteurState extends State<AddSecteur> {
                         var secteur = Secteur(
                             id: 0,
                             designationSecteur: designation.text,
-                            descriptionSecteur: description.text);
+                            descriptionSecteur: description.text,
+                            nomChefSecteur: nomUtilisateur);
                         Provider.of<HomeProvider>(context, listen: false)
-                            .addSecteur(
-                                secteur: secteur,
-                                context: context,
-                                idUser: widget.users.id.toString());
+                            .addSecteur(secteur: secteur, context: context);
                         Provider.of<HomeProvider>(context, listen: false)
                             .provideListSecteur();
                       }),
