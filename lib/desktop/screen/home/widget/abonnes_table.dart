@@ -5,6 +5,7 @@ import '../../../../config/config.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import 'action_dialogue.dart';
+import 'add_abonnes.dart';
 import 'detail_utilisateur.dart';
 
 class AbonnesTable extends StatelessWidget {
@@ -60,8 +61,7 @@ class AbonnesTable extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  actionDialogue(
-                      context: context, child: AddNewUser(users: users));
+                  actionDialogue(context: context, child: AddBonnes());
                 },
               ),
             ],
