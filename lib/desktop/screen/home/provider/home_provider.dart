@@ -10,11 +10,13 @@ class HomeProvider extends ChangeNotifier {
   dynamic _listUtilisateur;
   dynamic _listSecteur;
   dynamic _listTypeAbonnement;
+  dynamic _listAbonnes;
   int _topIndex = 0;
 
   get listUtilisateur => _listUtilisateur;
   get listSecteur => _listSecteur;
   get listTypeAbonnement => _listTypeAbonnement;
+  get listAbonnes => _listAbonnes;
   get topIndex => _topIndex;
 
   providelistUtilisateur() async {
@@ -29,6 +31,21 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listSecteur = await _service.getListSecteur(token: token);
+    notifyListeners();
+  }
+
+  provideListeTypeAbonnement() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listTypeAbonnement = await _service.getListTypeAbonnement(token: token);
+    notifyListeners();
+  }
+
+  provideListeAbonnes() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listAbonnes = await _service.getListAbonnes(token: token);
+    print(_listAbonnes);
     notifyListeners();
   }
 
@@ -106,13 +123,6 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.deleteSecteur(context: context, secteur: secteur, token: token);
-  }
-
-  provideListeTypeAbonnement() async {
-    var storage = const FlutterSecureStorage();
-    var token = await storage.read(key: 'tokens');
-    _listTypeAbonnement = await _service.getListTypeAbonnement(token: token);
-    notifyListeners();
   }
 
   getDeleteTypeAbonnement({

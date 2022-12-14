@@ -449,4 +449,24 @@ class ServiceApi {
       }
     } catch (e) {}
   }
+
+  getListAbonnes({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "abonne/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

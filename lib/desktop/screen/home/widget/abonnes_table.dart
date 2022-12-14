@@ -6,7 +6,6 @@ import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import 'action_dialogue.dart';
 import 'add_abonnes.dart';
-import 'detail_utilisateur.dart';
 
 class AbonnesTable extends StatelessWidget {
   final dynamic abonnesList;
@@ -77,11 +76,19 @@ class AbonnesTable extends StatelessWidget {
                           child: CustomText(
                               data: 'Nom et prénom',
                               overflow: TextOverflow.clip))),
-                  DataColumn(
-                      label: CustomText(
-                          data: 'E-mail', overflow: TextOverflow.ellipsis)),
                   DataColumn(label: CustomText(data: 'Téléphone')),
-                  DataColumn(label: CustomText(data: 'Rôle')),
+                  DataColumn(
+                      label: Expanded(
+                    child: CustomText(data: 'Description zone'),
+                  )),
+                  DataColumn(
+                      label: Expanded(
+                    child: CustomText(data: 'Secteur abonne'),
+                  )),
+                  DataColumn(
+                      label: Expanded(
+                    child: CustomText(data: 'Type abonnement'),
+                  )),
                   DataColumn(label: CustomText(data: '   Action')),
                 ],
                 rows: [
@@ -94,92 +101,105 @@ class AbonnesTable extends StatelessWidget {
                       cells: [
                         DataCell(CustomText(data: '${index + 1}')),
                         DataCell(
-                          CustomText(
-                            data:
-                                "${abonnesList![index]['nom_utilisateur']} ${abonnesList![index]['prenom_utilisateur']}",
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CustomText(
+                              data:
+                                  "${abonnesList![index]['nom_abonne']} ${abonnesList![index]['prenom_abonne']}",
+                            ),
                           ),
                         ),
                         DataCell(CustomText(
-                          data: abonnesList![index]['email'],
+                            data: abonnesList![index]['telephone_abonne']
+                                .toString())),
+                        DataCell(Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CustomText(
+                            data: abonnesList![index]['description_zone_abonne']
+                                .toString(),
+                          ),
                         )),
-                        DataCell(CustomText(
-                            data: abonnesList![index]['telephone_utilisateur']
-                                .toString())),
-                        DataCell(CustomText(
-                            data: abonnesList![index]['role_utilisateur']
-                                .toString())),
-                        DataCell(Row(children: [
-                          Expanded(
-                            child: MaterialButton(
-                                color: Palette.online,
-                                child: const CustomText(
-                                    data: "Détail", color: Colors.white),
-                                onPressed: () {
-                                  // actionDialogue(
-                                  //     child: DetailUtilisateur(
-                                  //       users: Users(
-                                  //           prenomUtilisateur: userList![index]
-                                  //               ['prenom_utilisateur'],
-                                  //           nomUtilisateur: userList![index]
-                                  //               ['nom_utilisateur'],
-                                  //           roleUtilisateur: userList![index]
-                                  //               ['role_utilisateur'],
-                                  //           email: userList![index]['email'],
-                                  //           telephoneUtilisateur: userList![
-                                  //                       index]
-                                  //                   ['telephone_utilisateur']
-                                  //               .toString(),
-                                  //           zoneUtilisateur: userList![index]
-                                  //               ['zone_utilisateur']),
-                                  //     ),
-                                  //     context: context);
-                                }),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Expanded(
-                            child: MaterialButton(
-                                color: Colors.red,
-                                onPressed: () async {
-                                  // getCodeAuth(
-                                  //     context: context,
-                                  //     onCall: () async {
-                                  //       var res = await Provider.of<
-                                  //           AuthProvider>(
-                                  //         context,
-                                  //         listen: false,
-                                  //       ).codeAuth(
-                                  //         idAmin: users.id.toString(),
-                                  //         code: code.text.toString(),
-                                  //         context: context,
-                                  //       );
-                                  //       if (res) {
-                                  //         // ignore: use_build_context_synchronously
-                                  //         Provider.of<HomeProvider>(
-                                  //                 context,
-                                  //                 listen: false)
-                                  //             .getDeleteUser(
-                                  //                 email: userList![index]
-                                  //                         ['email']
-                                  //                     .toString(),
-                                  //                 idUser: userList![index]
-                                  //                         ['id']
-                                  //                     .toString(),
-                                  //                 context: context);
-                                  //         print("delete");
-                                  //         print(userList![index]);
-                                  //         // ignore: use_build_context_synchronously
-                                  //         Provider.of<HomeProvider>(
-                                  //                 context,
-                                  //                 listen: false)
-                                  //             .providelistUtilisateur();
-                                  //       }
-                                  //       code.clear();
-                                  //     });
-                                },
-                                child: const Icon(IconlyBold.delete,
-                                    color: Colors.white)),
-                          ),
-                        ])),
+                        DataCell(Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CustomText(
+                              data: abonnesList![index]['secteur_abonne']
+                                  .toString()),
+                        )),
+                        DataCell(Padding(
+                          padding: const EdgeInsets.only(right: 100.0),
+                          child: Row(children: [
+                            Expanded(
+                              child: MaterialButton(
+                                  color: Palette.online,
+                                  child: const CustomText(
+                                      data: "Détail", color: Colors.white),
+                                  onPressed: () {
+                                    // actionDialogue(
+                                    //     child: DetailUtilisateur(
+                                    //       users: Users(
+                                    //           prenomUtilisateur: userList![index]
+                                    //               ['prenom_utilisateur'],
+                                    //           nomUtilisateur: userList![index]
+                                    //               ['nom_utilisateur'],
+                                    //           roleUtilisateur: userList![index]
+                                    //               ['role_utilisateur'],
+                                    //           email: userList![index]['email'],
+                                    //           telephoneUtilisateur: userList![
+                                    //                       index]
+                                    //                   ['telephone_utilisateur']
+                                    //               .toString(),
+                                    //           zoneUtilisateur: userList![index]
+                                    //               ['zone_utilisateur']),
+                                    //     ),
+                                    //     context: context);
+                                  }),
+                            ),
+                            const SizedBox(width: 10.0),
+                            Expanded(
+                              child: MaterialButton(
+                                  color: Colors.red,
+                                  onPressed: () async {
+                                    // getCodeAuth(
+                                    //     context: context,
+                                    //     onCall: () async {
+                                    //       var res = await Provider.of<
+                                    //           AuthProvider>(
+                                    //         context,
+                                    //         listen: false,
+                                    //       ).codeAuth(
+                                    //         idAmin: users.id.toString(),
+                                    //         code: code.text.toString(),
+                                    //         context: context,
+                                    //       );
+                                    //       if (res) {
+                                    //         // ignore: use_build_context_synchronously
+                                    //         Provider.of<HomeProvider>(
+                                    //                 context,
+                                    //                 listen: false)
+                                    //             .getDeleteUser(
+                                    //                 email: userList![index]
+                                    //                         ['email']
+                                    //                     .toString(),
+                                    //                 idUser: userList![index]
+                                    //                         ['id']
+                                    //                     .toString(),
+                                    //                 context: context);
+                                    //         print("delete");
+                                    //         print(userList![index]);
+                                    //         // ignore: use_build_context_synchronously
+                                    //         Provider.of<HomeProvider>(
+                                    //                 context,
+                                    //                 listen: false)
+                                    //             .providelistUtilisateur();
+                                    //       }
+                                    //       code.clear();
+                                    //     });
+                                  },
+                                  child: const Icon(IconlyBold.delete,
+                                      color: Colors.white)),
+                            ),
+                          ]),
+                        )),
                       ],
                     ),
                 ],
