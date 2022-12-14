@@ -132,6 +132,10 @@ class _AddSecteurState extends State<AddSecteur> {
                             .addSecteur(secteur: secteur, context: context);
                         Provider.of<HomeProvider>(context, listen: false)
                             .provideListSecteur();
+                        designation.clear();
+                        description.clear();
+                        nomUtilisateur = 'Nom utilisateur';
+                        setState(() {});
                       }),
                   CustumButton(
                       enableButton: true,

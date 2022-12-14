@@ -61,7 +61,7 @@ class AccueilCard extends StatelessWidget {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade200),
                       borderRadius: BorderRadius.circular(8.0),
-                      color: Palette.fadeColors),
+                      color: containerColor!.withOpacity(0.2)),
                   margin: const EdgeInsets.all(8.0),
                   child: ListTile(
                     onTap: onPressed,

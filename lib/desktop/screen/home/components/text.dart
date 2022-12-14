@@ -12,44 +12,6 @@ class DataTable2SimpleDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var list = [
-      {
-        "id": 1,
-        "nom_utilisateur": "s",
-        "prenom_utilisateur": "EMMANUEL",
-        "email_utilisateur": "ds",
-        "telephone_utilisateur": 59,
-        "role_utilisateur": "admin",
-        "zone_utilisateur": "pitoaré secteur saphir",
-        "id_utilisateur_initiateur": "0",
-        "created_at": "2022-11-25T21:40:32.000000Z",
-        "updated_at": "2022-11-25T21:40:32.000000Z"
-      },
-      {
-        "id": 1,
-        "nom_utilisateur": "s",
-        "prenom_utilisateur": "EMMANUEL",
-        "email_utilisateur": "ds",
-        "telephone_utilisateur": 59,
-        "role_utilisateur": "admin",
-        "zone_utilisateur": "pitoaré secteur saphir",
-        "id_utilisateur_initiateur": "0",
-        "created_at": "2022-11-25T21:40:32.000000Z",
-        "updated_at": "2022-11-25T21:40:32.000000Z"
-      },
-      {
-        "id": 1,
-        "nom_utilisateur": "s",
-        "prenom_utilisateur": "EMMANUEL",
-        "email_utilisateur": "ds",
-        "telephone_utilisateur": 59,
-        "role_utilisateur": "admin",
-        "zone_utilisateur": "pitoaré secteur saphir",
-        "id_utilisateur_initiateur": "0",
-        "created_at": "2022-11-25T21:40:32.000000Z",
-        "updated_at": "2022-11-25T21:40:32.000000Z"
-      },
-    ];
     bool selectedItem = false;
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -57,7 +19,7 @@ class DataTable2SimpleDemo extends StatelessWidget {
         children: [
           Row(
             children: [
-              CustomText(data: "List Utilisateur"),
+              const CustomText(data: "List Utilisateur"),
               Container(
                 alignment: Alignment.center,
                 height: 40.0,
@@ -67,7 +29,7 @@ class DataTable2SimpleDemo extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: Expanded(
+                child: const Expanded(
                     child: TextField(
                   decoration: InputDecoration(
                     hintText: "Search",
@@ -80,9 +42,12 @@ class DataTable2SimpleDemo extends StatelessWidget {
                 height: 40.0,
                 margin: const EdgeInsets.all(10.0),
                 padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.teal),
+                    borderRadius: BorderRadius.circular(5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Icon(Icons.add, color: Colors.teal),
                     CustomText(
                         data: "Ajoutez un utilisateur",
@@ -90,9 +55,6 @@ class DataTable2SimpleDemo extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ],
                 ),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.teal),
-                    borderRadius: BorderRadius.circular(5.0)),
               ),
             ],
           ),

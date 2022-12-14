@@ -49,7 +49,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       const Factures(),
       const Abonne(),
       const Versements(),
-      const Comptabilite(),
+      Comptabilite(user: widget.users!),
       const Charges(),
       const Message(),
       Secteurs(users: widget.users!),

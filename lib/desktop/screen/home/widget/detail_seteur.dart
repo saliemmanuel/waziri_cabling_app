@@ -17,54 +17,69 @@ class DetailSecteur extends StatelessWidget {
         child: Padding(
             padding: const EdgeInsets.all(58.0),
             child: SingleChildScrollView(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: CustomText(
+                                data: "Désignation secteur",
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child:
+                                CustomText(data: secteur.designationSecteur)),
+                        const Padding(
+                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: CustomText(
+                                data: "Description secteur",
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        CustomText(data: secteur.descriptionSecteur),
+                      ]),
+                ),
+                const SizedBox(width: 15.0),
+                Expanded(
+                  child: Column(
                     children: [
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                          data: "Désignation secteur",
-                          fontWeight: FontWeight.bold),
-                    ),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 10.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                              data: "Chef secteur",
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(data: secteur.nomChefSecteur)),
+                      const Padding(
+                        padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                              data: "Nombre abonnés secteur",
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(data: "150")),
+                    ],
                   ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(data: secteur.designationSecteur)),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                          data: "Description secteur",
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  CustomText(data: secteur.descriptionSecteur),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                          data: "Chef secteur", fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(data: secteur.designationSecteur)),
-                  const Padding(
-                    padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(
-                          data: "Nombre abonnés secteur",
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(data: secteur.nomChefSecteur)),
-                ]))));
+                )
+              ],
+            ))));
   }
 }

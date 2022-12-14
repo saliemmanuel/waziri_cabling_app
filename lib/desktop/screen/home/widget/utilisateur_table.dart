@@ -82,7 +82,11 @@ class UserTable extends StatelessWidget {
               child: DataTable(
                 columns: const [
                   DataColumn(label: CustomText(data: 'N°')),
-                  DataColumn(label: CustomText(data: 'Nom et prénom')),
+                  DataColumn(
+                      label: Expanded(
+                          child: CustomText(
+                              data: 'Nom et prénom',
+                              overflow: TextOverflow.clip))),
                   DataColumn(
                       label: CustomText(
                           data: 'E-mail', overflow: TextOverflow.ellipsis)),

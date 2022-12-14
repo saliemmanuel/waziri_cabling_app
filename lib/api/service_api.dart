@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/widget/add_type_abonnemet.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
+import 'package:waziri_cabling_app/models/type_abonnement.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../desktop/screen/log/provider/auth_provider.dart';
@@ -52,7 +54,6 @@ class ServiceApi {
           Navigator.pop(context);
           Provider.of<AuthProvider>(context, listen: false)
               .userData(token: response['token']);
-          print(response);
           return true;
         }
       } else {
@@ -227,11 +228,6 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print("*************");
-      print(data.statusCode);
-      print(data.body);
-      print(email);
-      print(idUser);
 
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
@@ -261,11 +257,6 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      // print("*************");
-      // print(data.statusCode);
-      print(data.body);
-      // print(codeAdmin);
-      // print(idUser);
 
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
@@ -312,13 +303,9 @@ class ServiceApi {
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
+
         succesTransaction(response['message'], context);
       }
-
-      print(data.body);
-      print("*************");
-      print(data.statusCode);
-      print(data.body);
     } catch (e) {}
   }
 
@@ -353,11 +340,6 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
       }
-
-      print(data.body);
-      print("*************");
-      print(data.statusCode);
-      print(data.body);
     } catch (e) {}
   }
 
@@ -374,7 +356,52 @@ class ServiceApi {
             'Connexion perdue, verifier votre connexion internet');
       });
 
-      print(data.body);
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          succesTransaction(response['message'], context);
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
+      }
+    } catch (e) {}
+  }
+
+  getListTypeAbonnement({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "type-abonnemnt/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return jsonDecode(data.body);
+      }
+    } catch (e) {}
+  }
+
+  deleteTypeAbonnement(
+      {TypeAbonnement? type, String? token, required var context}) async {
+    try {
+      var data = await http.post(
+          host.baseUrl(endpoint: "type-abonnemnt/delete-type"),
+          headers: host.headers(token!),
+          body: {
+            "id": type!.id.toString(),
+            "montant": type.montant,
+            "designation_type_abonnement": type.designationTypeAbonnement,
+            "nombre_chaine": type.nombreChaine
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
 
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
@@ -385,6 +412,40 @@ class ServiceApi {
           echecTransaction(response['message'], context);
           return response['statut'];
         }
+      }
+    } catch (e) {
+      echecTransaction('$e', context);
+    }
+  }
+
+  addTypeAbonnement(
+      {String? token, TypeAbonnement? type, required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+      var data = await http.post(
+          host.baseUrl(endpoint: "type-abonnemnt/ajout-type"),
+          headers: host.headers(token!),
+          body: {
+            'designation_type_abonnement': type!.designationTypeAbonnement,
+            'montant': type.montant,
+            'nombre_chaine': type.nombreChaine,
+            'id_initiateur': type.idInitiateur,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        var response = await jsonDecode(data.body);
+
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la création.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+
+        succesTransaction(response['message'], context);
       }
     } catch (e) {}
   }

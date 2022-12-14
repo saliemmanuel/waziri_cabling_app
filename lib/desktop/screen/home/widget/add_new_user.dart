@@ -42,164 +42,191 @@ class _AddNewUserState extends State<AddNewUser> {
           Navigator.pop(context);
         },
       ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "Nom utilisateur")),
-                  ),
-                  CustumTextField(
-                      bacgroundColor: Palette.teal,
-                      child: 'Nom utilisateur',
-                      controller: name,
-                      obscureText: false),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "Prénom utilisateur")),
-                  ),
-                  CustumTextField(
-                      child: 'Prénom utilisateur',
-                      controller: secondname,
-                      obscureText: false),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "E-mail")),
-                  ),
-                  CustumTextField(
-                      child: "E-mail", controller: email, obscureText: false),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "Téléphone")),
-                  ),
-                  CustumTextField(
-                      child: "Téléphone",
-                      controller: telephone,
-                      obscureText: false),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "Rôle")),
-                  ),
-                  Container(
-                    height: 55.5,
-                    margin: const EdgeInsets.only(
-                        left: 10.0, right: 10.0, bottom: 15.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Palette.primaryColor)),
-                    child: Center(
-                      child: DropdownButton(
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          hint: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Text(role.toString()),
+      child: SizedBox(
+        width: 750.0,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Nom utilisateur")),
                           ),
-                          dropdownColor: Colors.white,
-                          items: listRole!
-                              .map((e) => DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(e,
-                                        style: const TextStyle(
-                                            color: Colors.black)),
-                                  ))
-                              .toList(),
-                          onChanged: (newVille) {
-                            role = newVille!;
-                            setState(() {});
-                          }),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                    child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "Secteur")),
-                  ),
-                  Container(
-                    height: 55.5,
-                    margin: const EdgeInsets.only(
-                        left: 10.0, right: 10.0, bottom: 15.0),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: Palette.primaryColor)),
-                    child: Center(
-                      child: DropdownButton(
-                          isExpanded: true,
-                          underline: const SizedBox(),
-                          hint: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Text(secteur.toString()),
+                          CustumTextField(
+                              bacgroundColor: Palette.teal,
+                              child: 'Nom utilisateur',
+                              controller: name,
+                              obscureText: false),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Prénom utilisateur")),
                           ),
-                          dropdownColor: Colors.white,
-                          items: listSecteur!
-                              .map((e) => DropdownMenuItem<String>(
-                                    value: e,
-                                    child: Text(e,
-                                        style: const TextStyle(
-                                            color: Colors.black)),
-                                  ))
-                              .toList(),
-                          onChanged: (newVille) {
-                            secteur = newVille!;
-                            setState(() {});
-                          }),
+                          CustumTextField(
+                              child: 'Prénom utilisateur',
+                              controller: secondname,
+                              obscureText: false),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "E-mail")),
+                          ),
+                          CustumTextField(
+                              child: "E-mail",
+                              controller: email,
+                              obscureText: false),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  CustumButton(
-                      enableButton: true,
-                      child: "   Enregistrez   ",
-                      bacgroundColor: Palette.teal,
-                      onPressed: () async {
-                        Provider.of<HomeProvider>(context, listen: false)
-                            .addNewUser(
-                                users: Users(
-                                  id: null,
-                                  nomUtilisateur: name.text,
-                                  prenomUtilisateur: secondname.text,
-                                  roleUtilisateur: role,
-                                  telephoneUtilisateur:
-                                      telephone.text.toString(),
-                                  zoneUtilisateur: secteur,
-                                  idUtilisateurInitiateur: widget.users.id,
-                                  email: email.text,
-                                ),
-                                context: context);
-                        Provider.of<HomeProvider>(context, listen: false)
-                            .providelistUtilisateur();
-                      }),
-                  CustumButton(
-                      enableButton: true,
-                      child: "   Annuler   ",
-                      bacgroundColor: Palette.red,
-                      onPressed: () async {
-                        Navigator.pop(context);
-                      }),
-                ],
-              ),
-            ],
+                    const SizedBox(width: 15.0),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Téléphone")),
+                          ),
+                          CustumTextField(
+                              child: "Téléphone",
+                              controller: telephone,
+                              obscureText: false),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Rôle")),
+                          ),
+                          Container(
+                            height: 55.5,
+                            margin: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, bottom: 15.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border:
+                                    Border.all(color: Palette.primaryColor)),
+                            child: Center(
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  hint: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text(role.toString()),
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  items: listRole!
+                                      .map((e) => DropdownMenuItem<String>(
+                                            value: e,
+                                            child: Text(e,
+                                                style: const TextStyle(
+                                                    color: Colors.black)),
+                                          ))
+                                      .toList(),
+                                  onChanged: (newVille) {
+                                    role = newVille!;
+                                    setState(() {});
+                                  }),
+                            ),
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Secteur")),
+                          ),
+                          Container(
+                            height: 55.5,
+                            margin: const EdgeInsets.only(
+                                left: 10.0, right: 10.0, bottom: 15.0),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                border:
+                                    Border.all(color: Palette.primaryColor)),
+                            child: Center(
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  underline: const SizedBox(),
+                                  hint: Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Text(secteur.toString()),
+                                  ),
+                                  dropdownColor: Colors.white,
+                                  items: listSecteur!
+                                      .map((e) => DropdownMenuItem<String>(
+                                            value: e,
+                                            child: Text(e,
+                                                style: const TextStyle(
+                                                    color: Colors.black)),
+                                          ))
+                                      .toList(),
+                                  onChanged: (newVille) {
+                                    secteur = newVille!;
+                                    setState(() {});
+                                  }),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CustumButton(
+                        enableButton: true,
+                        child: "   Enregistrez   ",
+                        bacgroundColor: Palette.teal,
+                        onPressed: () async {
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .addNewUser(
+                                  users: Users(
+                                    id: null,
+                                    nomUtilisateur: name.text,
+                                    prenomUtilisateur: secondname.text,
+                                    roleUtilisateur: role,
+                                    telephoneUtilisateur:
+                                        telephone.text.toString(),
+                                    zoneUtilisateur: secteur,
+                                    idUtilisateurInitiateur: widget.users.id,
+                                    email: email.text,
+                                  ),
+                                  context: context);
+                          name.clear();
+                          secondname.clear();
+                          email.clear();
+                          telephone.clear();
+                          role = "Rôle utilisateur";
+                          secteur = "Selectionner un secteur";
+                          setState(() {});
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .providelistUtilisateur();
+                        }),
+                    CustumButton(
+                        enableButton: true,
+                        child: "   Annuler   ",
+                        bacgroundColor: Palette.red,
+                        onPressed: () async {
+                          Navigator.pop(context);
+                        }),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

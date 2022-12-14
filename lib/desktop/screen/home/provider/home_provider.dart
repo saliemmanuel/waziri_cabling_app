@@ -1,20 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:waziri_cabling_app/api/service_api.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/widget/add_secteur.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
+import 'package:waziri_cabling_app/models/type_abonnement.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
 class HomeProvider extends ChangeNotifier {
   final _service = ServiceApi();
   dynamic _listUtilisateur;
   dynamic _listSecteur;
+  dynamic _listTypeAbonnement;
   int _topIndex = 0;
 
   get listUtilisateur => _listUtilisateur;
+  get listSecteur => _listSecteur;
+  get listTypeAbonnement => _listTypeAbonnement;
   get topIndex => _topIndex;
 
-  get listSecteur => _listSecteur;
   providelistUtilisateur() async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
@@ -72,7 +74,10 @@ class HomeProvider extends ChangeNotifier {
         token: token, idUser: idUser, codeAdmin: codeAdmin, context: context);
   }
 
-  addNewUser({Users? users, required var context}) async {
+  addNewUser({
+    Users? users,
+    required var context,
+  }) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.addUtilisateur(
@@ -101,5 +106,31 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.deleteSecteur(context: context, secteur: secteur, token: token);
+  }
+
+  provideListeTypeAbonnement() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listTypeAbonnement = await _service.getListTypeAbonnement(token: token);
+    notifyListeners();
+  }
+
+  getDeleteTypeAbonnement({
+    TypeAbonnement? type,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.deleteTypeAbonnement(context: context, type: type, token: token);
+  }
+
+  getAddTypeAbonnement({
+    TypeAbonnement? type,
+    required var context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.addTypeAbonnement(token: token, type: type, context: context);
+    notifyListeners();
   }
 }
