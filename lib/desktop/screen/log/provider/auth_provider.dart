@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/api/service_api.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/models/users.dart';
+import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
 
 class AuthProvider extends ChangeNotifier {
   final _service = ServiceApi();
@@ -62,7 +62,7 @@ class AuthProvider extends ChangeNotifier {
     var token = await _storage.read(key: "tokens");
     _isLogged = await _service.deconnexion(token: token, context: context);
     _codeIsCorrect = false;
-    Provider.of<HomeProvider>(context, listen: false).changeBody(index: 0);
+    Provider.of<HomeProvider>(context, listen: false).deconnexion();
     _storage.deleteAll();
     _users = Users(
       id: null,
@@ -85,8 +85,13 @@ class AuthProvider extends ChangeNotifier {
     required dynamic context,
   }) async {
     var token = await _storage.read(key: "tokens");
-    _codeIsCorrect = await _service.getAuthCode(
-        code: code, idAmin: idAmin, token: token, context: context);
+    try {
+      _codeIsCorrect = await _service.getAuthCode(
+          code: code, idAmin: idAmin, token: token, context: context);
+    } catch (e) {
+      echecTransaction("Une erreur s'est produit", context)
+          .then((value) => Navigator.pop(context));
+    }
     return _codeIsCorrect;
   }
 

@@ -25,9 +25,11 @@ class AddSecteur extends StatefulWidget {
 class _AddSecteurState extends State<AddSecteur> {
   var designation = TextEditingController();
   var description = TextEditingController();
-  List? listUtilisateur = [];
   Users? users;
-  String nomUtilisateur = 'Nom utilisateur';
+  String nomChefSecteur = 'Nom utilisateur';
+  String idChefSecteur = '';
+
+  List? listUtilisateur = [];
 
   @override
   void initState() {
@@ -96,18 +98,20 @@ class _AddSecteurState extends State<AddSecteur> {
                                   hint: Padding(
                                       padding:
                                           const EdgeInsets.only(left: 10.0),
-                                      child: CustomText(data: nomUtilisateur)),
+                                      child: CustomText(data: nomChefSecteur)),
                                   dropdownColor: Colors.white,
                                   items: listUtilisateur!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
-                                            child: Text(e,
+                                            child: Text(
+                                                e.toString().split('-')[1],
                                                 style: const TextStyle(
                                                     color: Colors.black)),
                                           ))
                                       .toList(),
                                   onChanged: (user) {
-                                    nomUtilisateur = user!;
+                                    nomChefSecteur = user!.split('-')[1];
+                                    idChefSecteur = user.split('-')[0];
                                     setState(() {});
                                   }),
                             ),
@@ -124,17 +128,20 @@ class _AddSecteurState extends State<AddSecteur> {
                       bacgroundColor: Colors.teal,
                       onPressed: () async {
                         var secteur = Secteur(
-                            id: 0,
-                            designationSecteur: designation.text,
-                            descriptionSecteur: description.text,
-                            nomChefSecteur: nomUtilisateur);
+                          id: "",
+                          designationSecteur: designation.text,
+                          descriptionSecteur: description.text,
+                          nomChefSecteur: nomChefSecteur,
+                          idChefSecteur: idChefSecteur,
+                        );
+
                         Provider.of<HomeProvider>(context, listen: false)
                             .addSecteur(secteur: secteur, context: context);
                         Provider.of<HomeProvider>(context, listen: false)
                             .provideListSecteur();
                         designation.clear();
                         description.clear();
-                        nomUtilisateur = 'Nom utilisateur';
+                        nomChefSecteur = 'Nom utilisateur';
                         setState(() {});
                       }),
                   CustumButton(

@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 class Palette {
   static const Color scaffold = Color(0xFFFFFFFF);
-  static const Color grey = Color.fromARGB(117, 230, 227, 227);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color.fromARGB(255, 10, 10, 10);
+  static const Color grey = Colors.grey;
   static const Color appBarColor = Color(0xFF1D976C);
   static const Color sideBarColor = Color(0xFF1C212D);
   static const Color backgroundColor = Color.fromARGB(255, 227, 235, 243);
   static const Color fadeColors = Color(0xFFF3F8FC);
   static const Color teal = Colors.teal;
   static const Color red = Colors.red;
+  static const Color transparent = Colors.transparent;
 
   static const Color primaryColor = Color(0xFF1B00FF);
+  static const Color primaryColor2 = Color.fromARGB(255, 195, 195, 199);
   static const MaterialColor swatch = MaterialColor(0xFF1B00FF, {
     50: Color(0xFFFFFFFF),
     60: Color(0xFFFFFFFF),

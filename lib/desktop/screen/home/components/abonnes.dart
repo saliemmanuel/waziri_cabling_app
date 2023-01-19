@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
@@ -9,11 +10,11 @@ import '../widget/abonnes_table.dart';
 import '../widget/shimmer_table.dart';
 
 class Abonne extends StatelessWidget {
-  const Abonne({super.key});
+  final Users users;
+  const Abonne({super.key, required this.users});
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<HomeProvider>(context, listen: false).provideListeAbonnes();
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -50,6 +51,7 @@ class Abonne extends StatelessWidget {
                               ? const ShimmerTable()
                               : AbonnesTable(
                                   abonnesList: value.listAbonnes['abonne'],
+                                  users: users,
                                 ),
                     )))
           ],

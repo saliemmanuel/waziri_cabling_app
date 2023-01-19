@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../config/config.dart';
 
 class Index extends StatefulWidget {
-  const Index({super.key});
+  const Index({super.key, required bool isDesktop});
 
   @override
   State<Index> createState() => _IndexState();

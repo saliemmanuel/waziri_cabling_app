@@ -1,30 +1,75 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
+import 'package:waziri_cabling_app/models/abonne_models.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
 
 class AddBonnes extends StatefulWidget {
-  const AddBonnes({super.key});
+  final Users users;
+  const AddBonnes({super.key, required this.users});
 
   @override
   State<AddBonnes> createState() => _AddBonnesState();
 }
 
 class _AddBonnesState extends State<AddBonnes> {
-  List? listSecteur = [
-    'Maroua',
-    'Douala',
-    'Yaoundé ',
-    'Bamenda',
-    'Ngaoundéré',
-    'Loum',
-    'Nkongsamba',
-  ];
-  List? listRole = ['admin', 'chef-secteur'];
-  var role = "Rôle utilisateur";
+  var type = "Type abonnement";
   var secteur = "Selectionner un secteur";
+  var idChefSecteur = "";
+  var idType = "";
+  List? _listTypeAbonnement = [];
+  List? _listSecteur = [];
+  var nom = TextEditingController();
+  var prenom = TextEditingController();
+  var cni = TextEditingController();
+  var descriptionZone = TextEditingController();
+  var telephone = TextEditingController();
+
+  @override
+  void initState() {
+    initListSecteur();
+    initListTypeAbonnement();
+    super.initState();
+  }
+
+  initListTypeAbonnement() async {
+    List list = await Provider.of<HomeProvider>(context, listen: false)
+        .listTypeAbonnement["type_abonnement"];
+    if (list != []) {
+      for (var i = 0; i < list.length; i++) {
+        _listTypeAbonnement!.add(
+            '${list[i]['designation_type_abonnement']} - ${list[i]['id']}');
+      }
+    }
+    setState(() {});
+  }
+
+  initListSecteur() async {
+    List list = await Provider.of<HomeProvider>(context, listen: false)
+        .listSecteur["secteurs"];
+
+    if (list != []) {
+      for (var i = 0; i < list.length; i++) {
+        if (widget.users.roleUtilisateur == 'admin') {
+          _listSecteur!.add(
+              '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
+        } else {
+          if (list[i]['id_chef_secteur'] == widget.users.id) {
+            _listSecteur!.add(
+                '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
+          }
+        }
+      }
+    }
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Badge(
@@ -35,7 +80,6 @@ class _AddBonnesState extends State<AddBonnes> {
         },
       ),
       child: SizedBox(
-        width: 750.0,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 25.0),
@@ -53,27 +97,44 @@ class _AddBonnesState extends State<AddBonnes> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Nom utilisateur")),
+                                child: CustomText(data: "Nom abonné")),
                           ),
                           CustumTextField(
                               bacgroundColor: Palette.teal,
-                              child: 'Nom utilisateur',
+                              controller: nom,
+                              child: 'Nom abonné',
                               obscureText: false),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Prénom utilisateur")),
+                                child: CustomText(data: "Téléphone")),
                           ),
                           CustumTextField(
-                              child: 'Prénom utilisateur', obscureText: false),
+                              controller: telephone,
+                              child: "Téléphone",
+                              obscureText: false),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "E-mail")),
+                                child: CustomText(data: "cni abonné")),
                           ),
-                          CustumTextField(child: "E-mail", obscureText: false),
+                          CustumTextField(
+                              controller: cni,
+                              child: "cni abonné",
+                              obscureText: false),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(
+                                    data: "Description zône abonné")),
+                          ),
+                          CustumTextField(
+                              controller: descriptionZone,
+                              child: "Description",
+                              obscureText: false),
                         ],
                       ),
                     ),
@@ -85,15 +146,17 @@ class _AddBonnesState extends State<AddBonnes> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Téléphone")),
+                                child: CustomText(data: "Prénom abonné")),
                           ),
                           CustumTextField(
-                              child: "Téléphone", obscureText: false),
+                              controller: prenom,
+                              child: 'Prénom abonné',
+                              obscureText: false),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Rôle")),
+                                child: CustomText(data: "Type abonnement")),
                           ),
                           Container(
                             height: 55.5,
@@ -109,19 +172,21 @@ class _AddBonnesState extends State<AddBonnes> {
                                   underline: const SizedBox(),
                                   hint: Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text(role.toString()),
+                                    child: Text(type.toString()),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: listRole!
+                                  items: _listTypeAbonnement!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
-                                            child: Text(e,
+                                            child: Text(
+                                                e.toString().split('-')[0],
                                                 style: const TextStyle(
                                                     color: Colors.black)),
                                           ))
                                       .toList(),
-                                  onChanged: (newVille) {
-                                    role = newVille!;
+                                  onChanged: (newType) {
+                                    idType = newType.toString().split('-')[1];
+                                    type = newType!.toString().split('-')[0];
                                     setState(() {});
                                   }),
                             ),
@@ -130,7 +195,7 @@ class _AddBonnesState extends State<AddBonnes> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Secteur")),
+                                child: CustomText(data: "Secteur abonné")),
                           ),
                           Container(
                             height: 55.5,
@@ -149,20 +214,25 @@ class _AddBonnesState extends State<AddBonnes> {
                                     child: Text(secteur.toString()),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: listSecteur!
+                                  items: _listSecteur!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
-                                            child: Text(e,
+                                            child: Text(
+                                                e.toString().split('-')[0],
                                                 style: const TextStyle(
                                                     color: Colors.black)),
                                           ))
                                       .toList(),
-                                  onChanged: (newVille) {
-                                    secteur = newVille!;
+                                  onChanged: (newSecteur) {
+                                    secteur =
+                                        newSecteur!.toString().split('-')[0];
+                                    idChefSecteur =
+                                        newSecteur.toString().split('-')[2];
                                     setState(() {});
                                   }),
                             ),
                           ),
+                          const SizedBox(height: 110.0)
                         ],
                       ),
                     )
@@ -176,33 +246,44 @@ class _AddBonnesState extends State<AddBonnes> {
                         child: "   Enregistrez   ",
                         bacgroundColor: Palette.teal,
                         onPressed: () async {
-                          // Provider.of<HomeProvider>(context, listen: false)
-                          //     .addNewUser(
-                          //         users: Users(
-                          //           id: null,
-                          //           nomUtilisateur: name.text,
-                          //           prenomUtilisateur: secondname.text,
-                          //           roleUtilisateur: role,
-                          //           telephoneUtilisateur:
-                          //               telephone.text.toString(),
-                          //           zoneUtilisateur: secteur,
-                          //           idUtilisateurInitiateur: widget.users.id,
-                          //           email: email.text,
-                          //         ),
-                          //         context: context);
-                          // name.clear();
-                          // secondname.clear();
-                          // email.clear();
-                          // telephone.clear();
-                          // role = "Rôle utilisateur";
-                          // secteur = "Selectionner un secteur";
-                          // setState(() {});
-                          // Provider.of<HomeProvider>(context, listen: false)
-                          //     .providelistUtilisateur();
+                          if (nom.text.isEmpty ||
+                              prenom.text.isEmpty ||
+                              cni.text.isEmpty ||
+                              descriptionZone.text.isEmpty ||
+                              telephone.text.isEmpty) {
+                            errorDialogueCard("Erreur",
+                                "Entrez toute les informations svp!", context);
+                          } else {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .addAbonnes(
+                                    abonne: AbonneModels(
+                                        id: "",
+                                        nomAbonne: nom.text,
+                                        prenomAbonne: prenom.text,
+                                        cniAbonne: cni.text,
+                                        telephoneAbonne: telephone.text,
+                                        descriptionZoneAbonne:
+                                            descriptionZone.text,
+                                        secteurAbonne: secteur,
+                                        idChefSecteur: idChefSecteur,
+                                        typeAbonnement: type,
+                                        idTypeAbonnement: idType),
+                                    context: context);
+                            nom.clear();
+                            prenom.clear();
+                            cni.clear();
+                            telephone.clear();
+                            descriptionZone.clear();
+                            type = "Type abonnement";
+                            secteur = "Selectionner un secteur";
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .provideListeAbonnes(users: widget.users);
+                          }
+                          setState(() {});
                         }),
                     CustumButton(
                         enableButton: true,
-                        child: "   Annuler   ",
+                        child: "   Fermer   ",
                         bacgroundColor: Palette.red,
                         onPressed: () async {
                           Navigator.pop(context);

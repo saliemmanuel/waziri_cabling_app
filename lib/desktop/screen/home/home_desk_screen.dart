@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/abonnes.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/components/home_chef_secteur.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/components/secteurs.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
@@ -41,13 +42,21 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
+    Provider.of<HomeProvider>(context, listen: false)
+        .provideListeTypeAbonnement();
+    Provider.of<HomeProvider>(context, listen: false)
+        .provideListeAbonnes(users: widget.users);
+ 
+
     var listPage = [
-      const Accueil(),
+      widget.users!.roleUtilisateur != "chef-secteur"
+          ? const Accueil()
+          : const HomeChefSecteur(),
       Utilisateurs(user: widget.users!),
       const Materiel(),
       const Pannes(),
-      const Factures(),
-      const Abonne(),
+      Factures(users: widget.users!),
+      Abonne(users: widget.users!),
       const Versements(),
       Comptabilite(user: widget.users!),
       const Charges(),
@@ -56,19 +65,17 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       Parametres(users: widget.users),
     ];
     var listItem = [
-      if (widget.users!.roleUtilisateur != "chef-secteur")
-        CustomPaneItem(
-            body:
-                Text('Accueil', style: GoogleFonts.cabin(color: Colors.black)),
-            icon: const Icon(IconlyLight.home, color: Colors.black),
-            isSelected: true,
-            selectedIcon:
-                const Icon(IconlyBold.home, color: Palette.primaryColor),
-            index: 0,
-            onPressed: () {
-              Provider.of<HomeProvider>(context, listen: false)
-                  .changeBody(index: 0);
-            }),
+      CustomPaneItem(
+          body: Text('Accueil', style: GoogleFonts.cabin(color: Colors.black)),
+          icon: const Icon(IconlyLight.home, color: Colors.black),
+          isSelected: true,
+          selectedIcon:
+              const Icon(IconlyBold.home, color: Palette.primaryColor),
+          index: 0,
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 0);
+          }),
       if (widget.users!.roleUtilisateur != "chef-secteur")
         CustomPaneItem(
             body: Text('Utilisateur',
@@ -161,6 +168,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                                 code: code.text.toString(),
                                 context: context);
                     if (res) {
+                      // ignore: use_build_context_synchronously
                       Provider.of<HomeProvider>(context, listen: false)
                           .changeBody(index: 7);
                       code.clear();

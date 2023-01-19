@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
+import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
+import 'package:waziri_cabling_app/models/abonne_models.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import 'action_dialogue.dart';
 import 'add_abonnes.dart';
+import 'detail_abonne.dart';
 
 class AbonnesTable extends StatelessWidget {
+  final Users users;
   final dynamic abonnesList;
-  const AbonnesTable({super.key, required this.abonnesList});
+  const AbonnesTable(
+      {super.key, required this.abonnesList, required this.users});
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +40,12 @@ class AbonnesTable extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: const Expanded(
-                    child: TextField(
-                  // onChanged: (value) => runFilter(value),
-                  decoration: InputDecoration(
-                      hintText: "Search", border: InputBorder.none),
-                )),
+                // child: const Expanded(
+                //     child: TextField(
+                //   // onChanged: (value) => runFilter(value),
+                //   decoration: InputDecoration(
+                //       hintText: "Search", border: InputBorder.none),
+                // )),
               ),
               InkWell(
                 child: Container(
@@ -52,7 +61,7 @@ class AbonnesTable extends StatelessWidget {
                     children: const [
                       Icon(Icons.add, color: Colors.teal),
                       CustomText(
-                        data: "Ajoutez un utilisateur",
+                        data: "Ajoutez un abonné",
                         color: Colors.teal,
                         fontWeight: FontWeight.bold,
                       ),
@@ -60,7 +69,8 @@ class AbonnesTable extends StatelessWidget {
                   ),
                 ),
                 onTap: () {
-                  actionDialogue(context: context, child: AddBonnes());
+                  actionDialogue(
+                      context: context, child: AddBonnes(users: users));
                 },
               ),
             ],
@@ -73,23 +83,19 @@ class AbonnesTable extends StatelessWidget {
                   DataColumn(label: CustomText(data: 'N°')),
                   DataColumn(
                       label: Expanded(
-                          child: CustomText(
-                              data: 'Nom et prénom',
-                              overflow: TextOverflow.clip))),
+                          child: Text('Nom et prénom',
+                              overflow: TextOverflow.ellipsis))),
                   DataColumn(label: CustomText(data: 'Téléphone')),
                   DataColumn(
                       label: Expanded(
-                    child: CustomText(data: 'Description zone'),
+                    child:
+                        CustomText(selectable: false, data: 'Description zone'),
                   )),
                   DataColumn(
-                      label: Expanded(
-                    child: CustomText(data: 'Secteur abonne'),
-                  )),
+                      label: Text('Secteur abonné',
+                          overflow: TextOverflow.ellipsis)),
                   DataColumn(
-                      label: Expanded(
-                    child: CustomText(data: 'Type abonnement'),
-                  )),
-                  DataColumn(label: CustomText(data: '   Action')),
+                      label: Expanded(child: CustomText(data: '   Action'))),
                 ],
                 rows: [
                   for (var index = 0; index < abonnesList!.length; index++)
@@ -101,23 +107,18 @@ class AbonnesTable extends StatelessWidget {
                       cells: [
                         DataCell(CustomText(data: '${index + 1}')),
                         DataCell(
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: CustomText(
-                              data:
-                                  "${abonnesList![index]['nom_abonne']} ${abonnesList![index]['prenom_abonne']}",
-                            ),
+                          Text(
+                            "${abonnesList![index]['nom_abonne']} ${abonnesList![index]['prenom_abonne']}",
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         DataCell(CustomText(
+                            selectable: true,
                             data: abonnesList![index]['telephone_abonne']
                                 .toString())),
-                        DataCell(Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CustomText(
-                            data: abonnesList![index]['description_zone_abonne']
-                                .toString(),
-                          ),
+                        DataCell(CustomText(
+                          data: abonnesList![index]['description_zone_abonne'],
+                          selectable: true,
                         )),
                         DataCell(Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -134,24 +135,33 @@ class AbonnesTable extends StatelessWidget {
                                   child: const CustomText(
                                       data: "Détail", color: Colors.white),
                                   onPressed: () {
-                                    // actionDialogue(
-                                    //     child: DetailUtilisateur(
-                                    //       users: Users(
-                                    //           prenomUtilisateur: userList![index]
-                                    //               ['prenom_utilisateur'],
-                                    //           nomUtilisateur: userList![index]
-                                    //               ['nom_utilisateur'],
-                                    //           roleUtilisateur: userList![index]
-                                    //               ['role_utilisateur'],
-                                    //           email: userList![index]['email'],
-                                    //           telephoneUtilisateur: userList![
-                                    //                       index]
-                                    //                   ['telephone_utilisateur']
-                                    //               .toString(),
-                                    //           zoneUtilisateur: userList![index]
-                                    //               ['zone_utilisateur']),
-                                    //     ),
-                                    //     context: context);
+                                    var abonne = AbonneModels(
+                                        id: abonnesList![index]['id']
+                                            .toString(),
+                                        nomAbonne: abonnesList![index]['nom_abonne']
+                                            .toString(),
+                                        prenomAbonne: abonnesList![index]
+                                                ['prenom_abonne']
+                                            .toString(),
+                                        cniAbonne: abonnesList![index]['cni_abonne']
+                                            .toString(),
+                                        telephoneAbonne: abonnesList![index]
+                                                ['telephone_abonne']
+                                            .toString(),
+                                        descriptionZoneAbonne: abonnesList![index]
+                                                ['description_zone_abonne']
+                                            .toString(),
+                                        secteurAbonne: abonnesList![index]
+                                                ['secteur_abonne']
+                                            .toString(),
+                                        idChefSecteur: abonnesList![index]
+                                                ['id_chef_secteur']
+                                            .toString(),
+                                        typeAbonnement: abonnesList![index]['type_abonnement'].toString(),
+                                        idTypeAbonnement: abonnesList![index]['id_type_abonnement'].toString());
+                                    actionDialogue(
+                                        child: DetailAbonne(abonne: abonne),
+                                        context: context);
                                   }),
                             ),
                             const SizedBox(width: 10.0),
@@ -159,41 +169,57 @@ class AbonnesTable extends StatelessWidget {
                               child: MaterialButton(
                                   color: Colors.red,
                                   onPressed: () async {
-                                    // getCodeAuth(
-                                    //     context: context,
-                                    //     onCall: () async {
-                                    //       var res = await Provider.of<
-                                    //           AuthProvider>(
-                                    //         context,
-                                    //         listen: false,
-                                    //       ).codeAuth(
-                                    //         idAmin: users.id.toString(),
-                                    //         code: code.text.toString(),
-                                    //         context: context,
-                                    //       );
-                                    //       if (res) {
-                                    //         // ignore: use_build_context_synchronously
-                                    //         Provider.of<HomeProvider>(
-                                    //                 context,
-                                    //                 listen: false)
-                                    //             .getDeleteUser(
-                                    //                 email: userList![index]
-                                    //                         ['email']
-                                    //                     .toString(),
-                                    //                 idUser: userList![index]
-                                    //                         ['id']
-                                    //                     .toString(),
-                                    //                 context: context);
-                                    //         print("delete");
-                                    //         print(userList![index]);
-                                    //         // ignore: use_build_context_synchronously
-                                    //         Provider.of<HomeProvider>(
-                                    //                 context,
-                                    //                 listen: false)
-                                    //             .providelistUtilisateur();
-                                    //       }
-                                    //       code.clear();
-                                    //     });
+                                    getCodeAuth(
+                                        context: context,
+                                        onCall: () async {
+                                          var res =
+                                              await Provider.of<AuthProvider>(
+                                            context,
+                                            listen: false,
+                                          ).codeAuth(
+                                            idAmin: users.id.toString(),
+                                            code: code.text.toString(),
+                                            context: context,
+                                          );
+                                          if (res) {
+                                            var abonne = AbonneModels(
+                                                id: abonnesList![index]['id']
+                                                    .toString(),
+                                                nomAbonne: abonnesList![index]
+                                                    ['nom_abonne'],
+                                                prenomAbonne: abonnesList![index]
+                                                    ['prenom_abonne'],
+                                                cniAbonne: abonnesList![index]
+                                                    ['cni_abonne'],
+                                                telephoneAbonne: abonnesList![index]
+                                                        ['telephone_abonne']
+                                                    .toString(),
+                                                descriptionZoneAbonne: abonnesList![index]
+                                                    ['description_zone_abonne'],
+                                                secteurAbonne: abonnesList![index]
+                                                    ['secteur_abonne'],
+                                                idChefSecteur: abonnesList![index]
+                                                        ['id_chef_secteur']
+                                                    .toString(),
+                                                typeAbonnement: abonnesList![index]
+                                                        ['type_abonnement']
+                                                    .toString(),
+                                                idTypeAbonnement:
+                                                    abonnesList![index]['id_type_abonnement'].toString());
+                                            // ignore: use_build_context_synchronously
+                                            Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .getDeleteAbonne(
+                                                    abonne: abonne,
+                                                    context: context);
+                                            // ignore: use_build_context_synchronously
+                                            Provider.of<HomeProvider>(context,
+                                                    listen: false)
+                                                .provideListeAbonnes(
+                                                    users: users);
+                                          }
+                                          code.clear();
+                                        });
                                   },
                                   child: const Icon(IconlyBold.delete,
                                       color: Colors.white)),

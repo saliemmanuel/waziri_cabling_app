@@ -44,8 +44,7 @@ class _ParametresState extends State<Parametres> {
                 backgroundColor: Palette.scaffold,
               ),
             ),
-            Expanded(
-                child: Container(
+            Container(
               margin: const EdgeInsets.only(
                   left: 45.0, right: 45.0, bottom: 40.0, top: 40.0),
               padding: const EdgeInsets.all(25.0),
@@ -95,18 +94,19 @@ class _ParametresState extends State<Parametres> {
                   InkWell(
                     child: const Text("Edite"),
                     onTap: () {
-                      // actionDialogue(
-                      //     child: EditeUser(userData: userList![index]),
-                      //     context: context);
-                      Provider.of<HomeProvider>(context).updateUtilisateur(
-                        users: Users(),
-                        context: context,
-                      );
+                      actionDialogue(
+                          child: EditeUser(userData: widget.users!),
+                          context: context);
+                      // Provider.of<HomeProvider>(context, listen: false)
+                      //     .updateUtilisateur(
+                      //   users: Users(),
+                      //   context: context,
+                      // );
                     },
                   )
                 ],
               ),
-            ))
+            )
           ],
         ),
       ),

@@ -42,11 +42,16 @@ class SecteurTable extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: const Expanded(
-                    child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Search", border: InputBorder.none),
-                )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    CustomText(data: "Search", color: Colors.grey),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(IconlyBold.search, color: Colors.grey),
+                    )
+                  ],
+                ),
               ),
               InkWell(
                 child: Container(
@@ -96,10 +101,9 @@ class SecteurTable extends StatelessWidget {
                           : MaterialStateProperty.all(Colors.white),
                       cells: [
                         DataCell(CustomText(data: "${id + 1}")),
-                        DataCell(Expanded(
-                          child: CustomText(
-                              data: listSecteur[id]['designation_secteur']),
-                        )),
+                        DataCell(CustomText(
+                            selectable: true,
+                            data: listSecteur[id]['designation_secteur'])),
                         DataCell(CustomText(
                             data: listSecteur[id]['description_secteur'],
                             overflow: TextOverflow.clip)),
@@ -125,14 +129,17 @@ class SecteurTable extends StatelessWidget {
                                   actionDialogue(
                                       child: DetailSecteur(
                                         secteur: Secteur(
-                                          id: listSecteur[id]['id'],
-                                          descriptionSecteur: listSecteur[id]
-                                              ['description_secteur'],
-                                          designationSecteur: listSecteur[id]
-                                              ['designation_secteur'],
-                                          nomChefSecteur: listSecteur[id]
-                                              ['nom_chef_secteur'],
-                                        ),
+                                            id: listSecteur[id]['id']
+                                                .toString(),
+                                            descriptionSecteur: listSecteur[id]
+                                                ['description_secteur'],
+                                            designationSecteur: listSecteur[id]
+                                                ['designation_secteur'],
+                                            nomChefSecteur: listSecteur[id]
+                                                ['nom_chef_secteur'],
+                                            idChefSecteur: listSecteur[id]
+                                                    ['id_chef_secteur']
+                                                .toString()),
                                       ),
                                       context: context);
                                 }),
@@ -163,17 +170,21 @@ class SecteurTable extends StatelessWidget {
                                                     listen: false)
                                                 .getDeleteSecteur(
                                                     secteur: Secteur(
-                                                      id: listSecteur[id]['id'],
-                                                      descriptionSecteur:
-                                                          listSecteur[id][
-                                                              'description_secteur'],
-                                                      designationSecteur:
-                                                          listSecteur[id][
-                                                              'designation_secteur'],
-                                                      nomChefSecteur: listSecteur[
-                                                              id]
-                                                          ['nom_chef_secteur'],
-                                                    ),
+                                                        id: listSecteur[id]
+                                                                ['id']
+                                                            .toString(),
+                                                        descriptionSecteur:
+                                                            listSecteur[id][
+                                                                'description_secteur'],
+                                                        designationSecteur:
+                                                            listSecteur[id][
+                                                                'designation_secteur'],
+                                                        nomChefSecteur:
+                                                            listSecteur[id]['id_chef_secteur']
+                                                                .toString(),
+                                                        idChefSecteur:
+                                                            listSecteur[id]
+                                                                ['nom_chef_secteur']),
                                                     context: context);
 
                                             // ignore: use_build_context_synchronously

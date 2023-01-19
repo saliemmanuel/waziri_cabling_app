@@ -29,13 +29,6 @@ class DataTable2SimpleDemo extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: const Expanded(
-                    child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search",
-                    border: InputBorder.none,
-                  ),
-                )),
               ),
               Container(
                 alignment: Alignment.center,

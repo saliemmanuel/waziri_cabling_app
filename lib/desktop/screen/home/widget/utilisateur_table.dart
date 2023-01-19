@@ -41,12 +41,16 @@ class UserTable extends StatelessWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                child: const Expanded(
-                    child: TextField(
-                  // onChanged: (value) => runFilter(value),
-                  decoration: InputDecoration(
-                      hintText: "Search", border: InputBorder.none),
-                )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    CustomText(data: "Search", color: Colors.grey),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(IconlyBold.search, color: Colors.grey),
+                    )
+                  ],
+                ),
               ),
               InkWell(
                 child: Container(
@@ -110,6 +114,7 @@ class UserTable extends StatelessWidget {
                           ),
                         ),
                         DataCell(CustomText(
+                          selectable: true,
                           data: userList![index]['email'],
                         )),
                         DataCell(CustomText(

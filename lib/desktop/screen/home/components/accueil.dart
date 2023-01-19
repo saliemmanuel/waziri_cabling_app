@@ -61,29 +61,7 @@ class _AccueilState extends State<Accueil> {
                       8,
                       (index) => AccueilCard(
                         containerColor: Colors.teal,
-                        onPressed: () {
-                          showDialog(
-                              barrierColor: Colors.transparent,
-                              context: context,
-                              builder: (_) {
-                                return AlertDialog(
-                                  backgroundColor: Colors.transparent,
-                                  content: Container(
-                                    width: 950.0,
-                                    decoration:
-                                        BoxDecoration(color: Colors.red),
-                                    child: Column(
-                                      children: [
-                                        Text("SALI EMMANUEL"),
-                                        Text("SALI EMMANUEL"),
-                                        Text("SALI EMMANUEL"),
-                                        Text("SALI EMMANUEL"),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              });
-                        },
+                        onPressed: () {},
                       ),
                     )),
               ),

@@ -25,7 +25,6 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (context) => AuthProvider()),
-      ChangeNotifierProvider(create: ((context) => TesteProvide())),
       ChangeNotifierProvider(create: ((context) => HomeProvider())),
     ],
     child: Index(isDesktop: Platform.isWindows),

@@ -45,7 +45,10 @@ class DetailSecteur extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        CustomText(data: secteur.descriptionSecteur),
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child:
+                                CustomText(data: secteur.descriptionSecteur)),
                       ]),
                 ),
                 const SizedBox(width: 15.0),

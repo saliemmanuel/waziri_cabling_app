@@ -29,11 +29,6 @@ class ShimmerTable extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.teal,
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: const Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        hintText: "Search", border: InputBorder.none),
-                  )),
                 ),
                 Container(
                   alignment: Alignment.center,
@@ -44,11 +39,6 @@ class ShimmerTable extends StatelessWidget {
                   decoration: BoxDecoration(
                       color: Colors.teal,
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: const Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                        hintText: "Search", border: InputBorder.none),
-                  )),
                 ),
                 Container(
                   alignment: Alignment.center,

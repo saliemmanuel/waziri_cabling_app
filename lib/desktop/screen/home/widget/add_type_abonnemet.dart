@@ -101,7 +101,7 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
                         bacgroundColor: Palette.teal,
                         onPressed: () {
                           Provider.of<HomeProvider>(context, listen: false)
-                              .getAddTypeAbonnement(
+                              .addTypeAbonnement(
                                   type: TypeAbonnement(
                                       id: 0,
                                       designationTypeAbonnement:
