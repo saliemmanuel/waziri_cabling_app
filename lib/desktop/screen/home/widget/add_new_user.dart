@@ -214,7 +214,7 @@ class _AddNewUserState extends State<AddNewUser> {
                           secteur = "Selectionner un secteur";
                           setState(() {});
                           Provider.of<HomeProvider>(context, listen: false)
-                              .providelistUtilisateur();
+                              .providelistUtilisateur('Tout les utilisateurs');
                         }),
                     CustumButton(
                         enableButton: true,

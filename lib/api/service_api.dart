@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -195,7 +196,9 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   getPayementFacture(
@@ -236,7 +239,9 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   getAuthCode(
@@ -271,7 +276,9 @@ class ServiceApi {
           return response['statut'];
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   deleteUser(
@@ -301,7 +308,9 @@ class ServiceApi {
           return response['statut'];
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   deleteAbonne(
@@ -329,7 +338,9 @@ class ServiceApi {
           return response['statut'];
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   storeAdministrationCode(
@@ -357,7 +368,9 @@ class ServiceApi {
           return response['statut'];
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   addUtilisateur(
@@ -396,7 +409,9 @@ class ServiceApi {
 
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   updateUtilisateur(
@@ -430,7 +445,9 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   deleteSecteur({
@@ -460,7 +477,9 @@ class ServiceApi {
           return response['statut'];
         }
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   getListTypeAbonnement({String? token}) async {
@@ -541,7 +560,9 @@ class ServiceApi {
 
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   addAbonne({
@@ -578,7 +599,9 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   getListAbonnes({String? token, required Users? users}) async {

@@ -9,7 +9,7 @@ import 'package:waziri_cabling_app/models/users.dart';
 
 class HomeProvider extends ChangeNotifier {
   final _service = ServiceApi();
-  dynamic _listUtilisateur;
+  List _listUtilisateur = [];
   dynamic _listSecteur;
   dynamic _listTypeAbonnement;
   dynamic _listAbonnes;
@@ -23,12 +23,32 @@ class HomeProvider extends ChangeNotifier {
   get listFactures => _listFactures;
   get topIndex => _topIndex;
 
-  providelistUtilisateur() async {
+  providelistUtilisateur(var selectedTypeUtilisateur) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
-    _listUtilisateur = await _service.getListUtilisateur(token: token);
+    dynamic tmp;
+    tmp = await _service.getListUtilisateur(token: token);
+
+    if (tmp != null) {
+      var temp = tmp['utilisateur'];
+      if (temp != []) {
+        _listUtilisateur.clear();
+        for (var i in temp) {
+          if (i['role_utilisateur']
+              .toString()
+              .contains(selectedTypeUtilisateur!)) {
+            _listUtilisateur.add(i);
+          } else if (selectedTypeUtilisateur
+              .contains('Tout les utilisateurs')) {
+            _listUtilisateur.add(i);
+          }
+        }
+      }
+    }
     notifyListeners();
   }
+
+  makeSearch() {}
 
   provideListSecteur() async {
     var storage = const FlutterSecureStorage();
@@ -51,7 +71,7 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  dynamic _listTrie = [];
+  final dynamic _listTrie = [];
   get listTrie => _listTrie;
 
   provideListeFacture(
@@ -141,7 +161,7 @@ class HomeProvider extends ChangeNotifier {
   }
 
   deconnexion() {
-    _listUtilisateur = null;
+    _listUtilisateur.clear();
     _listSecteur = null;
     _listTypeAbonnement = null;
     _listAbonnes = null;

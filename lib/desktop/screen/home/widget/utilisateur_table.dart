@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -15,12 +16,20 @@ import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
 import 'detail_utilisateur.dart';
 
-class UserTable extends StatelessWidget {
+class UserTable extends StatefulWidget {
   final userList;
   final Users users;
 
   const UserTable({super.key, required this.userList, required this.users});
 
+  @override
+  State<UserTable> createState() => _UserTableState();
+}
+
+class _UserTableState extends State<UserTable> {
+  var listTypeUtilisateur = ['admin', 'chef-secteur', 'Tout les utilisateurs'];
+  var selectedTypeUtilisateur = '';
+  var controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,44 +39,66 @@ class UserTable extends StatelessWidget {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste des utilisateurs (${userList.length ?? ""})"),
+                  data:
+                      "Liste des utilisateurs (${widget.userList.length ?? ""})"),
               const SizedBox(width: 70.0),
               Container(
                 alignment: Alignment.center,
-                height: 40.0,
-                width: 230.0,
-                margin: const EdgeInsets.all(10.0),
+                height: 35.0,
+                width: 250.0,
+                margin: const EdgeInsets.all(8.0),
                 padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.teal),
+                    border: Border.all(color: Palette.teal),
                     borderRadius: BorderRadius.circular(5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    CustomText(data: "Search", color: Colors.grey),
-                    Padding(
+                  children: [
+                    Expanded(
+                        child: TextField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: 'Search'),
+                    )),
+                    const Padding(
                       padding: EdgeInsets.all(8.0),
-                      child: Icon(IconlyBold.search, color: Colors.grey),
+                      child: Icon(IconlyBold.search, color: Palette.grey),
                     )
                   ],
                 ),
               ),
+              ComboBox<String>(
+                style: const TextStyle(color: Palette.teal),
+                value: selectedTypeUtilisateur,
+                items: listTypeUtilisateur.map<ComboBoxItem<String>>((e) {
+                  return ComboBoxItem<String>(
+                    value: e,
+                    child: Text(e),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  setState(() => selectedTypeUtilisateur = value!);
+                  Provider.of<HomeProvider>(context, listen: false)
+                      .providelistUtilisateur(selectedTypeUtilisateur);
+                },
+                placeholder: const Text('Type utilisateur'),
+              ),
               InkWell(
                 child: Container(
                   alignment: Alignment.center,
-                  height: 40.0,
-                  margin: const EdgeInsets.all(10.0),
-                  padding: const EdgeInsets.all(10.0),
+                  height: 35.0,
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.teal),
+                      border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.add, color: Colors.teal),
+                      Icon(Icons.add, color: Palette.teal),
                       CustomText(
                         data: "Ajoutez un utilisateur",
-                        color: Colors.teal,
+                        color: Palette.teal,
                         fontWeight: FontWeight.bold,
                       ),
                     ],
@@ -75,12 +106,16 @@ class UserTable extends StatelessWidget {
                 ),
                 onTap: () {
                   actionDialogue(
-                      context: context, child: AddNewUser(users: users));
+                      context: context, child: AddNewUser(users: widget.users));
                 },
               ),
             ],
           ),
-          const Divider(),
+          Container(
+            height: 1,
+            color: Palette.grey,
+            width: double.infinity,
+          ),
           Expanded(
             child: SingleChildScrollView(
               child: DataTable(
@@ -99,53 +134,59 @@ class UserTable extends StatelessWidget {
                   DataColumn(label: CustomText(data: '   Action')),
                 ],
                 rows: [
-                  for (var index = 0; index < userList!.length; index++)
+                  for (var index = 0; index < widget.userList!.length; index++)
                     DataRow(
                       color: index % 2 == 0
                           ? MaterialStateProperty.all(
-                              Colors.grey.withOpacity(0.1))
-                          : MaterialStateProperty.all(Colors.white),
+                              Palette.grey.withOpacity(0.1))
+                          : MaterialStateProperty.all(Palette.white),
                       cells: [
                         DataCell(CustomText(data: '${index + 1}')),
                         DataCell(
                           CustomText(
                             data:
-                                "${userList![index]['nom_utilisateur']} ${userList![index]['prenom_utilisateur']}",
+                                "${widget.userList![index]['nom_utilisateur']} ${widget.userList![index]['prenom_utilisateur']}",
                           ),
                         ),
                         DataCell(CustomText(
                           selectable: true,
-                          data: userList![index]['email'],
+                          data: widget.userList![index]['email'],
                         )),
                         DataCell(CustomText(
-                            data: userList![index]['telephone_utilisateur']
+                            data: widget.userList![index]
+                                    ['telephone_utilisateur']
                                 .toString())),
                         DataCell(CustomText(
-                            data: userList![index]['role_utilisateur']
+                            data: widget.userList![index]['role_utilisateur']
                                 .toString())),
                         DataCell(Row(children: [
                           Expanded(
                             child: MaterialButton(
                                 color: Palette.online,
                                 child: const CustomText(
-                                    data: "Détail", color: Colors.white),
+                                    data: "Détail", color: Palette.white),
                                 onPressed: () {
                                   actionDialogue(
                                       child: DetailUtilisateur(
                                         users: Users(
-                                            prenomUtilisateur: userList![index]
-                                                ['prenom_utilisateur'],
-                                            nomUtilisateur: userList![index]
-                                                ['nom_utilisateur'],
-                                            roleUtilisateur: userList![index]
-                                                ['role_utilisateur'],
-                                            email: userList![index]['email'],
-                                            telephoneUtilisateur: userList![
-                                                        index]
+                                            prenomUtilisateur:
+                                                widget.userList![index]
+                                                    ['prenom_utilisateur'],
+                                            nomUtilisateur:
+                                                widget.userList![index]
+                                                    ['nom_utilisateur'],
+                                            roleUtilisateur:
+                                                widget.userList![index]
+                                                    ['role_utilisateur'],
+                                            email: widget.userList![index]
+                                                ['email'],
+                                            telephoneUtilisateur: widget
+                                                .userList![index]
                                                     ['telephone_utilisateur']
                                                 .toString(),
-                                            zoneUtilisateur: userList![index]
-                                                ['zone_utilisateur']),
+                                            zoneUtilisateur:
+                                                widget.userList![index]
+                                                    ['zone_utilisateur']),
                                       ),
                                       context: context);
                                 }),
@@ -153,8 +194,9 @@ class UserTable extends StatelessWidget {
                           const SizedBox(width: 10.0),
                           Expanded(
                             child: MaterialButton(
-                                color: Colors.red,
-                                onPressed: userList![index]['id'] == users.id
+                                color: Palette.red,
+                                onPressed: widget.userList![index]['id'] ==
+                                        widget.users.id
                                     ? null
                                     : () async {
                                         getCodeAuth(
@@ -165,7 +207,8 @@ class UserTable extends StatelessWidget {
                                                 context,
                                                 listen: false,
                                               ).codeAuth(
-                                                idAmin: users.id.toString(),
+                                                idAmin:
+                                                    widget.users.id.toString(),
                                                 code: code.text.toString(),
                                                 context: context,
                                               );
@@ -175,26 +218,29 @@ class UserTable extends StatelessWidget {
                                                         context,
                                                         listen: false)
                                                     .getDeleteUser(
-                                                        email: userList![index]
+                                                        email: widget
+                                                            .userList![index]
                                                                 ['email']
                                                             .toString(),
-                                                        idUser: userList![index]
+                                                        idUser: widget
+                                                            .userList![index]
                                                                 ['id']
                                                             .toString(),
                                                         context: context);
                                                 print("delete");
-                                                print(userList![index]);
+                                                print(widget.userList![index]);
                                                 // ignore: use_build_context_synchronously
                                                 Provider.of<HomeProvider>(
                                                         context,
                                                         listen: false)
-                                                    .providelistUtilisateur();
+                                                    .providelistUtilisateur(
+                                                        'Tout les utilisateurs');
                                               }
                                               code.clear();
                                             });
                                       },
                                 child: const Icon(IconlyBold.delete,
-                                    color: Colors.white)),
+                                    color: Palette.white)),
                           ),
                         ])),
                       ],

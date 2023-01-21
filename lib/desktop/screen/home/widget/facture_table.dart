@@ -35,7 +35,7 @@ class _FactureTableState extends State<FactureTable> {
     'Toute les factures'
   ];
   var selectedStatut = '';
-
+  var controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -48,21 +48,26 @@ class _FactureTableState extends State<FactureTable> {
               CustomText(
                   data:
                       "Liste des factures (${widget.listFacture.length ?? ""})"),
-              const SizedBox(width: 70.0),
+              const SizedBox(width: 50.0),
               Container(
                 alignment: Alignment.center,
-                height: 40.0,
-                width: 230.0,
-                margin: const EdgeInsets.all(10.0),
+                height: 35.0,
+                width: 250.0,
+                margin: const EdgeInsets.all(8.0),
                 padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
                 decoration: BoxDecoration(
                     border: Border.all(color: Palette.teal),
                     borderRadius: BorderRadius.circular(5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    CustomText(data: "Search", color: Palette.grey),
-                    Padding(
+                  children: [
+                    Expanded(
+                        child: TextField(
+                      controller: controller,
+                      decoration: const InputDecoration(
+                          border: InputBorder.none, hintText: 'Search'),
+                    )),
+                    const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Icon(IconlyBold.search, color: Palette.grey),
                     )
@@ -72,9 +77,9 @@ class _FactureTableState extends State<FactureTable> {
               GestureDetector(
                 child: Container(
                   alignment: Alignment.center,
-                  height: 40.0,
-                  margin: const EdgeInsets.all(10.0),
-                  padding: const EdgeInsets.all(10.0),
+                  height: 35.0,
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
@@ -128,9 +133,9 @@ class _FactureTableState extends State<FactureTable> {
               GestureDetector(
                 child: Container(
                     alignment: Alignment.center,
-                    height: 40.0,
-                    margin: const EdgeInsets.all(10.0),
-                    padding: const EdgeInsets.all(10.0),
+                    height: 35.0,
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
                         border: Border.all(color: Palette.teal),
                         borderRadius: BorderRadius.circular(5.0)),
@@ -223,7 +228,7 @@ class _FactureTableState extends State<FactureTable> {
                               margin: const EdgeInsets.all(8.0),
                               child: CustomText(
                                 data:
-                                    '${widget.listFacture[id]['nom_abonne']} ${widget.listFacture[id]['prenom_abonne']}',
+                                    '${widget.listFacture[id]['nom_abonne']}\n${widget.listFacture[id]['prenom_abonne']}',
                               ),
                             ),
                           ),

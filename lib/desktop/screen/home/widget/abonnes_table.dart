@@ -22,6 +22,7 @@ class AbonnesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = TextEditingController();
     return Padding(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
@@ -33,26 +34,35 @@ class AbonnesTable extends StatelessWidget {
               const SizedBox(width: 70.0),
               Container(
                 alignment: Alignment.center,
-                height: 40.0,
-                width: 230.0,
-                margin: const EdgeInsets.all(10.0),
+                height: 35.0,
+                width: 250.0,
+                margin: const EdgeInsets.all(8.0),
                 padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.teal),
+                    border: Border.all(color: Palette.teal),
                     borderRadius: BorderRadius.circular(5.0)),
-                // child: const Expanded(
-                //     child: TextField(
-                //   // onChanged: (value) => runFilter(value),
-                //   decoration: InputDecoration(
-                //       hintText: "Search", border: InputBorder.none),
-                // )),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: TextField(
+                      controller: controller,
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: 'Search'),
+                    )),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(IconlyBold.search, color: Palette.grey),
+                    )
+                  ],
+                ),
               ),
               InkWell(
                 child: Container(
                   alignment: Alignment.center,
-                  height: 40.0,
-                  margin: const EdgeInsets.all(10.0),
-                  padding: const EdgeInsets.all(10.0),
+                  height: 35.0,
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.teal),
                       borderRadius: BorderRadius.circular(5.0)),
@@ -108,7 +118,7 @@ class AbonnesTable extends StatelessWidget {
                         DataCell(CustomText(data: '${index + 1}')),
                         DataCell(
                           Text(
-                            "${abonnesList![index]['nom_abonne']} ${abonnesList![index]['prenom_abonne']}",
+                            "${abonnesList![index]['nom_abonne']}\n${abonnesList![index]['prenom_abonne']}",
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

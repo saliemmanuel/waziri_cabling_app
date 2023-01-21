@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/action_dialogue.dart';
 import 'package:waziri_cabling_app/models/type_abonnement.dart';
@@ -34,20 +35,30 @@ class TableTypeAbonnement extends StatelessWidget {
               const SizedBox(width: 50.0),
               Container(
                 alignment: Alignment.center,
-                height: 40.0,
+                height: 35.0,
                 width: 230.0,
-                margin: const EdgeInsets.all(10.0),
-                padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
+                margin: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
                 decoration: BoxDecoration(
-                    border: Border.all(color: Colors.teal),
+                    border: Border.all(color: Palette.teal),
                     borderRadius: BorderRadius.circular(5.0)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    CustomText(data: "Search", color: Palette.grey),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(IconlyBold.search, color: Palette.grey),
+                    )
+                  ],
+                ),
               ),
               InkWell(
                 child: Container(
                   alignment: Alignment.center,
-                  height: 40.0,
-                  margin: const EdgeInsets.all(10.0),
-                  padding: const EdgeInsets.all(10.0),
+                  height: 35.0,
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.teal),
                       borderRadius: BorderRadius.circular(5.0)),

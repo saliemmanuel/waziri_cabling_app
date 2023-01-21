@@ -28,7 +28,8 @@ class Utilisateurs extends StatefulWidget {
 class _UtilisateursState extends State<Utilisateurs> {
   @override
   Widget build(BuildContext context) {
-    Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
+    Provider.of<HomeProvider>(context, listen: false)
+        .providelistUtilisateur('Tout les utilisateurs');
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -48,19 +49,6 @@ class _UtilisateursState extends State<Utilisateurs> {
                     const CustomText(data: "Utilisateurs", color: Colors.black),
                 elevation: 0.0,
                 backgroundColor: Palette.scaffold,
-                actions: [
-                  Consumer(
-                    builder: (context, value, child) => CardTips(
-                      icon: IconlyLight.user,
-                      cardColors: Colors.grey,
-                      iconColors: Colors.black,
-                      title:
-                          "${Provider.of<AuthProvider>(context).user.nomUtilisateur} ${Provider.of<AuthProvider>(context).user.prenomUtilisateur}",
-                      titleColors: Colors.black,
-                      onTap: () {},
-                    ),
-                  )
-                ],
               ),
             ),
             Expanded(
@@ -76,8 +64,7 @@ class _UtilisateursState extends State<Utilisateurs> {
                           child: value.listUtilisateur == null
                               ? const ShimmerTable()
                               : UserTable(
-                                  userList:
-                                      value.listUtilisateur['utilisateur'],
+                                  userList: value.listUtilisateur,
                                   users: widget.user),
                         );
                       },

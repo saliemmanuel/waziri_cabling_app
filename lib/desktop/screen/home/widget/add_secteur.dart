@@ -33,14 +33,16 @@ class _AddSecteurState extends State<AddSecteur> {
 
   @override
   void initState() {
-    Provider.of<HomeProvider>(context, listen: false).providelistUtilisateur();
+    Provider.of<HomeProvider>(context, listen: false)
+        .providelistUtilisateur('Tout les utilisateurs');
     initListUser();
     super.initState();
   }
 
   initListUser() async {
-    List list = await Provider.of<HomeProvider>(context, listen: false)
-        .listUtilisateur["utilisateur"];
+    List list =
+        await Provider.of<HomeProvider>(context, listen: false).listUtilisateur;
+
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         listUtilisateur!.add(
