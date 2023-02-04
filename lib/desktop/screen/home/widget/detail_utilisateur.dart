@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../models/users.dart';
 
@@ -15,95 +16,52 @@ class DetailUtilisateur extends StatelessWidget {
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
-        child: Padding(
-            padding: const EdgeInsets.all(58.0),
-            child: SingleChildScrollView(
-                child: Row(
-              children: [
-                Expanded(
+        child: SizedBox(
+          width: 800.0,
+          child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: SingleChildScrollView(
                   child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "Nom et prénom",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data:
-                                    "${users.nomUtilisateur!} ${users.prenomUtilisateur!}")),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "E-mail", fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(data: users.email!)),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "Téléphone", fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child:
-                                CustomText(data: users.telephoneUtilisateur!)),
-                      ]),
-                ),
-                const SizedBox(width: 15.0),
-                Expanded(
-                    child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(
-                            data: "Rôle", fontWeight: FontWeight.bold),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const CustomText(
+                      data: "Détail utilisateur",
+                      color: Colors.red,
+                      fontSize: 30.0),
+                  const SizedBox(height: 25.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomDetailWidget(
+                                  title: "Nom et prénom",
+                                  subtitle:
+                                      "${users.nomUtilisateur!} ${users.prenomUtilisateur!}"),
+                              CustomDetailWidget(
+                                  title: "E-mail", subtitle: users.email!),
+                              CustomDetailWidget(
+                                  title: "Téléphone",
+                                  subtitle: users.telephoneUtilisateur!),
+                            ]),
                       ),
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: users.roleUtilisateur!)),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(
-                            data: "Secteur", fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: users.zoneUtilisateur!)),
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(
-                            data: "Nombre abonnés secteur",
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const Align(
-                        alignment: Alignment.centerLeft,
-                        child: CustomText(data: "14")),
-                  ],
-                ))
-              ],
-            ))));
+                      const SizedBox(width: 15.0),
+                      Expanded(
+                          child: Column(
+                        children: [
+                          CustomDetailWidget(
+                              title: "Rôle", subtitle: users.roleUtilisateur!),
+                          CustomDetailWidget(
+                              title: "Secteur",
+                              subtitle: users.zoneUtilisateur!),
+                          const SizedBox(height: 100.0)
+                        ],
+                      ))
+                    ],
+                  ),
+                ],
+              ))),
+        ));
   }
 }

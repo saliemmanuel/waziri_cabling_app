@@ -28,7 +28,9 @@ class UserTable extends StatefulWidget {
 
 class _UserTableState extends State<UserTable> {
   var listTypeUtilisateur = ['admin', 'chef-secteur', 'Tout les utilisateurs'];
+  var listTypeSearch = ['E-mail', 'Téléphone'];
   var selectedTypeUtilisateur = '';
+  var selectedSearch = '';
   var controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -41,31 +43,65 @@ class _UserTableState extends State<UserTable> {
               CustomText(
                   data:
                       "Liste des utilisateurs (${widget.userList.length ?? ""})"),
-              const SizedBox(width: 70.0),
-              Container(
-                alignment: Alignment.center,
-                height: 35.0,
-                width: 250.0,
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Palette.teal),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      controller: controller,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: 'Search'),
-                    )),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(IconlyBold.search, color: Palette.grey),
-                    )
-                  ],
-                ),
+              const SizedBox(width: 35.0),
+              Row(
+                children: [
+                  ComboBox<String>(
+                    style: const TextStyle(color: Palette.teal),
+                    value: selectedSearch,
+                    items: listTypeSearch.map<ComboBoxItem<String>>((e) {
+                      return ComboBoxItem<String>(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() => selectedSearch = value!);
+                      Provider.of<HomeProvider>(context, listen: false)
+                          .providelistUtilisateur(selectedTypeUtilisateur);
+                    },
+                    placeholder: const Text("Recherche par"),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 35.0,
+                    width: 200.0,
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.teal),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: TextField(
+                          controller: controller,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none, hintText: 'Search'),
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .providelistUtilisateur(
+                                      selectedTypeUtilisateur);
+                            } else {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .searchInListUtilisateur(
+                                      value,
+                                      selectedSearch == 'Téléphone'
+                                          ? "telephone_utilisateur"
+                                          : "email");
+                            }
+                          },
+                        )),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(IconlyBold.search, color: Palette.grey),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
               ComboBox<String>(
                 style: const TextStyle(color: Palette.teal),
@@ -111,11 +147,7 @@ class _UserTableState extends State<UserTable> {
               ),
             ],
           ),
-          Container(
-            height: 1,
-            color: Palette.grey,
-            width: double.infinity,
-          ),
+          Container(height: 1, color: Palette.grey, width: double.infinity),
           Expanded(
             child: SingleChildScrollView(
               child: DataTable(
@@ -202,41 +234,48 @@ class _UserTableState extends State<UserTable> {
                                         getCodeAuth(
                                             context: context,
                                             onCall: () async {
-                                              var res = await Provider.of<
-                                                  AuthProvider>(
-                                                context,
-                                                listen: false,
-                                              ).codeAuth(
-                                                idAmin:
-                                                    widget.users.id.toString(),
-                                                code: code.text.toString(),
-                                                context: context,
-                                              );
-                                              if (res) {
-                                                // ignore: use_build_context_synchronously
-                                                Provider.of<HomeProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .getDeleteUser(
-                                                        email: widget
-                                                            .userList![index]
-                                                                ['email']
-                                                            .toString(),
-                                                        idUser: widget
-                                                            .userList![index]
-                                                                ['id']
-                                                            .toString(),
-                                                        context: context);
-                                                print("delete");
-                                                print(widget.userList![index]);
-                                                // ignore: use_build_context_synchronously
-                                                Provider.of<HomeProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .providelistUtilisateur(
-                                                        'Tout les utilisateurs');
+                                              if (code.text.isNotEmpty) {
+                                                var res = await Provider.of<
+                                                    AuthProvider>(
+                                                  context,
+                                                  listen: false,
+                                                ).codeAuth(
+                                                  idAmin: widget.users.id
+                                                      .toString(),
+                                                  code: code.text.toString(),
+                                                  context: context,
+                                                );
+                                                if (res) {
+                                                  // ignore: use_build_context_synchronously
+                                                  Provider.of<HomeProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .getDeleteUser(
+                                                          email: widget
+                                                              .userList![index]
+                                                                  ['email']
+                                                              .toString(),
+                                                          idUser: widget
+                                                              .userList![index]
+                                                                  ['id']
+                                                              .toString(),
+                                                          context: context);
+                                                  print("delete");
+                                                  print(
+                                                      widget.userList![index]);
+                                                  // ignore: use_build_context_synchronously
+                                                  Provider.of<HomeProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .providelistUtilisateur(
+                                                          'Tout les utilisateurs');
+                                                }
+                                                code.clear();
+                                              } else {
+                                                echecTransaction(
+                                                    "Entrez le code svp!",
+                                                    context);
                                               }
-                                              code.clear();
                                             });
                                       },
                                 child: const Icon(IconlyBold.delete,

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/add_type_abonnemet.dart';
@@ -11,13 +12,18 @@ import 'package:waziri_cabling_app/models/secteur.dart';
 import 'package:waziri_cabling_app/models/type_abonnement.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
+import '../desktop/screen/home/provider/home_provider.dart';
 import '../desktop/screen/log/provider/auth_provider.dart';
 import '../global_widget/custom_dialogue_card.dart';
+import '../models/materiel_models.dart';
+import '../models/pannes_models.dart';
 import 'host.dart';
 import 'package:http/http.dart' as http;
 
 class ServiceApi {
   var host = Host();
+
+  var dio = Dio();
   bool isEmail(String email) {
     String p =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
@@ -25,7 +31,7 @@ class ServiceApi {
     return regExp.hasMatch(email);
   }
 
-  static formatDate(String date) {
+  static formatDate(String date, {bool enableMin = true}) {
     DateTime? datemsg;
     var annee = int.parse(date.substring(0, 4));
     var mois = int.parse(date.substring(5, 7));
@@ -37,13 +43,12 @@ class ServiceApi {
     var datenow = DateTime.now();
     var different = datenow.difference(datemsg);
     if (different.inDays > 8) {
-      return '$jour-$mois-$annee a $heur h $min min';
+      var valMin = '$heur h $min min';
+      return '$jour-$mois-$annee  ${enableMin ? 'a $valMin' : ''}';
     }
   }
 
-  // inscription
   connexion({String? email, String? password, var context}) async {
-    dynamic response;
     try {
       simpleDialogueCardSansTitle(
         msg: "Patientez svp ...",
@@ -51,28 +56,27 @@ class ServiceApi {
         barrierDismissible: false,
       );
       if (isEmail(email!)) {
-        var data = await http.post(
+        var data = await dio.postUri(
             host.baseUrl(endpoint: "utilisateur/connexion"),
-            headers: host.headers(""),
-            body: {
+            data: {
               "email": email,
               'password': password,
               "device_name": 'telephone.$email'
-            }).timeout(const Duration(seconds: 10), onTimeout: () {
-          throw TimeoutException(
-              'Connexion perdue, verifier votre connexion internet');
-        });
-        if (data.statusCode > 201) {
-          response = jsonDecode(data.body);
+            },
+            options: Options(
+                headers: host.headers(""),
+                sendTimeout: 60 * 1000,
+                receiveTimeout: 60 * 1000));
+
+        if (data.statusCode! > 201) {
           Navigator.pop(context);
-          errorDialogueCard("Erreur", response['message'], context);
+          errorDialogueCard("Erreur", data.data['message'], context);
           return false;
         }
         if (data.statusCode == 200) {
-          response = jsonDecode(data.body);
           Navigator.pop(context);
           Provider.of<AuthProvider>(context, listen: false)
-              .userData(token: response['token']);
+              .userData(token: data.data['token']);
           return true;
         }
       } else {
@@ -80,7 +84,8 @@ class ServiceApi {
         return false;
       }
     } catch (e) {
-      errorDialogueCard("Erreur", "$e", context)
+      errorDialogueCard("Erreur",
+              'Connexion perdue, verifier votre connexion internet', context)
           .then((value) => Navigator.pop(context));
       return false;
     }
@@ -108,14 +113,13 @@ class ServiceApi {
     try {
       simpleDialogueCardSansTitle(
           msg: "Déconnexion...", context: context, barrierDismissible: true);
-      var data = await http
-          .get(host.baseUrl(endpoint: "utilisateur/deconnexion"),
-              headers: host.headers(token!))
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode > 300) {
+      var data = await dio.getUri(
+          host.baseUrl(endpoint: "utilisateur/deconnexion"),
+          options: Options(
+              sendTimeout: 60 * 1000,
+              receiveTimeout: 60 * 1000,
+              headers: host.headers(token!)));
+      if (data.statusCode! > 300) {
         Navigator.pop(context);
         echecTransaction("Erreur lors de la déconnexion", context);
         return true;
@@ -129,38 +133,35 @@ class ServiceApi {
 
   getListUtilisateur({String? token}) async {
     try {
-      var data = await http
-          .get(host.baseUrl(endpoint: "utilisateur/index"),
-              headers: host.headers(token!))
+      var data = await dio
+          .postUri(host.baseUrl(endpoint: "utilisateur/index"),
+              options: Options(headers: host.headers(token!)))
           .timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      if (data.statusCode > 300) {
+      if (data.statusCode! > 300) {
         return [];
       }
       if (data.statusCode == 200) {
-        return jsonDecode(data.body);
+        return data.data;
       }
-    } catch (e) {}
+    } catch (e) {
+      print(e);
+    }
   }
 
   getListSecteur({String? token}) async {
-    try {
-      var data = await http
-          .get(host.baseUrl(endpoint: "secteur/index"),
-              headers: host.headers(token!))
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode > 300) {
-        return [];
-      }
-      if (data.statusCode == 200) {
-        return jsonDecode(data.body);
-      }
-    } catch (e) {}
+    // try {
+    var data = await dio.getUri(host.baseUrl(endpoint: "secteur/index"),
+        options: Options(headers: host.headers(token!)));
+    if (data.statusCode! > 300) {
+      return [];
+    }
+    if (data.statusCode == 200) {
+      return data.data['secteurs'];
+    }
+    // } catch (e) {}
   }
 
   addSecteur(
@@ -181,7 +182,6 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-
       if (data.statusCode > 300) {
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
@@ -195,6 +195,48 @@ class ServiceApi {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
         succesTransaction(response['message'], context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addMateriel({
+    String? token,
+    MaterielModels? materiel,
+    required BuildContext? context,
+  }) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+
+      var request = http.MultipartRequest(
+          "POST", host.baseUrl(endpoint: "materiel/store"));
+      request.headers['Authorization'] = 'Bearer $token';
+      request.fields['designation_materiel'] = materiel!.designationMateriel;
+      request.fields['prix_materiel'] = materiel.prixMateriel;
+      request.fields['date_achat_materiel'] = materiel.dateAchatMateriel;
+      request.fields['statut_materiel'] = 'token';
+      var imageMateriel = await http.MultipartFile.fromPath(
+          "image_materiel", materiel.imageMateriel);
+      var factureMateriel = await http.MultipartFile.fromPath(
+          "facture_materiel", materiel.factureMateriel);
+      request.files.add(imageMateriel);
+      request.files.add(factureMateriel);
+
+      http.StreamedResponse response = await request.send();
+      if (response.statusCode == 200) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        succesTransaction("Ajout matériel effectué", context);
+        // ignore: use_build_context_synchronously
+        Provider.of<HomeProvider>(context, listen: false).provideMateriels();
+      } else {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        echecTransaction("Echec ajout matériel", context);
       }
     } catch (e) {
       print(e);
@@ -231,12 +273,13 @@ class ServiceApi {
 
         var response = await jsonDecode(data.body);
         // ignore: use_build_context_synchronously
-        echecTransaction(
-            "Erreur lors de la création. ${response['message']}", context);
+        echecTransaction("Erreur lors du. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -255,29 +298,22 @@ class ServiceApi {
           context: context!,
           barrierDismissible: false);
 
-      var data = await http.post(host.baseUrl(endpoint: "code/get-code"),
-          headers: host.headers(token!),
-          body: {
-            "code_admin": code,
-            "id_admin": idAmin
-          }).timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
+      var data = await dio.postUri(host.baseUrl(endpoint: "code/get-code"),
+          options: Options(headers: host.headers(token!)),
+          data: {"code_admin": code, "id_admin": idAmin});
 
       if (data.statusCode == 200) {
         Navigator.pop(context);
-        var response = await jsonDecode(data.body);
-        if (response['statut']) {
+        if (data.data['statut']) {
           Navigator.pop(context);
-          return response['statut'];
+          return data.data['statut'];
         } else {
-          echecTransaction(response['message'], context);
-          return response['statut'];
+          echecTransaction(data.data['message'], context);
+          return data.data['statut'];
         }
       }
     } catch (e) {
-      print(e);
+      print("code $e");
     }
   }
 
@@ -306,6 +342,65 @@ class ServiceApi {
         } else {
           echecTransaction(response['message'], context);
           return response['statut'];
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  deleteMateriel(
+      {MaterielModels? materiel, String? token, required var context}) async {
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "materiel/destroy"),
+          headers: host.headers(token!),
+          body: {
+            "id": materiel!.id.toString(),
+            "designation_materiel": materiel.designationMateriel.toString(),
+            "prix_materiel": materiel.prixMateriel.toString(),
+            "date_achat_materiel": materiel.dateAchatMateriel.toString(),
+            "created_at": materiel.createAt.toString()
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        if (response['statut']) {
+          succesTransaction(response['message'], context);
+          return response['statut'];
+        } else {
+          echecTransaction(response['message'], context);
+          return response['statut'];
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  deletePannes(
+      {PannesModels? pannes, String? token, required var context}) async {
+    try {
+      var data = await dio.postUri(host.baseUrl(endpoint: "pannes/destroy"),
+          options: Options(headers: host.headers(token!)),
+          data: {
+            "id": pannes!.id.toString(),
+            "designation": pannes.designation.toString(),
+            "description": pannes.description.toString(),
+            "detected_date": pannes.detectedDate.toString(),
+            "secteur": pannes.secteur.toString(),
+          });
+
+      if (data.statusCode == 200) {
+        if (data.data['statut']) {
+          succesTransaction(data.data['message'], context);
+          Provider.of<HomeProvider>(context, listen: false).providePannes();
+          return data.data['statut'];
+        } else {
+          echecTransaction(data.data['message'], context);
+          return data.data['statut'];
         }
       }
     } catch (e) {
@@ -495,7 +590,41 @@ class ServiceApi {
         return [];
       }
       if (data.statusCode == 200) {
-        return jsonDecode(data.body);
+        var response = jsonDecode(data.body);
+        return response['type_abonnement'];
+      }
+    } catch (e) {}
+  }
+
+  getListMateriel({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "materiel/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        var response = jsonDecode(data.body);
+
+        return response['materiel'];
+      }
+    } catch (e) {}
+  }
+
+  getListPannes({String? token}) async {
+    try {
+      var data = await dio.getUri(host.baseUrl(endpoint: "pannes/index"),
+          options: Options(headers: host.headers(token!)));
+      if (data.statusCode! > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return data.data['pannes'];
       }
     } catch (e) {}
   }
@@ -604,6 +733,39 @@ class ServiceApi {
     }
   }
 
+  getAddPanne({
+    String? token,
+    PannesModels? panne,
+    required var context,
+  }) async {
+    try {
+      simpleDialogueCardSansTitle(
+        msg: "Patientez svp...",
+        context: context!,
+        barrierDismissible: true,
+      );
+      var data = await dio.postUri(host.baseUrl(endpoint: "pannes/store"),
+          options: Options(headers: host.headers(token!)),
+          data: {
+            'designation': panne!.designation,
+            'description': panne.description,
+            'detected_date': panne.detectedDate,
+            'secteur': panne.secteur,
+          });
+      print(data);
+      if (data.statusCode! > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la création.", context);
+      }
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        succesTransaction(data.data['message'], context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   getListAbonnes({String? token, required Users? users}) async {
     try {
       var data = await http
@@ -621,7 +783,8 @@ class ServiceApi {
         return [];
       }
       if (data.statusCode == 200) {
-        return jsonDecode(data.body);
+        var response = jsonDecode(data.body);
+        return response['abonne'];
       }
     } catch (e) {
       print(e);
@@ -633,22 +796,17 @@ class ServiceApi {
   ///
   getListFacture({String? token, required Users? users}) async {
     try {
-      var data = await http
-          .post(host.baseUrl(endpoint: "facture/index"),
-              body: {
-                'id_chef_secteur': users!.id.toString(),
-                'role_utilisateur': users.roleUtilisateur.toString(),
-              },
-              headers: host.headers(token!))
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode > 300) {
+      var data = await dio.postUri(host.baseUrl(endpoint: "facture/index"),
+          data: {
+            'id_chef_secteur': users!.id.toString(),
+            'role_utilisateur': users.roleUtilisateur.toString()
+          },
+          options: Options(headers: host.headers(token!)));
+      if (data.statusCode! > 300) {
         return [];
       }
       if (data.statusCode == 200) {
-        return jsonDecode(data.body);
+        return data.data;
       }
     } catch (e) {
       print(e);

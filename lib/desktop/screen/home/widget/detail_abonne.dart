@@ -2,7 +2,10 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
 
+import '../../../../config/config.dart';
+import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/widget.dart';
 
 class DetailAbonne extends StatelessWidget {
   final AbonneModels abonne;
@@ -16,110 +19,61 @@ class DetailAbonne extends StatelessWidget {
           onTap: () => Navigator.pop(context),
         ),
         child: SizedBox(
+          width: 800,
           child: Padding(
-              padding: const EdgeInsets.all(58.0),
+              padding: const EdgeInsets.all(40.0),
               child: SingleChildScrollView(
-                  child: Row(
+                  child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(
-                                  data: "Nom abonné",
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(data: abonne.nomAbonne)),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(
-                                  data: "Prénom abonné",
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(data: abonne.prenomAbonne)),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(
-                                  data: "cni abonné",
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(data: abonne.cniAbonne)),
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(
-                                  data: "Téléphone",
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Align(
-                              alignment: Alignment.centerLeft,
-                              child: CustomText(data: abonne.telephoneAbonne)),
-                        ]),
+                  const CustomText(
+                      data: "Détail Abonné", color: Colors.red, fontSize: 30.0),
+                  const SizedBox(height: 25.0),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomDetailWidget(
+                                  title: "Nom abonné",
+                                  subtitle: abonne.nomAbonne),
+                              CustomDetailWidget(
+                                  title: "Prénom abonné",
+                                  subtitle: abonne.prenomAbonne),
+                              CustomDetailWidget(
+                                  title: "cni abonné",
+                                  subtitle: abonne.cniAbonne),
+                              CustomDetailWidget(
+                                  title: "Téléphone abonné",
+                                  subtitle: abonne.telephoneAbonne),
+                            ]),
+                      ),
+                      const SizedBox(width: 25.0),
+                      Expanded(
+                        child: Column(
+                          children: [
+                            CustomDetailWidget(
+                                title: "Type abonnement",
+                                subtitle: abonne.typeAbonnement),
+                            CustomDetailWidget(
+                                title: "Secteur abonné",
+                                subtitle: abonne.secteurAbonne),
+                            CustomDetailWidget(
+                                title: "Description zône abonné",
+                                subtitle: abonne.descriptionZoneAbonne),
+                            const SizedBox(height: 100.0),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
-                  const SizedBox(width: 25.0),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "Type abonnement",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(data: abonne.typeAbonnement)),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "Secteur abonné",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(data: abonne.secteurAbonne)),
-                        const Padding(
-                          padding: EdgeInsets.only(bottom: 10.0, top: 35.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: CustomText(
-                                data: "Description zône abonné",
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child:
-                                CustomText(data: abonne.descriptionZoneAbonne)),
-                        const SizedBox(height: 125.0),
-                      ],
-                    ),
-                  )
+                  const SizedBox(height: 20.0),
+                  CustumButton(
+                      enableButton: true,
+                      child: "   Fermer   ",
+                      bacgroundColor: Palette.red,
+                      onPressed: () => Navigator.pop(context))
                 ],
               ))),
         ));

@@ -18,37 +18,52 @@ class _LoginDeskScreenState extends State<LoginDeskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(55.0),
-            color: Palette.scaffold,
-            height: double.infinity,
-            child: Image.asset('assets/images/login-page-img.png'),
-          ),
-        ),
-        Container(
-          width: 600.0,
-          color: Palette.scaffold,
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.end,
-              //     children: const [
-              //       CustomWindowsButton(),
-              //     ],
-              //   ),
-              // ),
-              const Spacer(),
-              const LoginCard(),
-              const Spacer(),
-            ],
-          ),
-        )
-      ]),
+      backgroundColor: Palette.scaffold,
+      body: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  const Spacer(),
+                  Container(
+                    padding: const EdgeInsets.only(left: 70.0),
+                    color: Palette.scaffold,
+                    child: Image.asset(
+                      'assets/images/logo_2.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  const Spacer(),
+                  const Spacer(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                width: 600.0,
+                color: Palette.scaffold,
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.end,
+                    //     children: const [
+                    //       CustomWindowsButton(),
+                    //     ],
+                    //   ),
+                    // ),
+                    const Spacer(),
+                    const LoginCard(),
+                    const Spacer(),
+                  ],
+                ),
+              ),
+            )
+          ]),
     );
   }
 }

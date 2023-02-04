@@ -42,12 +42,13 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeAbonnes(users: widget.users);
+    Provider.of<HomeProvider>(context, listen: false)
+        .provideListeTypeAbonnement();
+    Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     if (widget.users!.roleUtilisateur != "chef-secteur") {
-      Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
       Provider.of<HomeProvider>(context, listen: false)
           .providelistUtilisateur('Tout les utilisateurs');
-      Provider.of<HomeProvider>(context, listen: false)
-          .provideListeTypeAbonnement();
+      Provider.of<HomeProvider>(context, listen: false).provideMateriels();
     }
 
     var listPage = [
@@ -55,8 +56,8 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           ? const Accueil()
           : const HomeChefSecteur(),
       Utilisateurs(user: widget.users!),
-      const Materiel(),
-      const Pannes(),
+      Materiel(users: widget.users!),
+      Pannes(users: widget.users!),
       Factures(users: widget.users!),
       Abonne(users: widget.users!),
       const Versements(),
@@ -116,17 +117,6 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                 .changeBody(index: 3);
           }),
       CustomPaneItem(
-          body: Text('Factures', style: GoogleFonts.cabin(color: Colors.black)),
-          icon: const Icon(IconlyLight.document, color: Colors.black),
-          isSelected: false,
-          selectedIcon:
-              const Icon(IconlyBold.document, color: Palette.primaryColor),
-          index: 4,
-          onPressed: () {
-            Provider.of<HomeProvider>(context, listen: false)
-                .changeBody(index: 4);
-          }),
-      CustomPaneItem(
           body: Text('Abonnés', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.user_1, color: Colors.black),
           isSelected: false,
@@ -136,6 +126,17 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
           onPressed: () {
             Provider.of<HomeProvider>(context, listen: false)
                 .changeBody(index: 5);
+          }),
+      CustomPaneItem(
+          body: Text('Factures', style: GoogleFonts.cabin(color: Colors.black)),
+          icon: const Icon(IconlyLight.document, color: Colors.black),
+          isSelected: false,
+          selectedIcon:
+              const Icon(IconlyBold.document, color: Palette.primaryColor),
+          index: 4,
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 4);
           }),
       if (widget.users!.roleUtilisateur != "chef-secteur")
         CustomPaneItem(
@@ -163,17 +164,21 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
               getCodeAuth(
                   context: context,
                   onCall: () async {
-                    var res =
-                        await Provider.of<AuthProvider>(context, listen: false)
-                            .codeAuth(
-                                idAmin: widget.users!.id.toString(),
-                                code: code.text.toString(),
-                                context: context);
-                    if (res) {
-                      // ignore: use_build_context_synchronously
-                      Provider.of<HomeProvider>(context, listen: false)
-                          .changeBody(index: 7);
-                      code.clear();
+                    if (code.text.isNotEmpty) {
+                      var res = await Provider.of<AuthProvider>(context,
+                              listen: false)
+                          .codeAuth(
+                              idAmin: widget.users!.id.toString(),
+                              code: code.text.toString(),
+                              context: context);
+                      if (res) {
+                        // ignore: use_build_context_synchronously
+                        Provider.of<HomeProvider>(context, listen: false)
+                            .changeBody(index: 7);
+                        code.clear();
+                      }
+                    } else {
+                      echecTransaction("Entrez le code svp!", context);
                     }
                   });
             }),
@@ -247,13 +252,6 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                // const Padding(
-                                //     padding: EdgeInsets.only(bottom: 25),
-                                //     child: CustomText(
-                                //       data: "BW - IMAGE ",
-                                //       fontSize: 25.0,
-                                //       color: Palette.primaryColor,
-                                //     )),
                                 for (var i = 0; i < listItem.length; i++)
                                   CustomPaneItem(
                                     icon: listItem[i].icon,

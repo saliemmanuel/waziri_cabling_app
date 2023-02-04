@@ -39,8 +39,8 @@ class _AddBonnesState extends State<AddBonnes> {
   }
 
   initListTypeAbonnement() async {
-    List list = await Provider.of<HomeProvider>(context, listen: false)
-        .listTypeAbonnement["type_abonnement"];
+    dynamic list = await Provider.of<HomeProvider>(context, listen: false)
+        .listTypeAbonnement;
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         _listTypeAbonnement!.add(
@@ -51,9 +51,8 @@ class _AddBonnesState extends State<AddBonnes> {
   }
 
   initListSecteur() async {
-    List list = await Provider.of<HomeProvider>(context, listen: false)
-        .listSecteur["secteurs"];
-
+    dynamic list =
+        await Provider.of<HomeProvider>(context, listen: false).listSecteur;
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         if (widget.users.roleUtilisateur == 'admin') {
@@ -80,6 +79,7 @@ class _AddBonnesState extends State<AddBonnes> {
         },
       ),
       child: SizedBox(
+        width: 800.0,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 25.0),
@@ -87,6 +87,9 @@ class _AddBonnesState extends State<AddBonnes> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const CustomText(
+                    data: "Ajout Abonné", color: Colors.red, fontSize: 30.0),
+                const SizedBox(height: 25.0),
                 Row(
                   children: [
                     Expanded(

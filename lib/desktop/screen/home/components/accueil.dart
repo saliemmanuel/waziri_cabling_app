@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:iconly/iconly.dart';
-import 'package:pluto_grid/pluto_grid.dart';
 import 'package:waziri_cabling_app/config/config.dart';
 import 'package:waziri_cabling_app/global_widget/accueil_card.dart';
 import 'package:waziri_cabling_app/global_widget/card_tips.dart';

@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -14,15 +15,22 @@ import 'action_dialogue.dart';
 import 'add_abonnes.dart';
 import 'detail_abonne.dart';
 
-class AbonnesTable extends StatelessWidget {
+class AbonnesTable extends StatefulWidget {
   final Users users;
   final dynamic abonnesList;
   const AbonnesTable(
       {super.key, required this.abonnesList, required this.users});
 
   @override
+  State<AbonnesTable> createState() => _AbonnesTableState();
+}
+
+class _AbonnesTableState extends State<AbonnesTable> {
+  var listTypeSearch = ['Nom', 'Téléphone'];
+  var selectedSearch = '';
+  var controller = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    var controller = TextEditingController();
     return Padding(
         padding: const EdgeInsets.all(16),
         child: Column(children: [
@@ -30,32 +38,66 @@ class AbonnesTable extends StatelessWidget {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste des abonnées (${abonnesList.length ?? ""})"),
+                  data:
+                      "Liste des abonnées (${widget.abonnesList.length ?? ""})"),
               const SizedBox(width: 70.0),
-              Container(
-                alignment: Alignment.center,
-                height: 35.0,
-                width: 250.0,
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Palette.teal),
-                    borderRadius: BorderRadius.circular(5.0)),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                        child: TextField(
-                      controller: controller,
-                      decoration: InputDecoration(
-                          border: InputBorder.none, hintText: 'Search'),
-                    )),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(IconlyBold.search, color: Palette.grey),
-                    )
-                  ],
-                ),
+              Row(
+                children: [
+                  ComboBox<String>(
+                    style: const TextStyle(color: Palette.teal),
+                    value: selectedSearch,
+                    items: listTypeSearch.map<ComboBoxItem<String>>((e) {
+                      return ComboBoxItem<String>(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() => selectedSearch = value!);
+                      Provider.of<HomeProvider>(context, listen: false)
+                          .provideListeAbonnes(users: widget.users);
+                    },
+                    placeholder: const Text("Recherche par"),
+                  ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 35.0,
+                    width: 200.0,
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.teal),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                            child: TextField(
+                          controller: controller,
+                          decoration: const InputDecoration(
+                              border: InputBorder.none, hintText: 'Search'),
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .provideListeAbonnes(users: widget.users);
+                            } else {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .searchInListAbonne(
+                                      value,
+                                      selectedSearch == 'Téléphone'
+                                          ? "telephone_abonne"
+                                          : "nom_abonne");
+                            }
+                          },
+                        )),
+                        const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Icon(IconlyBold.search, color: Palette.grey),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
               ),
               InkWell(
                 child: Container(
@@ -64,15 +106,15 @@ class AbonnesTable extends StatelessWidget {
                   margin: const EdgeInsets.all(8.0),
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: Colors.teal),
+                      border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(Icons.add, color: Colors.teal),
+                      Icon(Icons.add, color: Palette.teal),
                       CustomText(
                         data: "Ajoutez un abonné",
-                        color: Colors.teal,
+                        color: Palette.teal,
                         fontWeight: FontWeight.bold,
                       ),
                     ],
@@ -80,12 +122,12 @@ class AbonnesTable extends StatelessWidget {
                 ),
                 onTap: () {
                   actionDialogue(
-                      context: context, child: AddBonnes(users: users));
+                      context: context, child: AddBonnes(users: widget.users));
                 },
               ),
             ],
           ),
-          const Divider(),
+          Container(height: 1, color: Palette.grey, width: double.infinity),
           Expanded(
             child: SingleChildScrollView(
               child: DataTable(
@@ -108,32 +150,35 @@ class AbonnesTable extends StatelessWidget {
                       label: Expanded(child: CustomText(data: '   Action'))),
                 ],
                 rows: [
-                  for (var index = 0; index < abonnesList!.length; index++)
+                  for (var index = 0;
+                      index < widget.abonnesList!.length;
+                      index++)
                     DataRow(
                       color: index % 2 == 0
                           ? MaterialStateProperty.all(
-                              Colors.grey.withOpacity(0.1))
-                          : MaterialStateProperty.all(Colors.white),
+                              Palette.grey.withOpacity(0.1))
+                          : MaterialStateProperty.all(Palette.white),
                       cells: [
                         DataCell(CustomText(data: '${index + 1}')),
                         DataCell(
                           Text(
-                            "${abonnesList![index]['nom_abonne']}\n${abonnesList![index]['prenom_abonne']}",
+                            "${widget.abonnesList![index]['nom_abonne']}\n${widget.abonnesList![index]['prenom_abonne']}",
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         DataCell(CustomText(
                             selectable: true,
-                            data: abonnesList![index]['telephone_abonne']
+                            data: widget.abonnesList![index]['telephone_abonne']
                                 .toString())),
                         DataCell(CustomText(
-                          data: abonnesList![index]['description_zone_abonne'],
+                          data: widget.abonnesList![index]
+                              ['description_zone_abonne'],
                           selectable: true,
                         )),
                         DataCell(Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: CustomText(
-                              data: abonnesList![index]['secteur_abonne']
+                              data: widget.abonnesList![index]['secteur_abonne']
                                   .toString()),
                         )),
                         DataCell(Padding(
@@ -143,32 +188,32 @@ class AbonnesTable extends StatelessWidget {
                               child: MaterialButton(
                                   color: Palette.online,
                                   child: const CustomText(
-                                      data: "Détail", color: Colors.white),
+                                      data: "Détail", color: Palette.white),
                                   onPressed: () {
                                     var abonne = AbonneModels(
-                                        id: abonnesList![index]['id']
+                                        id: widget.abonnesList![index]['id']
                                             .toString(),
-                                        nomAbonne: abonnesList![index]['nom_abonne']
+                                        nomAbonne: widget.abonnesList![index]
+                                                ['nom_abonne']
                                             .toString(),
-                                        prenomAbonne: abonnesList![index]
+                                        prenomAbonne: widget.abonnesList![index]
                                                 ['prenom_abonne']
                                             .toString(),
-                                        cniAbonne: abonnesList![index]['cni_abonne']
+                                        cniAbonne: widget.abonnesList![index]
+                                                ['cni_abonne']
                                             .toString(),
-                                        telephoneAbonne: abonnesList![index]
+                                        telephoneAbonne: widget
+                                            .abonnesList![index]
                                                 ['telephone_abonne']
                                             .toString(),
-                                        descriptionZoneAbonne: abonnesList![index]
+                                        descriptionZoneAbonne: widget
+                                            .abonnesList![index]
                                                 ['description_zone_abonne']
                                             .toString(),
-                                        secteurAbonne: abonnesList![index]
-                                                ['secteur_abonne']
-                                            .toString(),
-                                        idChefSecteur: abonnesList![index]
-                                                ['id_chef_secteur']
-                                            .toString(),
-                                        typeAbonnement: abonnesList![index]['type_abonnement'].toString(),
-                                        idTypeAbonnement: abonnesList![index]['id_type_abonnement'].toString());
+                                        secteurAbonne: widget.abonnesList![index]['secteur_abonne'].toString(),
+                                        idChefSecteur: widget.abonnesList![index]['id_chef_secteur'].toString(),
+                                        typeAbonnement: widget.abonnesList![index]['type_abonnement'].toString(),
+                                        idTypeAbonnement: widget.abonnesList![index]['id_type_abonnement'].toString());
                                     actionDialogue(
                                         child: DetailAbonne(abonne: abonne),
                                         context: context);
@@ -177,7 +222,7 @@ class AbonnesTable extends StatelessWidget {
                             const SizedBox(width: 10.0),
                             Expanded(
                               child: MaterialButton(
-                                  color: Colors.red,
+                                  color: Palette.red,
                                   onPressed: () async {
                                     getCodeAuth(
                                         context: context,
@@ -187,35 +232,33 @@ class AbonnesTable extends StatelessWidget {
                                             context,
                                             listen: false,
                                           ).codeAuth(
-                                            idAmin: users.id.toString(),
+                                            idAmin: widget.users.id.toString(),
                                             code: code.text.toString(),
                                             context: context,
                                           );
                                           if (res) {
                                             var abonne = AbonneModels(
-                                                id: abonnesList![index]['id']
+                                                id: widget.abonnesList![index]['id']
                                                     .toString(),
-                                                nomAbonne: abonnesList![index]
+                                                nomAbonne: widget.abonnesList![index]
                                                     ['nom_abonne'],
-                                                prenomAbonne: abonnesList![index]
+                                                prenomAbonne: widget.abonnesList![index]
                                                     ['prenom_abonne'],
-                                                cniAbonne: abonnesList![index]
+                                                cniAbonne: widget.abonnesList![index]
                                                     ['cni_abonne'],
-                                                telephoneAbonne: abonnesList![index]
+                                                telephoneAbonne: widget
+                                                    .abonnesList![index]
                                                         ['telephone_abonne']
                                                     .toString(),
-                                                descriptionZoneAbonne: abonnesList![index]
+                                                descriptionZoneAbonne: widget
+                                                        .abonnesList![index]
                                                     ['description_zone_abonne'],
-                                                secteurAbonne: abonnesList![index]
-                                                    ['secteur_abonne'],
-                                                idChefSecteur: abonnesList![index]
-                                                        ['id_chef_secteur']
-                                                    .toString(),
-                                                typeAbonnement: abonnesList![index]
-                                                        ['type_abonnement']
-                                                    .toString(),
-                                                idTypeAbonnement:
-                                                    abonnesList![index]['id_type_abonnement'].toString());
+                                                secteurAbonne:
+                                                    widget.abonnesList![index]
+                                                        ['secteur_abonne'],
+                                                idChefSecteur: widget.abonnesList![index]['id_chef_secteur'].toString(),
+                                                typeAbonnement: widget.abonnesList![index]['type_abonnement'].toString(),
+                                                idTypeAbonnement: widget.abonnesList![index]['id_type_abonnement'].toString());
                                             // ignore: use_build_context_synchronously
                                             Provider.of<HomeProvider>(context,
                                                     listen: false)
@@ -226,13 +269,13 @@ class AbonnesTable extends StatelessWidget {
                                             Provider.of<HomeProvider>(context,
                                                     listen: false)
                                                 .provideListeAbonnes(
-                                                    users: users);
+                                                    users: widget.users);
                                           }
                                           code.clear();
                                         });
                                   },
                                   child: const Icon(IconlyBold.delete,
-                                      color: Colors.white)),
+                                      color: Palette.white)),
                             ),
                           ]),
                         )),

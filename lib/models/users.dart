@@ -1,14 +1,14 @@
 import 'dart:convert';
 
 class Users {
-  final int? id;
+  final String? id;
   final String? nomUtilisateur;
   final String? email;
   final String? prenomUtilisateur;
   final String? telephoneUtilisateur;
   final String? roleUtilisateur;
   final String? zoneUtilisateur;
-  final int? idUtilisateurInitiateur;
+  final String? idUtilisateurInitiateur;
   Users({
     this.id,
     this.nomUtilisateur,
@@ -21,14 +21,14 @@ class Users {
   });
 
   Users copyWith({
-    int? id,
+    String? id,
     String? nomUtilisateur,
     String? email,
     String? prenomUtilisateur,
     String? telephoneUtilisateur,
     String? roleUtilisateur,
     String? zoneUtilisateur,
-    int? idUtilisateurInitiateur,
+    String? idUtilisateurInitiateur,
   }) {
     return Users(
       id: id ?? this.id,
@@ -58,7 +58,7 @@ class Users {
 
   factory Users.fromMap(Map<String, dynamic> map) {
     return Users(
-      id: map['id'] != null ? map['id'] as int : null,
+      id: map['id'] != null ? map['id'] as String : null,
       nomUtilisateur: map['nomUtilisateur'] != null
           ? map['nomUtilisateur'] as String
           : null,
@@ -76,7 +76,7 @@ class Users {
           ? map['zoneUtilisateur'] as String
           : null,
       idUtilisateurInitiateur: map['idUtilisateurInitiateur'] != null
-          ? map['idUtilisateurInitiateur'] as int
+          ? map['idUtilisateurInitiateur'] as String
           : null,
     );
   }

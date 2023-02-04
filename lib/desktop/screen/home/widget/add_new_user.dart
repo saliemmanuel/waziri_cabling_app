@@ -51,6 +51,11 @@ class _AddNewUserState extends State<AddNewUser> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const CustomText(
+                    data: "Ajout utilisateur",
+                    color: Colors.red,
+                    fontSize: 30.0),
+                const SizedBox(height: 25.0),
                 Row(
                   children: [
                     Expanded(
@@ -146,7 +151,7 @@ class _AddNewUserState extends State<AddNewUser> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Secteur")),
+                                child: CustomText(data: "Ville")),
                           ),
                           Container(
                             height: 55.5,
@@ -202,7 +207,8 @@ class _AddNewUserState extends State<AddNewUser> {
                                     telephoneUtilisateur:
                                         telephone.text.toString(),
                                     zoneUtilisateur: secteur,
-                                    idUtilisateurInitiateur: widget.users.id,
+                                    idUtilisateurInitiateur:
+                                        widget.users.id.toString(),
                                     email: email.text,
                                   ),
                                   context: context);
@@ -218,7 +224,7 @@ class _AddNewUserState extends State<AddNewUser> {
                         }),
                     CustumButton(
                         enableButton: true,
-                        child: "   Annuler   ",
+                        child: "   Fermer   ",
                         bacgroundColor: Palette.red,
                         onPressed: () async {
                           Navigator.pop(context);

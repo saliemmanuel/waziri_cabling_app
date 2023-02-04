@@ -50,7 +50,7 @@ class Abonne extends StatelessWidget {
                           value.listAbonnes == null
                               ? const ShimmerTable()
                               : AbonnesTable(
-                                  abonnesList: value.listAbonnes['abonne'],
+                                  abonnesList: value.listAbonnes,
                                   users: users,
                                 ),
                     )))

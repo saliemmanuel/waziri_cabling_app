@@ -36,25 +36,23 @@ class AuthProvider extends ChangeNotifier {
     var data = await _service.getUserData(token: token);
     if (data['id'] != null) {
       _users = Users.fromMap({
-        "id": data['id'],
+        "id": data['id'].toString(),
         "nomUtilisateur": data['nom_utilisateur'],
         "email": data['email'],
         "prenomUtilisateur": data['prenom_utilisateur'],
         "telephoneUtilisateur": data['telephone_utilisateur'].toString(),
         "roleUtilisateur": data['role_utilisateur'],
         "zoneUtilisateur": data['zone_utilisateur'],
-        "idUtilisateurInitiateur": data['idUtilisateurInitiateur']
+        "idUtilisateurInitiateur": data['idUtilisateurInitiateur'].toString()
       });
       await _storage.write(key: "tokens", value: token);
     }
-    print(token);
     notifyListeners();
   }
 
   setSessionActive({bool? session}) async {
     _sessionActive = session!;
     await _storage.write(key: "session", value: session.toString());
-    print(_sessionActive);
     notifyListeners();
   }
 

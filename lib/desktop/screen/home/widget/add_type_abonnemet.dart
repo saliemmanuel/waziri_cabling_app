@@ -41,6 +41,11 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                const CustomText(
+                    data: "Espace ajours type abonnement",
+                    color: Colors.red,
+                    fontSize: 30.0),
+                const SizedBox(height: 15.0),
                 Row(
                   children: [
                     Expanded(
@@ -120,7 +125,7 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
                         }),
                     CustumButton(
                         enableButton: true,
-                        child: "   Annuler   ",
+                        child: "   Fermer   ",
                         bacgroundColor: Palette.red,
                         onPressed: () => Navigator.pop(context)),
                   ],

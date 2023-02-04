@@ -51,8 +51,7 @@ class Secteurs extends StatelessWidget {
                           child: value.listSecteur == null
                               ? const ShimmerTable()
                               : SecteurTable(
-                                  users: users,
-                                  listSecteur: value.listSecteur['secteurs']),
+                                  users: users, listSecteur: value.listSecteur),
                         );
                       },
                     )))

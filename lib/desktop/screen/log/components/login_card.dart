@@ -32,7 +32,7 @@ class _LoginCardState extends State<LoginCard> {
         children: [
           const CustomText(
               data: "Login To BW - IMAGE",
-              color: Palette.primaryColor,
+              color: Palette.black,
               fontWeight: FontWeight.bold,
               fontSize: 30.0),
           const SizedBox(height: 35.0),
