@@ -1,21 +1,29 @@
-import 'package:badges/badges.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
+import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
-import '../../../../global_widget/widget.dart';
 import '../../../../models/facture_models.dart';
+import '../../log/provider/auth_provider.dart';
+import '../home_desk_screen.dart';
+import '../provider/home_provider.dart';
+import 'generate_pdf/facture_pdf_api.dart';
 
 class DetailFacture extends StatelessWidget {
+  final Users users;
   final FactureModels facture;
 
-  const DetailFacture({super.key, required this.facture});
+  const DetailFacture({super.key, required this.facture, required this.users});
 
   @override
   Widget build(BuildContext context) {
+    var factureApi = FacturePdfApi();
     return Badge(
-      badgeContent: InkWell(
-          child: const Icon(Icons.close, color: Colors.white),
+      label: InkWell(
+          child: const Icon(Icons.close, color: Palette.white),
           onTap: () => Navigator.pop(context)),
       child: SizedBox(
         child: SingleChildScrollView(
@@ -25,13 +33,67 @@ class DetailFacture extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const CustomText(
-                    data: "Détail facture", color: Colors.red, fontSize: 30.0),
+                Row(
+                  children: [
+                    const CustomText(
+                        data: "Détail facture",
+                        color: Palette.red,
+                        fontSize: 30.0),
+                    const SizedBox(width: 300.0),
+                    InkWell(
+                      child: Container(
+                          alignment: Alignment.center,
+                          height: 35.0,
+                          margin: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Palette.teal),
+                              borderRadius: BorderRadius.circular(5.0)),
+                          child: const Icon(
+                            FluentIcons.print,
+                            color: Palette.teal,
+                          )),
+                      onTap: () {
+                        getCodeAuth(
+                            context: context,
+                            onCall: () async {
+                              if (code.text.isNotEmpty) {
+                                var res = await Provider.of<AuthProvider>(
+                                        context,
+                                        listen: false)
+                                    .codeAuth(
+                                        idAmin: users.id.toString(),
+                                        code: code.text.toString(),
+                                        context: context);
+                                if (res) {
+                                  // ignore: use_build_context_synchronously
+                                  Provider.of<HomeProvider>(context,
+                                          listen: false)
+                                      .provideListeFacture(
+                                          users: users,
+                                          selectedStatut: 'impayer');
+                                  // ignore: use_build_context_synchronously
+                                  await factureApi.generateFacture(
+                                      title:
+                                          'facture_${facture.nomAbonne} ${facture.prenomAbonne}_du_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}.pdf',
+                                      [facture.toMap()],
+                                      context);
+                                  code.clear();
+                                }
+                              } else {
+                                echecTransaction(
+                                    "Entrez le code svp!", context);
+                              }
+                            });
+                      },
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 25.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomText(data: "FACTURE N0 : # ${facture.numeroFacture}"),
+                    CustomText(data: "FACTURE N° : ${facture.numeroFacture}"),
                     CustomText(data: "Du :  ${facture.createAt}"),
                   ],
                 ),
@@ -49,7 +111,8 @@ class DetailFacture extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             CustomText(
-                              data: "Nom et prénom : ${facture.nomAbonne}",
+                              data:
+                                  "Nom et prénom : ${facture.nomAbonne} ${facture.prenomAbonne}",
                             ),
                             CustomText(
                                 data:
@@ -161,18 +224,13 @@ class DetailFacture extends StatelessWidget {
                     child: CustomText(
                       data:
                           "Net à payer : ${int.parse(facture.impayes!) + int.parse(facture.mensualiteFacture!)}",
-                      color: Colors.red,
+                      color: Palette.red,
                       fontWeight: FontWeight.bold,
                       fontSize: 23.0,
                     ),
                   ),
                 ),
                 const SizedBox(height: 20.0),
-                CustumButton(
-                    enableButton: true,
-                    child: "   Fermer   ",
-                    bacgroundColor: Palette.red,
-                    onPressed: () => Navigator.pop(context)),
                 const SizedBox(height: 35.0),
               ],
             ),
@@ -189,10 +247,10 @@ class DetailFacture extends StatelessWidget {
           (index) => Expanded(
                   child: Container(
                 color: index == 0
-                    ? Colors.transparent
+                    ? Palette.transparent
                     : index % 2 == 0
-                        ? Colors.transparent
-                        : Colors.grey,
+                        ? Palette.transparent
+                        : Palette.grey,
                 height: 1,
                 width: 0.5,
               ))),

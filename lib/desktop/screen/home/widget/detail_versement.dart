@@ -1,21 +1,18 @@
-import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
-import 'package:waziri_cabling_app/global_widget/custom_detail_widget.dart';
-import 'package:waziri_cabling_app/models/pannes_models.dart';
+import 'package:waziri_cabling_app/models/versement_models.dart';
 
-import '../../../../config/config.dart';
-import '../../../../global_widget/custom_button.dart';
+import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_text.dart';
 
-class DetailPannes extends StatefulWidget {
-  final PannesModels pannes;
-  const DetailPannes({super.key, required this.pannes});
+class DetailVersement extends StatefulWidget {
+  final VersementModels versementModels;
+  const DetailVersement({super.key, required this.versementModels});
 
   @override
-  State<DetailPannes> createState() => _DetailPannesState();
+  State<DetailVersement> createState() => _DetailVersementState();
 }
 
-class _DetailPannesState extends State<DetailPannes> {
+class _DetailVersementState extends State<DetailVersement> {
   @override
   Widget build(BuildContext context) {
     return Badge(
@@ -47,14 +44,13 @@ class _DetailPannesState extends State<DetailPannes> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomDetailWidget(
-                                    title: "Désignation panne",
-                                    subtitle: widget.pannes.designation),
+                                    title: "Nom Secteur",
+                                    subtitle:
+                                        widget.versementModels.nomSecteur),
                                 CustomDetailWidget(
-                                    title: "Description panne",
-                                    subtitle: widget.pannes.description),
-                                CustomDetailWidget(
-                                    title: "Date détection panne",
-                                    subtitle: widget.pannes.detectedDate),
+                                    title: "Nom chef sercteur",
+                                    subtitle:
+                                        widget.versementModels.nomChefSecteur),
                               ]),
                         ),
                         const SizedBox(width: 10.0),
@@ -62,9 +58,11 @@ class _DetailPannesState extends State<DetailPannes> {
                             child: Column(
                           children: [
                             CustomDetailWidget(
-                                title: "Date resolution panne",
-                                subtitle: widget.pannes.secteur),
-                            const SizedBox(height: 200.0),
+                                title: "Date versement",
+                                subtitle: widget.versementModels.dateVersement),
+                            CustomDetailWidget(
+                                title: "Somme verser",
+                                subtitle: widget.versementModels.sommeVerser),
                           ],
                         ))
                       ],

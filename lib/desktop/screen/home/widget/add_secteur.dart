@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -55,7 +55,7 @@ class _AddSecteurState extends State<AddSecteur> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () => Navigator.pop(context),
       ),

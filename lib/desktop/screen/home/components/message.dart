@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../models/users.dart';
+import '../provider/home_provider.dart';
+import '../widget/shimmer_table.dart';
+import '../widget/table_message.dart';
 
 class Message extends StatefulWidget {
-  const Message({super.key});
+  final Users users;
+
+  const Message({super.key, required this.users});
 
   @override
   State<Message> createState() => _MessageState();
@@ -14,6 +20,7 @@ class Message extends StatefulWidget {
 class _MessageState extends State<Message> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false).provideMessageMoi();
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -41,7 +48,17 @@ class _MessageState extends State<Message> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(18.0)),
-                    child: DataTable2SimpleDemo()))
+                    child: Consumer<HomeProvider>(
+                      builder: (context, value, child) {
+                        return SizedBox(
+                          child: value.listPannes == null
+                              ? const ShimmerTable()
+                              : TableMessage(
+                                  users: widget.users,
+                                  listMessage: value.listMessageMois),
+                        );
+                      },
+                    )))
           ],
         ),
       ),

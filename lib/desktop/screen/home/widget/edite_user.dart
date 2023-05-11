@@ -1,12 +1,5 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
-import 'package:waziri_cabling_app/models/users.dart';
-
-import '../../../../global_widget/custom_dropdow.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
 
@@ -52,7 +45,7 @@ class _EditeUserState extends State<EditeUser> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);
@@ -188,9 +181,7 @@ class _EditeUserState extends State<EditeUser> {
                       enableButton: true,
                       child: "   Enregistrez   ",
                       bacgroundColor: Palette.teal,
-                      onPressed: () async {
-                       
-                      }),
+                      onPressed: () async {}),
                   CustumButton(
                       enableButton: true,
                       child: "   Annuler   ",

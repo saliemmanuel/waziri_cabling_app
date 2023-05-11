@@ -1,15 +1,7 @@
-import 'dart:io';
-
-import 'package:badges/badges.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/api/service_api.dart';
 import 'package:waziri_cabling_app/global_widget/add_image_card.dart';
 import 'package:waziri_cabling_app/global_widget/custom_detail_widget.dart';
 import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
@@ -33,14 +25,14 @@ class _AddMaterielState extends State<AddMateriel> {
   var prix = TextEditingController();
   dynamic selectedDate;
   dynamic fileImageMateriel;
-  dynamic fileImageFacture;
   bool imageIsLoading = false;
+  dynamic fileImageFacture;
   bool factureIsLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);

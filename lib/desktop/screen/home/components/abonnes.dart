@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
@@ -15,6 +14,8 @@ class Abonne extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false)
+        .provideListeAbonnes(users: users);
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(

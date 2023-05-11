@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
@@ -59,7 +58,8 @@ class _AddBonnesState extends State<AddBonnes> {
           _listSecteur!.add(
               '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
         } else {
-          if (list[i]['id_chef_secteur'] == widget.users.id) {
+          if (list[i]['id_chef_secteur'].toString() ==
+              widget.users.id.toString()) {
             _listSecteur!.add(
                 '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
           }
@@ -72,7 +72,7 @@ class _AddBonnesState extends State<AddBonnes> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);

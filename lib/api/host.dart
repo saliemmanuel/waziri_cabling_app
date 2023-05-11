@@ -2,6 +2,7 @@
 
 class Host {
   static var host = 'http://192.168.137.1:3366';
+  // static var host = 'https://waziricablingapp.000webhostapp.com';
 
   Uri baseUrl({String? endpoint}) => Uri.parse("$host/api/$endpoint/");
   String baseUrl2({String? endpoint}) => "$host/api/$endpoint/";

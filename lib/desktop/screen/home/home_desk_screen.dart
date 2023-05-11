@@ -9,13 +9,10 @@ import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.da
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/users.dart';
-import 'package:window_manager/window_manager.dart';
 
 import '../../../config/config.dart';
 import '../../../global_widget/custom_dialogue_card.dart';
 import '../../../global_widget/custom_pane_item.dart';
-import '../../../global_widget/custom_window_button.dart';
-import '../log/components/login_card.dart';
 import 'components/accueil.dart';
 import 'components/charges.dart';
 import 'components/comptabilite.dart';
@@ -46,6 +43,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
         .provideListeTypeAbonnement();
     Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     if (widget.users!.roleUtilisateur != "chef-secteur") {
+      Provider.of<HomeProvider>(context, listen: false).provideVersements();
       Provider.of<HomeProvider>(context, listen: false)
           .providelistUtilisateur('Tout les utilisateurs');
       Provider.of<HomeProvider>(context, listen: false).provideMateriels();
@@ -60,10 +58,10 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       Pannes(users: widget.users!),
       Factures(users: widget.users!),
       Abonne(users: widget.users!),
-      const Versements(),
-      Comptabilite(user: widget.users!),
-      const Charges(),
-      const Message(),
+      Versements(users: widget.users!),
+      Comptabilite(users: widget.users!),
+      Charges(users: widget.users!),
+      Message(users: widget.users!),
       Secteurs(users: widget.users!),
       Parametres(users: widget.users),
     ];
@@ -281,7 +279,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                       children: [
                         CustomText(
                             data:
-                                "© 2022 · BW-IMAGE - Application de Gestion de Cable. ${widget.users!.email ?? ""}",
+                                "© 2023 · BW-IMAGE - Application de Gestion de Cable. ${widget.users!.email ?? ""}",
                             fontWeight: FontWeight.bold),
                       ],
                     ),

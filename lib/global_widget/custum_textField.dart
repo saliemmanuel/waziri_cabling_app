@@ -15,6 +15,8 @@ class CustumTextField extends StatefulWidget {
   final int? maxLength;
   final FocusNode? focusNode;
   final bool? enabled;
+  final double? height;
+  final int? maxLines;
 
   const CustumTextField(
       {Key? key,
@@ -29,15 +31,17 @@ class CustumTextField extends StatefulWidget {
       this.onChanged,
       this.maxLength,
       this.focusNode,
-      this.enabled})
+      this.enabled,
+      this.height = 58.0,
+      this.maxLines})
       : assert(child != null, 'child ne doit pas être null'),
         super(key: key);
 
   @override
-  _CustumTextFieldState createState() => _CustumTextFieldState();
+  CustumTextFieldState createState() => CustumTextFieldState();
 }
 
-class _CustumTextFieldState extends State<CustumTextField> {
+class CustumTextFieldState extends State<CustumTextField> {
   bool obscure = false;
   @override
   void initState() {
@@ -52,7 +56,7 @@ class _CustumTextFieldState extends State<CustumTextField> {
       padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
       child: Container(
         alignment: Alignment.center,
-        height: 58.0,
+        height: widget.height,
         decoration: BoxDecoration(
             borderRadius: widget.borderRadius == null
                 ? BorderRadius.circular(8.0)

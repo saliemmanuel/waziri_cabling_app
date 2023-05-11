@@ -1,21 +1,18 @@
-import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
-import 'package:waziri_cabling_app/global_widget/custom_detail_widget.dart';
-import 'package:waziri_cabling_app/models/pannes_models.dart';
+import 'package:waziri_cabling_app/models/charge_models.dart';
 
-import '../../../../config/config.dart';
-import '../../../../global_widget/custom_button.dart';
+import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_text.dart';
 
-class DetailPannes extends StatefulWidget {
-  final PannesModels pannes;
-  const DetailPannes({super.key, required this.pannes});
+class DetailCharges extends StatefulWidget {
+  final ChargeModels chargeModels;
+  const DetailCharges({super.key, required this.chargeModels});
 
   @override
-  State<DetailPannes> createState() => _DetailPannesState();
+  State<DetailCharges> createState() => _DetailChargesState();
 }
 
-class _DetailPannesState extends State<DetailPannes> {
+class _DetailChargesState extends State<DetailCharges> {
   @override
   Widget build(BuildContext context) {
     return Badge(
@@ -48,13 +45,15 @@ class _DetailPannesState extends State<DetailPannes> {
                               children: [
                                 CustomDetailWidget(
                                     title: "Désignation panne",
-                                    subtitle: widget.pannes.designation),
+                                    subtitle:
+                                        widget.chargeModels.designationCharge),
                                 CustomDetailWidget(
                                     title: "Description panne",
-                                    subtitle: widget.pannes.description),
+                                    subtitle:
+                                        widget.chargeModels.descriptionCharge),
                                 CustomDetailWidget(
                                     title: "Date détection panne",
-                                    subtitle: widget.pannes.detectedDate),
+                                    subtitle: widget.chargeModels.dateCharge),
                               ]),
                         ),
                         const SizedBox(width: 10.0),
@@ -62,8 +61,8 @@ class _DetailPannesState extends State<DetailPannes> {
                             child: Column(
                           children: [
                             CustomDetailWidget(
-                                title: "Date resolution panne",
-                                subtitle: widget.pannes.secteur),
+                                title: "Somme versée",
+                                subtitle: widget.chargeModels.sommeCharge),
                             const SizedBox(height: 200.0),
                           ],
                         ))
