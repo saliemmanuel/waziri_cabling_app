@@ -1,13 +1,10 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/global_widget/widget.dart';
-
-import '../../home/home_desk_screen.dart';
 
 class LoginCard extends StatefulWidget {
   const LoginCard({super.key});

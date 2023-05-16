@@ -7,7 +7,6 @@ import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../provider/home_provider.dart';
 import '../widget/shimmer_table.dart';
-import 'text.dart';
 
 class Materiel extends StatefulWidget {
   final Users users;

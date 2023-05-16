@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
 
@@ -14,7 +13,7 @@ class DetailAbonne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
-        badgeContent: InkWell(
+        label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
@@ -68,12 +67,6 @@ class DetailAbonne extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 20.0),
-                  CustumButton(
-                      enableButton: true,
-                      child: "   Fermer   ",
-                      bacgroundColor: Palette.red,
-                      onPressed: () => Navigator.pop(context))
                 ],
               ))),
         ));

@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
 
 class FacturePdfApi {
-  static generateFacture(List listFacture, var context) async {
+  generateFacture(List listFacture, var context, {var title}) async {
     final imageJpg = (await rootBundle.load('assets/images/banners.png'))
         .buffer
         .asUint8List();
@@ -216,7 +216,7 @@ class FacturePdfApi {
 
     return saveDocument(
         context: context,
-        name:
+        name: title ??
             'facture_bw_du_${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}.pdf',
         pdf: pdf);
   }
@@ -228,27 +228,25 @@ class FacturePdfApi {
           (index) => Expanded(
                   child: Container(
                 color: index == 0
-                    ? PdfColor.fromHex('#FFFFFF')
+                    ? PdfColors.white
                     : index % 2 == 0
-                        ? PdfColor.fromHex('#FFFFFF')
-                        : PdfColor.fromHex('#000000'),
+                        ? PdfColors.white
+                        : PdfColors.grey,
                 height: 1,
                 width: 0.5,
               ))),
     );
   }
 
-  static Future<File> saveDocument({
+  saveDocument({
     required String name,
     required Document pdf,
     required var context,
   }) async {
-    final bytes = await pdf.save();
-
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/$name');
-
     try {
+      final bytes = await pdf.save();
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/$name');
       succesTransaction(
           'Facture générer avec succes et enrégistré dans ${dir.path}',
           context);
@@ -257,6 +255,5 @@ class FacturePdfApi {
     } catch (e) {
       succesTransaction('$e', context);
     }
-    return file;
   }
 }

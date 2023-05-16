@@ -1,9 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
-import 'package:waziri_cabling_app/config/config.dart';
-import 'package:waziri_cabling_app/global_widget/widget.dart';
-
-import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 
 /// Example without a datasource
@@ -12,7 +7,6 @@ class DataTable2SimpleDemo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool selectedItem = false;
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(

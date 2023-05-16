@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/models/type_abonnement.dart';
@@ -6,7 +5,6 @@ import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_text.dart';
-import '../../../../global_widget/custum_textField.dart';
 import '../../../../global_widget/widget.dart';
 import '../provider/home_provider.dart';
 
@@ -26,7 +24,7 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);

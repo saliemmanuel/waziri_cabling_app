@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
@@ -14,7 +14,7 @@ class DetailSecteur extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
-        badgeContent: InkWell(
+        label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
@@ -52,7 +52,7 @@ class DetailSecteur extends StatelessWidget {
                           children: [
                             CustomDetailWidget(
                                 title: "Chef secteur",
-                                subtitle: secteur.descriptionSecteur),
+                                subtitle: secteur.nomChefSecteur),
                             const SizedBox(height: 99.0),
                           ],
                         ),

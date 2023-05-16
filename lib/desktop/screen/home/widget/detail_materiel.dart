@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:badges/badges.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
@@ -30,7 +29,7 @@ class _DetailMaterielState extends State<DetailMateriel> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-        badgeContent: InkWell(
+        label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
@@ -115,11 +114,6 @@ class _DetailMaterielState extends State<DetailMateriel> {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  CustumButton(
-                      enableButton: true,
-                      child: "   Fermer   ",
-                      bacgroundColor: Palette.red,
-                      onPressed: () => Navigator.pop(context)),
                 ],
               ))),
         ));
@@ -150,9 +144,11 @@ class _HelperState extends State<Helper> {
               String fullPath =
                   "${tempDir.path}/${widget.fileName.split('/').last}";
               // ignore: use_build_context_synchronously
-              errorDialogueCard("Téléchargement",
-                  'Fichier enregistré dans $fullPath', context);
               download(widget.fileName, fullPath);
+              if (pourcent == "100") {
+                errorDialogueCard("Téléchargement",
+                    'Fichier enregistré dans $fullPath', context);
+              }
             },
           )
         : InkWell(

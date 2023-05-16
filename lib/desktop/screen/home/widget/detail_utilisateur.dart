@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
 
 import '../../../../global_widget/custom_detail_widget.dart';
@@ -12,7 +12,7 @@ class DetailUtilisateur extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
-        badgeContent: InkWell(
+        label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
         ),
@@ -53,7 +53,7 @@ class DetailUtilisateur extends StatelessWidget {
                           CustomDetailWidget(
                               title: "Rôle", subtitle: users.roleUtilisateur!),
                           CustomDetailWidget(
-                              title: "Secteur",
+                              title: "Ville ",
                               subtitle: users.zoneUtilisateur!),
                           const SizedBox(height: 100.0)
                         ],

@@ -16,7 +16,7 @@ class ShimmerTable extends StatelessWidget {
         gradient: const LinearGradient(colors: [Colors.grey, Colors.white]),
         child: Column(
           children: [
-            const SizedBox(height: 50.0),
+            const SizedBox(height: 30.0),
             Row(
               children: [
                 const SizedBox(width: 15.0),

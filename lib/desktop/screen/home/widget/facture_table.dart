@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/api/service_api.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/detail_facture.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/generate_pdf/facture_pdf_api.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/payement_facture.dart';
@@ -39,6 +38,8 @@ class _FactureTableState extends State<FactureTable> {
   var selectedStatut = '';
   var selectedSearch = '';
   var controller = TextEditingController();
+  var factureApi = FacturePdfApi();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -116,50 +117,50 @@ class _FactureTableState extends State<FactureTable> {
                 ],
               ),
               const SizedBox(width: 4.0),
-              if (widget.users.roleUtilisateur != "chef-secteur") 
-              InkWell(
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 35.0,
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Palette.teal),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: const CustomText(
-                    data: "Etablir factures",
-                    color: Palette.teal,
-                    fontWeight: FontWeight.bold,
+              if (widget.users.roleUtilisateur != "chef-secteur")
+                InkWell(
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: 35.0,
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.teal),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: const CustomText(
+                      data: "Etablir factures",
+                      color: Palette.teal,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                onTap: () {
-                  getCodeAuth(
-                      context: context,
-                      onCall: () async {
-                        if (code.text.isNotEmpty) {
-                          var res = await Provider.of<AuthProvider>(context,
-                                  listen: false)
-                              .codeAuth(
-                                  idAmin: widget.users.id.toString(),
-                                  code: code.text.toString(),
-                                  context: context);
-                          if (res) {
-                            // ignore: use_build_context_synchronously
-                            Provider.of<HomeProvider>(context, listen: false)
-                                .generateFacture(users: widget.users);
-                            // ignore: use_build_context_synchronously
-                            Provider.of<HomeProvider>(context, listen: false)
-                                .provideListeFacture(
-                                    users: widget.users,
-                                    selectedStatut: 'Toute les factures');
-                            code.clear();
+                  onTap: () {
+                    getCodeAuth(
+                        context: context,
+                        onCall: () async {
+                          if (code.text.isNotEmpty) {
+                            var res = await Provider.of<AuthProvider>(context,
+                                    listen: false)
+                                .codeAuth(
+                                    idAmin: widget.users.id.toString(),
+                                    code: code.text.toString(),
+                                    context: context);
+                            if (res) {
+                              // ignore: use_build_context_synchronously
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .generateFacture(users: widget.users);
+                              // ignore: use_build_context_synchronously
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .provideListeFacture(
+                                      users: widget.users,
+                                      selectedStatut: 'Toute les factures');
+                              code.clear();
+                            }
+                          } else {
+                            echecTransaction("Entrez le code svp!", context);
                           }
-                        } else {
-                          echecTransaction("Entrez le code svp!", context);
-                        }
-                      });
-                },
-              ),
+                        });
+                  },
+                ),
               const SizedBox(width: 8.0),
               ComboBox<String>(
                 style: const TextStyle(color: Palette.teal),
@@ -179,74 +180,51 @@ class _FactureTableState extends State<FactureTable> {
                 placeholder: const Text('Type facture'),
               ),
               const SizedBox(width: 8.0),
-              Expanded(
-                child: InkWell(
-                  child: Container(
-                      alignment: Alignment.center,
-                      height: 35.0,
-                      margin: const EdgeInsets.all(8.0),
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Palette.teal),
-                          borderRadius: BorderRadius.circular(5.0)),
-                      child: const Icon(
-                        FluentIcons.print,
-                        color: Palette.teal,
-                      )),
-                  onTap: () {
-                    getCodeAuth(
-                        context: context,
-                        onCall: () async {
-                          if (code.text.isNotEmpty) {
-                            var res = await Provider.of<AuthProvider>(context,
-                                    listen: false)
-                                .codeAuth(
-                                    idAmin: widget.users.id.toString(),
-                                    code: code.text.toString(),
-                                    context: context);
-                            if (res) {
-                              // ignore: use_build_context_synchronously
-                              Provider.of<HomeProvider>(context, listen: false)
-                                  .provideListeFacture(
-                                      users: widget.users,
-                                      selectedStatut: 'impayer');
-                              // ignore: use_build_context_synchronously
-                              await FacturePdfApi.generateFacture(
-                                  // ignore: use_build_context_synchronously
-                                  await Provider.of<HomeProvider>(context,
-                                          listen: false)
-                                      .listTrie,
-                                  context);
-                              code.clear();
-                            }
-                          } else {
-                            echecTransaction("Entrez le code svp!", context);
+              InkWell(
+                child: Container(
+                    alignment: Alignment.center,
+                    height: 35.0,
+                    margin: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Palette.teal),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: const Icon(
+                      FluentIcons.print,
+                      color: Palette.teal,
+                    )),
+                onTap: () {
+                  getCodeAuth(
+                      context: context,
+                      onCall: () async {
+                        if (code.text.isNotEmpty) {
+                          var res = await Provider.of<AuthProvider>(context,
+                                  listen: false)
+                              .codeAuth(
+                                  idAmin: widget.users.id.toString(),
+                                  code: code.text.toString(),
+                                  context: context);
+                          if (res) {
+                            // ignore: use_build_context_synchronously
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .provideListeFacture(
+                                    users: widget.users,
+                                    selectedStatut: 'impayer');
+                            // ignore: use_build_context_synchronously
+                            await factureApi.generateFacture(
+                                // ignore: use_build_context_synchronously
+                                await Provider.of<HomeProvider>(context,
+                                        listen: false)
+                                    .listTrie,
+                                context);
+                            code.clear();
                           }
-                        });
-                  },
-                ),
+                        } else {
+                          echecTransaction("Entrez le code svp!", context);
+                        }
+                      });
+                },
               ),
-              // Expanded(
-              //   child: InkWell(
-              //     onTap: () {
-              //       _selectDate(context);
-              //       print(selectedDate);
-
-              //     },
-              //     child: Container(
-              //         alignment: Alignment.center,
-              //         height: 35.0,
-              //         margin: const EdgeInsets.all(8.0),
-              //         padding: const EdgeInsets.all(8.0),
-              //         decoration: BoxDecoration(
-              //             border: Border.all(color: Palette.teal),
-              //             borderRadius: BorderRadius.circular(5.0)),
-              //         child: const Icon(
-              //           FluentIcons.date_time,
-              //           color: Palette.teal,
-              //         )),
-              //   ),
-              // ),
             ],
           ),
           Container(height: 1, color: Palette.grey, width: double.infinity),
@@ -355,6 +333,7 @@ class _FactureTableState extends State<FactureTable> {
                                     actionDialogue(
                                         context: context,
                                         child: DetailFacture(
+                                          users: widget.users,
                                           facture: FactureModels(
                                             idFacture: widget.listFacture[id]
                                                     ['id_facture']
@@ -416,7 +395,7 @@ class _FactureTableState extends State<FactureTable> {
                                                     ['nombre_chaine']
                                                 .toString(),
                                             createAt: widget.listFacture[id]
-                                                    ['created_at']
+                                                    ['create_fm']
                                                 .toString(),
                                           ),
                                         ));

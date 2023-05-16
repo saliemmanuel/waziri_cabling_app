@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/widget/add_type_abonnemet.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
+import 'package:waziri_cabling_app/models/charge_models.dart';
 import 'package:waziri_cabling_app/models/facture_models.dart';
+import 'package:waziri_cabling_app/models/message_moi_models.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
 import 'package:waziri_cabling_app/models/type_abonnement.dart';
 import 'package:waziri_cabling_app/models/users.dart';
+import 'package:waziri_cabling_app/models/versement_models.dart';
 
 import '../desktop/screen/home/provider/home_provider.dart';
 import '../desktop/screen/log/provider/auth_provider.dart';
@@ -56,27 +57,22 @@ class ServiceApi {
         barrierDismissible: false,
       );
       if (isEmail(email!)) {
-        var data = await dio.postUri(
-            host.baseUrl(endpoint: "utilisateur/connexion"),
-            data: {
-              "email": email,
-              'password': password,
-              "device_name": 'telephone.$email'
-            },
-            options: Options(
-                headers: host.headers(""),
-                sendTimeout: 60 * 1000,
-                receiveTimeout: 60 * 1000));
-
-        if (data.statusCode! > 201) {
+        var data = await http
+            .post(host.baseUrl(endpoint: "utilisateur/connexion"), body: {
+          "email": email,
+          'password': password,
+          "device_name": 'telephone.$email'
+        });
+        var response = await jsonDecode(data.body);
+        if (data.statusCode > 201) {
           Navigator.pop(context);
-          errorDialogueCard("Erreur", data.data['message'], context);
+          errorDialogueCard("Connexion", response['message'], context);
           return false;
         }
         if (data.statusCode == 200) {
           Navigator.pop(context);
           Provider.of<AuthProvider>(context, listen: false)
-              .userData(token: data.data['token']);
+              .userData(token: response['token']);
           return true;
         }
       } else {
@@ -152,16 +148,16 @@ class ServiceApi {
   }
 
   getListSecteur({String? token}) async {
-    // try {
-    var data = await dio.getUri(host.baseUrl(endpoint: "secteur/index"),
-        options: Options(headers: host.headers(token!)));
-    if (data.statusCode! > 300) {
-      return [];
-    }
-    if (data.statusCode == 200) {
-      return data.data['secteurs'];
-    }
-    // } catch (e) {}
+    try {
+      var data = await dio.getUri(host.baseUrl(endpoint: "secteur/index"),
+          options: Options(headers: host.headers(token!)));
+      if (data.statusCode! > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return data.data['secteurs'];
+      }
+    } catch (e) {}
   }
 
   addSecteur(
@@ -194,6 +190,133 @@ class ServiceApi {
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
+        succesTransaction(response['message'], context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addVersement(
+      {String? token,
+      VersementModels? versement,
+      required BuildContext? context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+
+      var data = await http.post(host.baseUrl(endpoint: "versement/store"),
+          headers: host.headers(token!),
+          body: {
+            "nom_secteur": versement!.nomSecteur,
+            "nom_chef_secteur": versement.nomChefSecteur,
+            "somme_verser": versement.sommeVerser,
+            "date_versement": versement.dateVersement,
+            "id_secteur": versement.idSecteur,
+            "id_chef_secteur": versement.idChefSecteur,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      if (data.statusCode > 202) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        echecTransaction(
+            "Erreur lors de la création. ${response['message']}", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        succesTransaction(response['message'], context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addCharge(
+      {String? token,
+      ChargeModels? charge,
+      required BuildContext? context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+
+      var data = await http.post(host.baseUrl(endpoint: "charge/store"),
+          headers: host.headers(token!),
+          body: {
+            "designation_charge": charge!.designationCharge,
+            "description_charge": charge.descriptionCharge,
+            "date_charge": charge.dateCharge,
+            "somme_verser": charge.sommeCharge
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      if (data.statusCode > 202) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        echecTransaction(
+            "Erreur lors de la création. ${response['message']}", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        Provider.of<HomeProvider>(context, listen: false).provideCharge();
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
+        succesTransaction(response['message'], context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addMessageMois(
+      {String? token,
+      MessageMoisModel? messageMois,
+      required BuildContext? context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+
+      var data = await http.post(host.baseUrl(endpoint: "message-mois/store"),
+          headers: host.headers(token!),
+          body: {
+            "designation_message": messageMois!.designationMessageMois,
+            "corps_message": messageMois.corpsMessageMois,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      if (data.statusCode > 202) {
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        echecTransaction(
+            "Erreur lors de la création. ${response['message']}", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        // ignore: use_build_context_synchronously
+        Provider.of<HomeProvider>(context, listen: false)
+            .provideListMessageMoi();
+        // ignore: use_build_context_synchronously
+        Navigator.pop(context);
+        // ignore: use_build_context_synchronously
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -408,6 +531,86 @@ class ServiceApi {
     }
   }
 
+  deleteMessageMois(
+      {MessageMoisModel? message, String? token, required var context}) async {
+    try {
+      var data = await dio.postUri(host.baseUrl(endpoint: "pannes/destroy"),
+          options: Options(headers: host.headers(token!)),
+          data: {"id": message!.id.toString()});
+
+      if (data.statusCode == 200) {
+        if (data.data['statut']) {
+          succesTransaction(data.data['message'], context);
+          Provider.of<HomeProvider>(context, listen: false).providePannes();
+          return data.data['statut'];
+        } else {
+          echecTransaction(data.data['message'], context);
+          return data.data['statut'];
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  deleteVersement(
+      {VersementModels? versement, String? token, required var context}) async {
+    try {
+      var data = await dio.postUri(host.baseUrl(endpoint: "versement/destroy"),
+          options: Options(headers: host.headers(token!)),
+          data: {
+            "id": versement!.id.toString(),
+            "nom_secteur": versement.nomSecteur,
+            "nom_chef_secteur": versement.nomChefSecteur,
+            "somme_verser": versement.sommeVerser.toString(),
+            "date_versement": versement.dateVersement.toString(),
+            "id_secteur": versement.idSecteur.toString(),
+            "id_chef_secteur": versement.idChefSecteur.toString(),
+          });
+
+      if (data.statusCode == 200) {
+        if (data.data['statut']) {
+          succesTransaction(data.data['message'], context);
+          Provider.of<HomeProvider>(context, listen: false).provideVersements();
+          return data.data['statut'];
+        } else {
+          echecTransaction(data.data['message'], context);
+          return data.data['statut'];
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  deleteCharge(
+      {ChargeModels? charge, String? token, required var context}) async {
+    try {
+      var data = await dio.postUri(host.baseUrl(endpoint: "charge/destroy"),
+          options: Options(headers: host.headers(token!)),
+          data: {
+            "id": charge!.id.toString(),
+            "designation_charge": charge.designationCharge,
+            "description_charge": charge.descriptionCharge,
+            "date_charge": charge.dateCharge,
+            "somme_verser": charge.sommeCharge
+          });
+
+      if (data.statusCode == 200) {
+        if (data.data['statut']) {
+          succesTransaction(data.data['message'], context);
+          Provider.of<HomeProvider>(context, listen: false).provideCharge();
+          return data.data['statut'];
+        } else {
+          echecTransaction(data.data['message'], context);
+          return data.data['statut'];
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   deleteAbonne(
       {AbonneModels? abonne, String? token, required var context}) async {
     try {
@@ -434,7 +637,7 @@ class ServiceApi {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -464,7 +667,7 @@ class ServiceApi {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -494,7 +697,7 @@ class ServiceApi {
       });
       if (data.statusCode > 300) {
         var response = await jsonDecode(data.body);
-
+        debugPrint(response.toString());
         Navigator.pop(context);
         echecTransaction("Erreur lors de la création.", context);
       }
@@ -505,7 +708,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -541,7 +744,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -573,7 +776,7 @@ class ServiceApi {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -593,7 +796,9 @@ class ServiceApi {
         var response = jsonDecode(data.body);
         return response['type_abonnement'];
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   getListMateriel({String? token}) async {
@@ -613,7 +818,74 @@ class ServiceApi {
 
         return response['materiel'];
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getListVersement({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "versement/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        var response = jsonDecode(data.body);
+
+        return response['versement'];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getListCharge({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "charge/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        var response = jsonDecode(data.body);
+
+        return response['charges'];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getListMessageMois({String? token}) async {
+    try {
+      var data = await http
+          .get(host.baseUrl(endpoint: "message-mois/index"),
+              headers: host.headers(token!))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        var response = jsonDecode(data.body);
+        return response['message'];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   getListPannes({String? token}) async {
@@ -626,7 +898,9 @@ class ServiceApi {
       if (data.statusCode == 200) {
         return data.data['pannes'];
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   deleteTypeAbonnement(
@@ -679,6 +953,7 @@ class ServiceApi {
       });
       if (data.statusCode > 300) {
         var response = await jsonDecode(data.body);
+        debugPrint(response.toString());
 
         Navigator.pop(context);
         echecTransaction("Erreur lors de la création.", context);
@@ -690,7 +965,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -720,6 +995,8 @@ class ServiceApi {
       });
       if (data.statusCode > 300) {
         var response = await jsonDecode(data.body);
+        debugPrint(response.toString());
+
         Navigator.pop(context);
         echecTransaction("Erreur lors de la création.", context);
       }
@@ -729,7 +1006,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -752,7 +1029,6 @@ class ServiceApi {
             'detected_date': panne.detectedDate,
             'secteur': panne.secteur,
           });
-      print(data);
       if (data.statusCode! > 300) {
         Navigator.pop(context);
         echecTransaction("Erreur lors de la création.", context);
@@ -762,7 +1038,7 @@ class ServiceApi {
         succesTransaction(data.data['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -787,13 +1063,10 @@ class ServiceApi {
         return response['abonne'];
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
-  ///
-  ///
-  ///
   getListFacture({String? token, required Users? users}) async {
     try {
       var data = await dio.postUri(host.baseUrl(endpoint: "facture/index"),
@@ -802,6 +1075,7 @@ class ServiceApi {
             'role_utilisateur': users.roleUtilisateur.toString()
           },
           options: Options(headers: host.headers(token!)));
+
       if (data.statusCode! > 300) {
         return [];
       }
@@ -809,7 +1083,7 @@ class ServiceApi {
         return data.data;
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -829,7 +1103,7 @@ class ServiceApi {
         return jsonDecode(data.body);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 }

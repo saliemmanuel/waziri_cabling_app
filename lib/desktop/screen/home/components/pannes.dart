@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/table_pannes.dart';
 
 import '../../../../config/config.dart';

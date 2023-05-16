@@ -46,19 +46,10 @@ class _LoginDeskScreenState extends State<LoginDeskScreen> {
                 color: Palette.scaffold,
                 alignment: Alignment.center,
                 child: Column(
-                  children: [
-                    // Padding(
-                    //   padding: const EdgeInsets.all(8.0),
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.end,
-                    //     children: const [
-                    //       CustomWindowsButton(),
-                    //     ],
-                    //   ),
-                    // ),
-                    const Spacer(),
-                    const LoginCard(),
-                    const Spacer(),
+                  children: const [
+                    Spacer(),
+                    LoginCard(),
+                    Spacer(),
                   ],
                 ),
               ),

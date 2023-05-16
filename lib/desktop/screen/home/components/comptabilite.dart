@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
@@ -10,43 +9,32 @@ import '../../../../global_widget/accueil_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../provider/home_provider.dart';
 import '../widget/table_type_abonnement.dart';
-import 'text.dart';
 
 class Comptabilite extends StatelessWidget {
-  final Users user;
-  const Comptabilite({super.key, required this.user});
+  final Users users;
+  const Comptabilite({super.key, required this.users});
 
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeTypeAbonnement();
     List<_SalesData> data = [
-      _SalesData('Janvier', 12),
-      _SalesData('Fevrier', 2),
+      _SalesData('Jan', 12),
+      _SalesData('Fev', 2),
       _SalesData('Mars', 6),
-      _SalesData('Avril', 25),
+      _SalesData('Avr', 25),
       _SalesData('Mai', 0),
-      _SalesData('Juin', 7),
-      _SalesData('Juillet', 5),
-      _SalesData('Août', 9),
-      _SalesData('Septembre', 6),
-      _SalesData('Octobre', 2),
-      _SalesData('Novembre', 45),
-      _SalesData('Décembre', 40),
+      // _SalesData('Juin', 7),
+      // _SalesData('Juil', 5),
+      // _SalesData('Août', 9),
+      // _SalesData('Sept', 6),
+      // _SalesData('Oct', 2),
+      // _SalesData('Nov', 45),
+      // _SalesData('Déc', 40),
     ];
     var data2 = [
       _ChartData('Janvier', 12),
       _ChartData('Fevrier', 0),
-      _ChartData('Mars', 6),
-      _ChartData('Avril', 25),
-      _ChartData('Mai', 0),
-      _ChartData('Juin', 7),
-      _ChartData('Juillet', 5),
-      _ChartData('Août', 9),
-      _ChartData('Septembre', 6),
-      _ChartData('Octobre', 2),
-      _ChartData('Novembre', 45),
-      _ChartData('Décembre', 40),
     ];
     return Scaffold(
       backgroundColor: Palette.scaffold,
@@ -105,7 +93,7 @@ class Comptabilite extends StatelessWidget {
                                     sales.year,
                                 yValueMapper: (_SalesData sales, _) =>
                                     sales.sales,
-                                name: 'Sales',
+                                name: 'Tandence',
                                 dataLabelSettings:
                                     const DataLabelSettings(isVisible: true))
                           ]),
@@ -193,7 +181,7 @@ class Comptabilite extends StatelessWidget {
                   return value.listTypeAbonnement == null
                       ? const ShimmerTable()
                       : TableTypeAbonnement(
-                          users: user,
+                          users: users,
                           listTypeAbonnement: value.listTypeAbonnement);
                 }),
               ),

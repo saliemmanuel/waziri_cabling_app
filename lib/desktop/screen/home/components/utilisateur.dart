@@ -1,21 +1,14 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
 import 'package:waziri_cabling_app/config/config.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
-import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
-import 'package:waziri_cabling_app/global_widget/card_tips.dart';
 
 import '../../../../global_widget/custom_text.dart';
 import '../../../../models/users.dart';
 import '../widget/utilisateur_table.dart';
-import 'text.dart';
 
 class Utilisateurs extends StatefulWidget {
   final Users user;

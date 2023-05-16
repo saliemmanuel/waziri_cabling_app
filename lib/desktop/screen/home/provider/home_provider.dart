@@ -1,12 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:waziri_cabling_app/api/service_api.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
+import 'package:waziri_cabling_app/models/charge_models.dart';
 import 'package:waziri_cabling_app/models/facture_models.dart';
 import 'package:waziri_cabling_app/models/materiel_models.dart';
+import 'package:waziri_cabling_app/models/message_moi_models.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
 import 'package:waziri_cabling_app/models/type_abonnement.dart';
 import 'package:waziri_cabling_app/models/users.dart';
+import 'package:waziri_cabling_app/models/versement_models.dart';
 
 import '../../../../models/pannes_models.dart';
 
@@ -18,6 +23,9 @@ class HomeProvider extends ChangeNotifier {
   dynamic _listAbonnes = [];
   dynamic _listMateriels = [];
   dynamic _listPannes = [];
+  dynamic _listVersements = [];
+  dynamic _listMessageMois = [];
+  dynamic _listCharget = [];
   dynamic _listFactures;
   int _topIndex = 0;
   dynamic _listTrie = [];
@@ -28,6 +36,9 @@ class HomeProvider extends ChangeNotifier {
   get listAbonnes => _listAbonnes;
   get listMateriels => _listMateriels;
   get listPannes => _listPannes;
+  get listVersements => _listVersements;
+  get listMessageMois => _listMessageMois;
+  get listCharge => _listCharget;
   get listFactures => _listFactures;
   get topIndex => _topIndex;
   get listTrie => _listTrie;
@@ -55,7 +66,7 @@ class HomeProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
     notifyListeners();
   }
@@ -85,6 +96,36 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listMateriels = await _service.getListMateriel(token: token);
+    notifyListeners();
+  }
+
+  provideVersements() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listVersements = await _service.getListVersement(token: token);
+    notifyListeners();
+  }
+
+  provideCharge() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listCharget = await _service.getListCharge(token: token);
+    notifyListeners();
+  }
+
+  provideMessageMoi() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listMessageMois = await _service.getListMessageMois(token: token);
+    notifyListeners();
+  }
+
+  provideListMessageMoi() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    debugPrint(token.toString());
+
+    // _listCharget = await _service.getListMessage(token: token);
     notifyListeners();
   }
 
@@ -228,6 +269,22 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  searchInListVersement(String query) {
+    dynamic results = [];
+    if (query.isEmpty) {
+      results = _listVersements;
+    } else {
+      results = _listVersements
+          .where((element) => element['nom_secteur']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()))
+          .toList();
+    }
+    _listVersements = results;
+    notifyListeners();
+  }
+
   generateFacture({required Users? users}) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
@@ -252,6 +309,31 @@ class HomeProvider extends ChangeNotifier {
     var token = await storage.read(key: 'tokens');
 
     _service.addMateriel(token: token, materiel: materiel!, context: context);
+  }
+
+  addVersement(
+      {required VersementModels? versement,
+      required BuildContext? context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.addVersement(
+        token: token, versement: versement!, context: context);
+  }
+
+  addCharge(
+      {required ChargeModels? charge, required BuildContext? context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.addCharge(token: token, charge: charge!, context: context);
+  }
+
+  addMessageMois(
+      {required MessageMoisModel? messageMois,
+      required BuildContext? context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.addMessageMois(
+        token: token, messageMois: messageMois!, context: context);
   }
 
   payementFacture(
@@ -375,6 +457,45 @@ class HomeProvider extends ChangeNotifier {
     _service.deletePannes(
       context: context,
       pannes: pannes,
+      token: token,
+    );
+  }
+
+  getDeleteVersement({
+    VersementModels? versement,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.deleteVersement(
+      context: context,
+      versement: versement,
+      token: token,
+    );
+  }
+
+  getDeleteMessageMois({
+    MessageMoisModel? message,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.deleteMessageMois(
+      context: context,
+      message: message,
+      token: token,
+    );
+  }
+
+  getDeleteCharge({
+    ChargeModels? charge,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.deleteCharge(
+      context: context,
+      charge: charge,
       token: token,
     );
   }

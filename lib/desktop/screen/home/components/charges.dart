@@ -1,14 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/components/text.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../models/users.dart';
+import '../provider/home_provider.dart';
+import '../widget/shimmer_table.dart';
+import '../widget/table_charge.dart';
 
 class Charges extends StatefulWidget {
-  const Charges({super.key});
+  final Users users;
+
+  const Charges({super.key, required this.users});
 
   @override
   State<Charges> createState() => _ChargesState();
@@ -17,6 +20,7 @@ class Charges extends StatefulWidget {
 class _ChargesState extends State<Charges> {
   @override
   Widget build(BuildContext context2) {
+    Provider.of<HomeProvider>(context, listen: false).provideCharge();
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -44,7 +48,17 @@ class _ChargesState extends State<Charges> {
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(18.0)),
-                    child: DataTable2SimpleDemo()))
+                    child: Consumer<HomeProvider>(
+                      builder: (context, value, child) {
+                        return SizedBox(
+                          child: value.listPannes == null
+                              ? const ShimmerTable()
+                              : TableCharge(
+                                  users: widget.users,
+                                  listCharge: value.listCharge),
+                        );
+                      },
+                    )))
           ],
         ),
       ),

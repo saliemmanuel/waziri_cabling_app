@@ -1,28 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/global_widget/custom_dialogue_card.dart';
-import 'package:waziri_cabling_app/models/pannes_models.dart';
-import 'package:waziri_cabling_app/models/users.dart';
+import 'package:waziri_cabling_app/models/versement_models.dart';
 
-import '../../../../config/config.dart';
+import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
+import '../provider/home_provider.dart';
 
-class AddPannes extends StatefulWidget {
-  final Users users;
-  const AddPannes({super.key, required this.users});
+class AddVersement extends StatefulWidget {
+  const AddVersement({super.key});
 
   @override
-  State<AddPannes> createState() => _AddPannesState();
+  State<AddVersement> createState() => _AddVersementState();
 }
 
-class _AddPannesState extends State<AddPannes> {
-  List? _listSecteur = [];
+class _AddVersementState extends State<AddVersement> {
+  var somme = TextEditingController();
+  dynamic selectedDate;
+  final List? _listSecteur = [];
   var secteur = "Selectionner un secteur";
-  var designation = TextEditingController();
-  var description = TextEditingController();
+  var idSecteur = "";
+  var idChefSecteur = "";
+  dynamic nomChefSecteur;
 
   @override
   void initState() {
@@ -31,20 +32,12 @@ class _AddPannesState extends State<AddPannes> {
   }
 
   initListSecteur() async {
-    List list =
+    dynamic list =
         await Provider.of<HomeProvider>(context, listen: false).listSecteur;
-
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
-        if (widget.users.roleUtilisateur == 'admin') {
-          _listSecteur!.add(
-              '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
-        } else {
-          if (list[i]['id_chef_secteur'] == widget.users.id) {
-            _listSecteur!.add(
-                '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
-          }
-        }
+        _listSecteur!.add(
+            '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']} - ${list[i]['id']}');
       }
     }
     setState(() {});
@@ -57,10 +50,11 @@ class _AddPannesState extends State<AddPannes> {
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);
+          Provider.of<HomeProvider>(context, listen: false).provideVersements();
         },
       ),
       child: SizedBox(
-        width: 800.0,
+        width: 850.0,
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.only(left: 50.0, right: 50.0, top: 25.0),
@@ -69,7 +63,7 @@ class _AddPannesState extends State<AddPannes> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomText(
-                    data: "Ajout pannes", color: Colors.red, fontSize: 30.0),
+                    data: "Ajout versement", color: Colors.red, fontSize: 30.0),
                 const SizedBox(height: 25.0),
                 Row(
                   children: [
@@ -81,43 +75,7 @@ class _AddPannesState extends State<AddPannes> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Désigantion panne")),
-                          ),
-                          CustumTextField(
-                              bacgroundColor: Palette.teal,
-                              controller: designation,
-                              child: 'Désignation',
-                              obscureText: false),
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Description panne")),
-                          ),
-                          CustumTextField(
-                              controller: description,
-                              child: "Description",
-                              obscureText: false),
-                          CustomDetailWidget(
-                            title: "Jour détection panne",
-                            nullVal: "Date",
-                            subtitle: selectedJourDate,
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 15.0),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
-                            child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Secteur")),
+                                child: CustomText(data: "Désignation secteur")),
                           ),
                           Container(
                             height: 55.5,
@@ -133,7 +91,9 @@ class _AddPannesState extends State<AddPannes> {
                                   underline: const SizedBox(),
                                   hint: Padding(
                                     padding: const EdgeInsets.only(left: 10.0),
-                                    child: Text(secteur.toString()),
+                                    child: Text(secteur.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black)),
                                   ),
                                   dropdownColor: Colors.white,
                                   items: _listSecteur!
@@ -148,14 +108,54 @@ class _AddPannesState extends State<AddPannes> {
                                   onChanged: (newSecteur) {
                                     secteur =
                                         newSecteur!.toString().split('-')[0];
+                                    nomChefSecteur =
+                                        newSecteur.toString().split('-')[1];
+                                    idChefSecteur =
+                                        newSecteur.toString().split('-')[2];
+                                    idSecteur =
+                                        newSecteur.toString().split('-')[3];
                                     setState(() {});
                                   }),
                             ),
                           ),
-                          const SizedBox(height: 200.0)
+                          const SizedBox(height: 10.0),
+                          const Padding(
+                            padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
+                            child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: CustomText(data: "Somme verser")),
+                          ),
+                          CustumTextField(
+                              child: 'Somme',
+                              controller: somme,
+                              obscureText: false),
+                          const SizedBox(height: 100.0)
                         ],
                       ),
-                    )
+                    ),
+                    const SizedBox(width: 15.0),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CustomDetailWidget(
+                            title: "Nom chef secteur",
+                            nullVal: "Nom chef secteur",
+                            subtitle: nomChefSecteur,
+                          ),
+                          const SizedBox(height: 10.0),
+                          CustomDetailWidget(
+                            title: "Date versement",
+                            nullVal: "Date",
+                            subtitle: selectedDate,
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                          ),
+                          const SizedBox(height: 100.0)
+                        ],
+                      ),
+                    ),
                   ],
                 ),
                 Row(
@@ -166,30 +166,27 @@ class _AddPannesState extends State<AddPannes> {
                         child: "   Enregistrez   ",
                         bacgroundColor: Palette.teal,
                         onPressed: () async {
-                          if (designation.text.isEmpty ||
-                              description.text.isEmpty ||
-                              selectedJourDate == null) {
-                            errorDialogueCard("Erreur",
-                                "Entrez toute les informations svp!", context);
-                          } else {
+                          if (nomChefSecteur != null ||
+                              secteur != "Selectionner un secteur" ||
+                              selectedDate != null ||
+                              somme.text.isNotEmpty) {
                             Provider.of<HomeProvider>(context, listen: false)
-                                .addPannes(
-                                    panne: PannesModels(
-                                      id: "",
-                                      designation: designation.text,
-                                      description: description.text,
-                                      detectedDate: selectedJourDate,
-                                      secteur: secteur,
-                                    ),
+                                .addVersement(
+                                    versement: VersementModels(
+                                        id: "",
+                                        nomSecteur: secteur,
+                                        nomChefSecteur: nomChefSecteur,
+                                        dateVersement: selectedDate,
+                                        idSecteur: idSecteur,
+                                        idChefSecteur: idChefSecteur,
+                                        sommeVerser: somme.text.toString()),
                                     context: context);
-                            designation.clear();
-                            description.clear();
-                            selectedJourDate = null;
-                            secteur = "Selectionner un secteur";
                             Provider.of<HomeProvider>(context, listen: false)
-                                .providePannes();
+                                .provideVersements();
+                          } else {
+                            echecTransaction(
+                                "Remplissez tous les champ svp!", context);
                           }
-                          setState(() {});
                         }),
                     CustumButton(
                         enableButton: true,
@@ -197,6 +194,8 @@ class _AddPannesState extends State<AddPannes> {
                         bacgroundColor: Palette.red,
                         onPressed: () async {
                           Navigator.pop(context);
+                          Provider.of<HomeProvider>(context, listen: false)
+                              .provideMateriels();
                         }),
                   ],
                 ),
@@ -208,17 +207,15 @@ class _AddPannesState extends State<AddPannes> {
     );
   }
 
-  dynamic selectedJourDate;
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
         context: context,
-        textDirection: TextDirection.ltr,
         initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedJourDate) {
+    if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedJourDate = '${picked.day}-${picked.month}-${picked.year} ';
+        selectedDate = '${picked.day}-${picked.month}-${picked.year} ';
       });
     }
   }

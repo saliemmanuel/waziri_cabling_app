@@ -260,9 +260,7 @@ class _UserTableState extends State<UserTable> {
                                                                   ['id']
                                                               .toString(),
                                                           context: context);
-                                                  print("delete");
-                                                  print(
-                                                      widget.userList![index]);
+
                                                   // ignore: use_build_context_synchronously
                                                   Provider.of<HomeProvider>(
                                                           context,

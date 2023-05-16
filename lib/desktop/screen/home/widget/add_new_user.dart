@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
@@ -28,7 +27,7 @@ class _AddNewUserState extends State<AddNewUser> {
   ];
   List? listRole = ['admin', 'chef-secteur'];
   var role = "Rôle utilisateur";
-  var secteur = "Selectionner un secteur";
+  var secteur = "Selectionner une ville";
   var name = TextEditingController();
   var secondname = TextEditingController();
   var email = TextEditingController();
@@ -36,7 +35,7 @@ class _AddNewUserState extends State<AddNewUser> {
   @override
   Widget build(BuildContext context) {
     return Badge(
-      badgeContent: InkWell(
+      label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
           Navigator.pop(context);
@@ -77,11 +76,11 @@ class _AddNewUserState extends State<AddNewUser> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Prénom utilisateur")),
+                                child: CustomText(data: "Téléphone")),
                           ),
                           CustumTextField(
-                              child: 'Prénom utilisateur',
-                              controller: secondname,
+                              child: "Téléphone",
+                              controller: telephone,
                               obscureText: false),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
@@ -104,11 +103,11 @@ class _AddNewUserState extends State<AddNewUser> {
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: CustomText(data: "Téléphone")),
+                                child: CustomText(data: "Prénom utilisateur")),
                           ),
                           CustumTextField(
-                              child: "Téléphone",
-                              controller: telephone,
+                              child: 'Prénom utilisateur',
+                              controller: secondname,
                               obscureText: false),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
@@ -217,7 +216,7 @@ class _AddNewUserState extends State<AddNewUser> {
                           email.clear();
                           telephone.clear();
                           role = "Rôle utilisateur";
-                          secteur = "Selectionner un secteur";
+                          secteur = "Selectionner une ville";
                           setState(() {});
                           Provider.of<HomeProvider>(context, listen: false)
                               .providelistUtilisateur('Tout les utilisateurs');
