@@ -22,8 +22,8 @@ class _AddBonnesState extends State<AddBonnes> {
   var secteur = "Selectionner un secteur";
   var idChefSecteur = "";
   var idType = "";
-  List? _listTypeAbonnement = [];
-  List? _listSecteur = [];
+  List? listTypeAbonnement = [];
+  List? listSecteur = [];
   var nom = TextEditingController();
   var prenom = TextEditingController();
   var cni = TextEditingController();
@@ -42,7 +42,7 @@ class _AddBonnesState extends State<AddBonnes> {
         .listTypeAbonnement;
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
-        _listTypeAbonnement!.add(
+        listTypeAbonnement!.add(
             '${list[i]['designation_type_abonnement']} - ${list[i]['id']}');
       }
     }
@@ -55,12 +55,12 @@ class _AddBonnesState extends State<AddBonnes> {
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         if (widget.users.roleUtilisateur == 'admin') {
-          _listSecteur!.add(
+          listSecteur!.add(
               '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
         } else {
           if (list[i]['id_chef_secteur'].toString() ==
               widget.users.id.toString()) {
-            _listSecteur!.add(
+            listSecteur!.add(
                 '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
           }
         }
@@ -72,6 +72,8 @@ class _AddBonnesState extends State<AddBonnes> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -178,7 +180,7 @@ class _AddBonnesState extends State<AddBonnes> {
                                     child: Text(type.toString()),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: _listTypeAbonnement!
+                                  items: listTypeAbonnement!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
                                             child: Text(
@@ -217,7 +219,7 @@ class _AddBonnesState extends State<AddBonnes> {
                                     child: Text(secteur.toString()),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: _listSecteur!
+                                  items: listSecteur!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
                                             child: Text(
@@ -235,64 +237,71 @@ class _AddBonnesState extends State<AddBonnes> {
                                   }),
                             ),
                           ),
-                          const SizedBox(height: 110.0)
+                          const SizedBox(height: 40.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              CustumButton(
+                                  enableButton: true,
+                                  child: "   Enregistrez   ",
+                                  bacgroundColor: Palette.teal,
+                                  onPressed: () async {
+                                    if (nom.text.isEmpty ||
+                                        prenom.text.isEmpty ||
+                                        cni.text.isEmpty ||
+                                        descriptionZone.text.isEmpty ||
+                                        telephone.text.isEmpty) {
+                                      errorDialogueCard(
+                                          "Erreur",
+                                          "Entrez toute les informations svp!",
+                                          context);
+                                    } else {
+                                      Provider.of<HomeProvider>(context,
+                                              listen: false)
+                                          .addAbonnes(
+                                              abonne: AbonneModels(
+                                                  id: "",
+                                                  nomAbonne: nom.text,
+                                                  prenomAbonne: prenom.text,
+                                                  cniAbonne: cni.text,
+                                                  telephoneAbonne:
+                                                      telephone.text,
+                                                  descriptionZoneAbonne:
+                                                      descriptionZone.text,
+                                                  secteurAbonne: secteur,
+                                                  idChefSecteur: idChefSecteur,
+                                                  typeAbonnement: type,
+                                                  idTypeAbonnement: idType),
+                                              context: context);
+                                      nom.clear();
+                                      prenom.clear();
+                                      cni.clear();
+                                      telephone.clear();
+                                      descriptionZone.clear();
+                                      type = "Type abonnement";
+                                      secteur = "Selectionner un secteur";
+                                      Provider.of<HomeProvider>(context,
+                                              listen: false)
+                                          .provideListeAbonnes(
+                                              users: widget.users);
+                                    }
+                                    setState(() {});
+                                  }),
+                              CustumButton(
+                                  enableButton: true,
+                                  child: "   Fermer   ",
+                                  bacgroundColor: Palette.red,
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          ),
                         ],
                       ),
                     )
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustumButton(
-                        enableButton: true,
-                        child: "   Enregistrez   ",
-                        bacgroundColor: Palette.teal,
-                        onPressed: () async {
-                          if (nom.text.isEmpty ||
-                              prenom.text.isEmpty ||
-                              cni.text.isEmpty ||
-                              descriptionZone.text.isEmpty ||
-                              telephone.text.isEmpty) {
-                            errorDialogueCard("Erreur",
-                                "Entrez toute les informations svp!", context);
-                          } else {
-                            Provider.of<HomeProvider>(context, listen: false)
-                                .addAbonnes(
-                                    abonne: AbonneModels(
-                                        id: "",
-                                        nomAbonne: nom.text,
-                                        prenomAbonne: prenom.text,
-                                        cniAbonne: cni.text,
-                                        telephoneAbonne: telephone.text,
-                                        descriptionZoneAbonne:
-                                            descriptionZone.text,
-                                        secteurAbonne: secteur,
-                                        idChefSecteur: idChefSecteur,
-                                        typeAbonnement: type,
-                                        idTypeAbonnement: idType),
-                                    context: context);
-                            nom.clear();
-                            prenom.clear();
-                            cni.clear();
-                            telephone.clear();
-                            descriptionZone.clear();
-                            type = "Type abonnement";
-                            secteur = "Selectionner un secteur";
-                            Provider.of<HomeProvider>(context, listen: false)
-                                .provideListeAbonnes(users: widget.users);
-                          }
-                          setState(() {});
-                        }),
-                    CustumButton(
-                        enableButton: true,
-                        child: "   Fermer   ",
-                        bacgroundColor: Palette.red,
-                        onPressed: () async {
-                          Navigator.pop(context);
-                        }),
-                  ],
-                ),
+                const SizedBox(height: 40.0),
               ],
             ),
           ),

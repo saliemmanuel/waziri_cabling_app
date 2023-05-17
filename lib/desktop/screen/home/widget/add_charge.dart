@@ -25,6 +25,8 @@ class _AddChargeState extends State<AddCharge> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {

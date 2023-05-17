@@ -7,16 +7,12 @@ import 'package:waziri_cabling_app/models/charge_models.dart';
 import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
-import '../../../../models/pannes_models.dart';
 import '../../../../models/users.dart';
-import '../../../../models/versement_models.dart';
 import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
 import '../provider/home_provider.dart';
 import 'action_dialogue.dart';
 import 'add_charge.dart';
-import 'add_versement.dart';
-import 'detail_pannes.dart';
 
 class TableCharge extends StatefulWidget {
   final dynamic listCharge;
@@ -90,9 +86,9 @@ class _TableChargeState extends State<TableCharge> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child:const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children:  [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                           data: "Ajoutez une charge",

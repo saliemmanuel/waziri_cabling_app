@@ -13,7 +13,6 @@ import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
 import '../provider/home_provider.dart';
 import 'action_dialogue.dart';
-import 'add_new_user.dart';
 import 'detail_seteur.dart';
 
 class SecteurTable extends StatefulWidget {

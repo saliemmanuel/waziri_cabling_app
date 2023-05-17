@@ -108,9 +108,9 @@ class _AbonnesTableState extends State<AbonnesTable> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                         data: "Ajoutez un abonné",
@@ -215,7 +215,9 @@ class _AbonnesTableState extends State<AbonnesTable> {
                                         typeAbonnement: widget.abonnesList![index]['type_abonnement'].toString(),
                                         idTypeAbonnement: widget.abonnesList![index]['id_type_abonnement'].toString());
                                     actionDialogue(
-                                        child: DetailAbonne(abonne: abonne),
+                                        child: DetailAbonne(
+                                            abonne: abonne,
+                                            users: widget.users),
                                         context: context);
                                   }),
                             ),

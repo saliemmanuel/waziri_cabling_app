@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 
-import '../config/config.dart';
 import 'custom_text.dart';
 
 class AccueilCard extends StatelessWidget {

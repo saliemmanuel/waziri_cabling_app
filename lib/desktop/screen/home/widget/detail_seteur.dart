@@ -1,10 +1,7 @@
-import 'package:badges/badges.dart' as db;
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/secteur.dart';
 
-import '../../../../config/palette.dart';
-import '../../../../global_widget/custom_button.dart';
 import '../../../../global_widget/custom_detail_widget.dart';
 
 class DetailSecteur extends StatelessWidget {
@@ -14,6 +11,8 @@ class DetailSecteur extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Badge(
+        largeSize: 30,
+        smallSize: 50,
         label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
@@ -60,11 +59,6 @@ class DetailSecteur extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20.0),
-                  CustumButton(
-                      enableButton: true,
-                      child: "   Fermer   ",
-                      bacgroundColor: Palette.red,
-                      onPressed: () => Navigator.pop(context))
                 ],
               ))),
         ));

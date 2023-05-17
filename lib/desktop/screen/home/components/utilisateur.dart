@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,8 +5,8 @@ import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.da
 import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
 import 'package:waziri_cabling_app/config/config.dart';
 
-import '../../../../global_widget/custom_text.dart';
 import '../../../../models/users.dart';
+import '../widget/app_header.dart';
 import '../widget/utilisateur_table.dart';
 
 class Utilisateurs extends StatefulWidget {
@@ -34,16 +33,7 @@ class _UtilisateursState extends State<Utilisateurs> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
-              child: AppBar(
-                title:
-                    const CustomText(data: "Utilisateurs", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Utilisateurs"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(

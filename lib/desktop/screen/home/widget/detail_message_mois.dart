@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
-import 'package:waziri_cabling_app/models/message_moi_models.dart';
 
-import '../../../../config/palette.dart';
-import '../../../../global_widget/custom_button.dart';
+import '../../../../config/config.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
-import '../../../../global_widget/custum_textField.dart';
+import '../../../../global_widget/widget.dart';
+import '../../../../models/message_moi_models.dart';
+import '../provider/home_provider.dart';
 
-class AddMessageMois extends StatefulWidget {
-  const AddMessageMois({super.key});
+class DetailMessageMois extends StatefulWidget {
+  final MessageMoisModel messageMoisModel;
+  const DetailMessageMois({super.key, required this.messageMoisModel});
 
   @override
-  State<AddMessageMois> createState() => _AddMessageMoisState();
+  State<DetailMessageMois> createState() => _DetailMessageMoisState();
 }
 
-class _AddMessageMoisState extends State<AddMessageMois> {
-  var designation = TextEditingController();
-  var corps = TextEditingController();
+class _DetailMessageMoisState extends State<DetailMessageMois> {
+  late TextEditingController designation;
+  late TextEditingController corps;
+
+  @override
+  void initState() {
+    designation = TextEditingController(
+        text: widget.messageMoisModel.designationMessageMois);
+    corps =
+        TextEditingController(text: widget.messageMoisModel.corpsMessageMois);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,7 @@ class _AddMessageMoisState extends State<AddMessageMois> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomText(
-                    data: "Ajout message mois",
+                    data: "Détail message mois",
                     color: Colors.red,
                     fontSize: 30.0),
                 const SizedBox(height: 25.0),

@@ -6,11 +6,9 @@ import 'package:waziri_cabling_app/config/config.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/action_dialogue.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/add_new_user.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/widget/edite_user.dart';
 
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
-import '../../../../global_widget/widget.dart';
 import '../../../../models/users.dart';
 import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
@@ -128,9 +126,9 @@ class _UserTableState extends State<UserTable> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                         data: "Ajoutez un utilisateur",
@@ -201,15 +199,15 @@ class _UserTableState extends State<UserTable> {
                                   actionDialogue(
                                       child: DetailUtilisateur(
                                         users: Users(
+                                            id: widget.userList![index]['id']
+                                                .toString(),
                                             prenomUtilisateur:
                                                 widget.userList![index]
                                                     ['prenom_utilisateur'],
-                                            nomUtilisateur:
-                                                widget.userList![index]
-                                                    ['nom_utilisateur'],
-                                            roleUtilisateur:
-                                                widget.userList![index]
-                                                    ['role_utilisateur'],
+                                            nomUtilisateur: widget.userList![index]
+                                                ['nom_utilisateur'],
+                                            roleUtilisateur: widget.userList![index]
+                                                ['role_utilisateur'],
                                             email: widget.userList![index]
                                                 ['email'],
                                             telephoneUtilisateur: widget
@@ -218,7 +216,10 @@ class _UserTableState extends State<UserTable> {
                                                 .toString(),
                                             zoneUtilisateur:
                                                 widget.userList![index]
-                                                    ['zone_utilisateur']),
+                                                    ['zone_utilisateur'],
+                                            idUtilisateurInitiateur:
+                                                widget.userList![index]
+                                                    ['id_utilisateur_initiateur']),
                                       ),
                                       context: context);
                                 }),

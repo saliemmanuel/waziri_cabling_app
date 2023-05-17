@@ -5,7 +5,7 @@ import 'package:waziri_cabling_app/desktop/screen/home/widget/secteur_table.dart
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
-import '../../../../global_widget/custom_text.dart';
+import '../widget/app_header.dart';
 import '../widget/shimmer_table.dart';
 
 class Secteurs extends StatelessWidget {
@@ -26,18 +26,7 @@ class Secteurs extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                left: 45.0,
-                right: 45.0,
-              ),
-              child: AppBar(
-                title: const CustomText(data: "Secteurs", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Secteurs"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(

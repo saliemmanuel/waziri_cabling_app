@@ -19,10 +19,10 @@ class AddVersement extends StatefulWidget {
 class _AddVersementState extends State<AddVersement> {
   var somme = TextEditingController();
   dynamic selectedDate;
-  final List? _listSecteur = [];
-  var secteur = "Selectionner un secteur";
-  var idSecteur = "";
-  var idChefSecteur = "";
+  final List? listSecteur = [];
+  String? secteur = "Selectionner un secteur";
+  String? idSecteur = "";
+  String? idChefSecteur = "";
   dynamic nomChefSecteur;
 
   @override
@@ -36,7 +36,7 @@ class _AddVersementState extends State<AddVersement> {
         await Provider.of<HomeProvider>(context, listen: false).listSecteur;
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
-        _listSecteur!.add(
+        listSecteur!.add(
             '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']} - ${list[i]['id']}');
       }
     }
@@ -46,6 +46,8 @@ class _AddVersementState extends State<AddVersement> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -96,7 +98,7 @@ class _AddVersementState extends State<AddVersement> {
                                             color: Colors.black)),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: _listSecteur!
+                                  items: listSecteur!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
                                             child: Text(
@@ -174,11 +176,11 @@ class _AddVersementState extends State<AddVersement> {
                                 .addVersement(
                                     versement: VersementModels(
                                         id: "",
-                                        nomSecteur: secteur,
+                                        nomSecteur: secteur!,
                                         nomChefSecteur: nomChefSecteur,
                                         dateVersement: selectedDate,
-                                        idSecteur: idSecteur,
-                                        idChefSecteur: idChefSecteur,
+                                        idSecteur: idSecteur!,
+                                        idChefSecteur: idChefSecteur!,
                                         sommeVerser: somme.text.toString()),
                                     context: context);
                             Provider.of<HomeProvider>(context, listen: false)

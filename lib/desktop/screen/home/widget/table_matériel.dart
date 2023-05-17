@@ -87,9 +87,9 @@ class TableMaterielState extends State<TableMateriel> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Colors.teal),
                       CustomText(
                           data: "Ajoutez un matériel",

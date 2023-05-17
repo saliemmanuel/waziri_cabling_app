@@ -32,6 +32,8 @@ class _AddMaterielState extends State<AddMateriel> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -80,7 +82,7 @@ class _AddMaterielState extends State<AddMateriel> {
                               controller: prix,
                               obscureText: false),
                           CustomDetailWidget(
-                            title: "Date Achat",
+                            title: "Date achat matériel",
                             nullVal: "Date",
                             subtitle: selectedDate,
                             onTap: () {

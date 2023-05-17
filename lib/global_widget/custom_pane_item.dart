@@ -1,7 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/config/config.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
 
 class CustomPaneItem extends StatelessWidget {
   final Widget? title;

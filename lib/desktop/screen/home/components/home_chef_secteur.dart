@@ -41,7 +41,7 @@ class HomeChefSecteur extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(28.0),
                         child: Image.asset(
-                          'assets/images/home_1.png',
+                          'assets/images/logo_2.png',
                           height: 375,
                         ),
                       ),

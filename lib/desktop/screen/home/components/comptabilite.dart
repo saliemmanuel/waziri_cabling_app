@@ -6,8 +6,8 @@ import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/accueil_card.dart';
-import '../../../../global_widget/custom_text.dart';
 import '../provider/home_provider.dart';
+import '../widget/app_header.dart';
 import '../widget/table_type_abonnement.dart';
 
 class Comptabilite extends StatelessWidget {
@@ -48,16 +48,7 @@ class Comptabilite extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 20.0, left: 40.0, right: 40.0),
-                child: AppBar(
-                  title: const CustomText(
-                      data: "Comptabilité", color: Colors.black),
-                  elevation: 0.0,
-                  backgroundColor: Palette.scaffold,
-                ),
-              ),
+              appHeader("Comptabilité"),
               Container(
                 height: 350.0,
                 margin: const EdgeInsets.only(

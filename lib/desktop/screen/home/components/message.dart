@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../config/config.dart';
-import '../../../../global_widget/custom_text.dart';
 import '../../../../models/users.dart';
 import '../provider/home_provider.dart';
+import '../widget/app_header.dart';
 import '../widget/shimmer_table.dart';
 import '../widget/table_message.dart';
 
@@ -32,15 +32,7 @@ class _MessageState extends State<Message> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
-              child: AppBar(
-                title: const CustomText(data: "Message", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Message"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(

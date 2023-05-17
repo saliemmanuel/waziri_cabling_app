@@ -6,7 +6,7 @@ import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
-import '../../../../global_widget/custom_text.dart';
+import '../widget/app_header.dart';
 import '../widget/facture_table.dart';
 
 class Factures extends StatefulWidget {
@@ -33,15 +33,7 @@ class _FacturesState extends State<Factures> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
-              child: AppBar(
-                title: const CustomText(data: "Factures", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Factures"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(

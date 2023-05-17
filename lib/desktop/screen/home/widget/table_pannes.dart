@@ -86,9 +86,9 @@ class _TablePannesState extends State<TablePannes> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                           data: "Ajoutez une pannes",
@@ -166,6 +166,7 @@ class _TablePannesState extends State<TablePannes> {
                                   actionDialogue(
                                       context: context,
                                       child: DetailPannes(
+                                        users: widget.users,
                                         pannes: PannesModels(
                                           id: widget.listPannes[i]['id']
                                               .toString(),

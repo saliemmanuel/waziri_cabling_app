@@ -19,7 +19,7 @@ class AddPannes extends StatefulWidget {
 }
 
 class _AddPannesState extends State<AddPannes> {
-  List? _listSecteur = [];
+  List? listSecteur = [];
   var secteur = "Selectionner un secteur";
   var designation = TextEditingController();
   var description = TextEditingController();
@@ -37,11 +37,11 @@ class _AddPannesState extends State<AddPannes> {
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         if (widget.users.roleUtilisateur == 'admin') {
-          _listSecteur!.add(
+          listSecteur!.add(
               '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
         } else {
           if (list[i]['id_chef_secteur'] == widget.users.id) {
-            _listSecteur!.add(
+            listSecteur!.add(
                 '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
           }
         }
@@ -53,6 +53,8 @@ class _AddPannesState extends State<AddPannes> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -69,7 +71,7 @@ class _AddPannesState extends State<AddPannes> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomText(
-                    data: "Ajout pannes", color: Colors.red, fontSize: 30.0),
+                    data: "Ajout panne", color: Colors.red, fontSize: 30.0),
                 const SizedBox(height: 25.0),
                 Row(
                   children: [
@@ -98,14 +100,6 @@ class _AddPannesState extends State<AddPannes> {
                               controller: description,
                               child: "Description",
                               obscureText: false),
-                          CustomDetailWidget(
-                            title: "Jour détection panne",
-                            nullVal: "Date",
-                            subtitle: selectedJourDate,
-                            onTap: () {
-                              _selectDate(context);
-                            },
-                          ),
                         ],
                       ),
                     ),
@@ -113,6 +107,14 @@ class _AddPannesState extends State<AddPannes> {
                     Expanded(
                       child: Column(
                         children: [
+                          CustomDetailWidget(
+                            title: "Date détection panne",
+                            nullVal: "Date",
+                            subtitle: selectedJourDate,
+                            onTap: () {
+                              _selectDate(context);
+                            },
+                          ),
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
@@ -136,7 +138,7 @@ class _AddPannesState extends State<AddPannes> {
                                     child: Text(secteur.toString()),
                                   ),
                                   dropdownColor: Colors.white,
-                                  items: _listSecteur!
+                                  items: listSecteur!
                                       .map((e) => DropdownMenuItem<String>(
                                             value: e,
                                             child: Text(
@@ -152,7 +154,6 @@ class _AddPannesState extends State<AddPannes> {
                                   }),
                             ),
                           ),
-                          const SizedBox(height: 200.0)
                         ],
                       ),
                     )

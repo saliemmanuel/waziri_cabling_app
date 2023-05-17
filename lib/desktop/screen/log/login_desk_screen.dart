@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
-import 'package:waziri_cabling_app/desktop/screen/log/provider/test_provider.dart';
-import 'package:waziri_cabling_app/global_widget/custom_window_button.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'components/login_card.dart';
 
@@ -45,8 +41,8 @@ class _LoginDeskScreenState extends State<LoginDeskScreen> {
                 width: 600.0,
                 color: Palette.scaffold,
                 alignment: Alignment.center,
-                child: Column(
-                  children: const [
+                child: const Column(
+                  children: [
                     Spacer(),
                     LoginCard(),
                     Spacer(),

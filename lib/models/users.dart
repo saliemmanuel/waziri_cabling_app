@@ -94,7 +94,6 @@ class Users {
   @override
   bool operator ==(covariant Users other) {
     if (identical(this, other)) return true;
-
     return other.id == id &&
         other.nomUtilisateur == nomUtilisateur &&
         other.email == email &&

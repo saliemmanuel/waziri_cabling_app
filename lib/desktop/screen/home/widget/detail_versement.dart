@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:waziri_cabling_app/models/versement_models.dart';
 
+import '../../../../config/config.dart';
 import '../../../../global_widget/custom_detail_widget.dart';
+import '../../../../global_widget/custom_detail_widget_2.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/widget.dart';
 
 class DetailVersement extends StatefulWidget {
   final VersementModels versementModels;
@@ -13,9 +16,21 @@ class DetailVersement extends StatefulWidget {
 }
 
 class _DetailVersementState extends State<DetailVersement> {
+  late TextEditingController somme;
+  bool? isActive = false;
+  VersementModels? _versementModels;
+
+  @override
+  void initState() {
+    somme = TextEditingController(text: widget.versementModels.sommeVerser);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Badge(
+        largeSize: 30,
+        smallSize: 50,
         label: InkWell(
           child: const Icon(Icons.close, color: Colors.white),
           onTap: () => Navigator.pop(context),
@@ -44,7 +59,7 @@ class _DetailVersementState extends State<DetailVersement> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 CustomDetailWidget(
-                                    title: "Nom Secteur",
+                                    title: "Nom secteur",
                                     subtitle:
                                         widget.versementModels.nomSecteur),
                                 CustomDetailWidget(
@@ -60,16 +75,56 @@ class _DetailVersementState extends State<DetailVersement> {
                             CustomDetailWidget(
                                 title: "Date versement",
                                 subtitle: widget.versementModels.dateVersement),
-                            CustomDetailWidget(
+                            CustomDetailWidget2(
                                 title: "Somme verser",
-                                subtitle: widget.versementModels.sommeVerser),
+                                controller: somme,
+                                onChanged: (value) {
+                                  valueIsChange();
+                                }),
                           ],
                         ))
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        CustumButton(
+                          bacgroundColor:
+                              isActive! ? Palette.teal : Colors.grey,
+                          enableButton: isActive,
+                          child: "  Enregistrez  ",
+                          onPressed: () {},
+                        ),
+                        CustumButton(
+                            enableButton: true,
+                            child: "   Fermer   ",
+                            bacgroundColor: Palette.red,
+                            onPressed: () async {
+                              Navigator.pop(context);
+                            }),
                       ],
                     ),
                   ],
                 ),
               ))),
         ));
+  }
+
+  valueIsChange() {
+    _versementModels = VersementModels(
+        id: widget.versementModels.id,
+        nomSecteur: widget.versementModels.nomSecteur,
+        nomChefSecteur: widget.versementModels.nomChefSecteur,
+        sommeVerser: somme.text,
+        dateVersement: widget.versementModels.dateVersement,
+        idSecteur: widget.versementModels.idSecteur,
+        idChefSecteur: widget.versementModels.idChefSecteur);
+
+    if (_versementModels.toString() != widget.versementModels.toString()) {
+      isActive = true;
+    } else {
+      isActive = false;
+    }
+    setState(() {});
   }
 }

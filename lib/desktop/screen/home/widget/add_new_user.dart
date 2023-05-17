@@ -25,6 +25,7 @@ class _AddNewUserState extends State<AddNewUser> {
     'Loum',
     'Nkongsamba',
   ];
+
   List? listRole = ['admin', 'chef-secteur'];
   var role = "Rôle utilisateur";
   var secteur = "Selectionner une ville";
@@ -35,6 +36,8 @@ class _AddNewUserState extends State<AddNewUser> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -188,6 +191,7 @@ class _AddNewUserState extends State<AddNewUser> {
                     )
                   ],
                 ),
+                const SizedBox(height: 15.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -230,6 +234,7 @@ class _AddNewUserState extends State<AddNewUser> {
                         }),
                   ],
                 ),
+                const SizedBox(height: 10.0),
               ],
             ),
           ),

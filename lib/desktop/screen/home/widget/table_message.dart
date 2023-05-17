@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/models/message_moi_models.dart';
@@ -11,12 +13,13 @@ import '../home_desk_screen.dart';
 import '../provider/home_provider.dart';
 import 'action_dialogue.dart';
 import 'add_message_mois.dart';
-import 'add_versement.dart';
+import 'detail_message_mois.dart';
 
 class TableMessage extends StatefulWidget {
-  final listMessage;
+  final List listMessage;
   final Users users;
-  const TableMessage({super.key, this.listMessage, required this.users});
+  const TableMessage(
+      {super.key, required this.listMessage, required this.users});
 
   @override
   State<TableMessage> createState() => _TableMessageState();
@@ -35,7 +38,7 @@ class _TableMessageState extends State<TableMessage> {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste message (${widget.listMessage.length ?? ""})",
+                  data: "Liste message (${widget.listMessage.length})",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
               InkWell(
@@ -47,9 +50,9 @@ class _TableMessageState extends State<TableMessage> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                           data: "Ajoutez un message",
@@ -100,6 +103,30 @@ class _TableMessageState extends State<TableMessage> {
                           data: widget.listMessage[i]['corps_message'])),
                       DataCell(Row(
                         children: [
+                          Expanded(
+                            child: MaterialButton(
+                                color: Palette.online,
+                                child: const CustomText(
+                                    data: "Détail", color: Palette.white),
+                                onPressed: () {
+                                  actionDialogue(
+                                    context: context,
+                                    child: DetailMessageMois(
+                                      messageMoisModel: MessageMoisModel(
+                                        id: widget.listMessage[i]['id']
+                                            .toString(),
+                                        designationMessageMois: widget
+                                            .listMessage[i]
+                                                ['designation_message']
+                                            .toString(),
+                                        corpsMessageMois: widget.listMessage[i]
+                                                ['corps_message']
+                                            .toString(),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                          ),
                           const SizedBox(width: 10.0),
                           Expanded(
                               child: MaterialButton(
@@ -120,7 +147,6 @@ class _TableMessageState extends State<TableMessage> {
                                         context: context,
                                       );
                                       if (res) {
-                                        // ignore: use_build_context_synchronously
                                         Provider.of<HomeProvider>(context,
                                                 listen: false)
                                             .getDeleteMessageMois(
@@ -129,12 +155,12 @@ class _TableMessageState extends State<TableMessage> {
                                                   id: widget.listMessage[i]
                                                           ['id']
                                                       .toString(),
-                                                  designationMessageMois:
-                                                      widget.listMessage[i]
-                                                          ['nom_secteur'],
+                                                  designationMessageMois: widget
+                                                          .listMessage[i]
+                                                      ['designation_message'],
                                                   corpsMessageMois:
                                                       widget.listMessage[i]
-                                                          ['nom_chef_secteur'],
+                                                          ['corps_message'],
                                                 ));
                                       }
                                       code.clear();

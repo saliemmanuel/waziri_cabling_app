@@ -4,8 +4,8 @@ import 'package:waziri_cabling_app/desktop/screen/home/widget/table_mat%C3%A9rie
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
-import '../../../../global_widget/custom_text.dart';
 import '../provider/home_provider.dart';
+import '../widget/app_header.dart';
 import '../widget/shimmer_table.dart';
 
 class Materiel extends StatefulWidget {
@@ -31,15 +31,7 @@ class _MaterielState extends State<Materiel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding:
-                  const EdgeInsets.only(top: 20.0, left: 45.0, right: 45.0),
-              child: AppBar(
-                title: const CustomText(data: "Matériels", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Matériels"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(
