@@ -534,14 +534,16 @@ class ServiceApi {
   deleteMessageMois(
       {MessageMoisModel? message, String? token, required var context}) async {
     try {
-      var data = await dio.postUri(host.baseUrl(endpoint: "pannes/destroy"),
+      var data = await dio.postUri(
+          host.baseUrl(endpoint: "message-mois/destroy"),
           options: Options(headers: host.headers(token!)),
           data: {"id": message!.id.toString()});
 
       if (data.statusCode == 200) {
         if (data.data['statut']) {
           succesTransaction(data.data['message'], context);
-          Provider.of<HomeProvider>(context, listen: false).providePannes();
+          Provider.of<HomeProvider>(context, listen: false)
+              .provideListMessageMoi();
           return data.data['statut'];
         } else {
           echecTransaction(data.data['message'], context);

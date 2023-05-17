@@ -45,7 +45,7 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   iconly: ^1.0.1
   http: ^0.13.3
-  google_fonts: ^3.0.1
+  google_fonts: ^4.0.4
   shimmer: ^2.0.0
   flutter_improved_scrolling: ^0.0.3
   window_manager: ^0.2.7

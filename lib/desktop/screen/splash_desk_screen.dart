@@ -1,13 +1,8 @@
-import 'dart:async';
-
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/config/config.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/home_desk_screen.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/login_desk_screen.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
-import 'package:waziri_cabling_app/global_widget/route.dart';
 
 class SplashDeskScreen extends StatefulWidget {
   const SplashDeskScreen({super.key});

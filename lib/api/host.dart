@@ -1,11 +1,7 @@
 //Ici déclaré tous les variables de connexion au serveur distant
 
 class Host {
-<<<<<<< HEAD
-  static var host = 'http://192.168.137.210:3366';
-=======
   static var host = 'http://192.168.137.1:3366';
->>>>>>> a0fa67c8ff72efcfef306aadbdc582be6c67dc5c
   // static var host = 'https://waziricablingapp.000webhostapp.com';
 
   Uri baseUrl({String? endpoint}) => Uri.parse("$host/api/$endpoint/");
