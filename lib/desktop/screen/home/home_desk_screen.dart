@@ -37,11 +37,14 @@ var code = TextEditingController();
 class _HomeDeskScreenState extends State<HomeDeskScreen> {
   @override
   Widget build(BuildContext context) {
+    Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
+    Provider.of<HomeProvider>(context, listen: false).provideCharge();
+    Provider.of<HomeProvider>(context, listen: false).providePannes();
+    Provider.of<HomeProvider>(context, listen: false).provideListMessageMoi();
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeAbonnes(users: widget.users);
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeTypeAbonnement();
-    Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     if (widget.users!.roleUtilisateur != "chef-secteur") {
       Provider.of<HomeProvider>(context, listen: false).provideVersements();
       Provider.of<HomeProvider>(context, listen: false)

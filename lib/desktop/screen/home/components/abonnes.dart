@@ -4,8 +4,8 @@ import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.da
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
-import '../../../../global_widget/custom_text.dart';
 import '../widget/abonnes_table.dart';
+import '../widget/app_header.dart';
 import '../widget/shimmer_table.dart';
 
 class Abonne extends StatelessWidget {
@@ -27,18 +27,7 @@ class Abonne extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                left: 45.0,
-                right: 45.0,
-              ),
-              child: AppBar(
-                title: const CustomText(data: "Abonnés", color: Colors.black),
-                elevation: 0.0,
-                backgroundColor: Palette.scaffold,
-              ),
-            ),
+            appHeader("Abonnés"),
             Expanded(
                 child: Container(
                     margin: const EdgeInsets.only(
