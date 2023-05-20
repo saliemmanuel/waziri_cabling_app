@@ -194,7 +194,7 @@ class _UserTableState extends State<UserTable> {
                             child: MaterialButton(
                                 color: Palette.online,
                                 child: const CustomText(
-                                    data: "Détail", color: Palette.white),
+                                    data: "Détail ", color: Palette.white),
                                 onPressed: () {
                                   actionDialogue(
                                       child: DetailUtilisateur(
@@ -228,8 +228,9 @@ class _UserTableState extends State<UserTable> {
                           Expanded(
                             child: MaterialButton(
                                 color: Palette.red,
-                                onPressed: widget.userList![index]['id'] ==
-                                        widget.users.id
+                                onPressed: widget.userList![index]['id']
+                                            .toString() ==
+                                        widget.users.id.toString()
                                     ? null
                                     : () async {
                                         getCodeAuth(

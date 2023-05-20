@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/models/versement_models.dart';
 
 import '../../../../config/config.dart';
@@ -6,6 +7,7 @@ import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_detail_widget_2.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
+import '../provider/home_provider.dart';
 
 class DetailVersement extends StatefulWidget {
   final VersementModels versementModels;
@@ -93,7 +95,15 @@ class _DetailVersementState extends State<DetailVersement> {
                               isActive! ? Palette.teal : Colors.grey,
                           enableButton: isActive,
                           child: "  Enregistrez  ",
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_versementModels.toString() !=
+                                widget.versementModels.toString()) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .getUpadeteVersement(
+                                      versementModels: _versementModels,
+                                      context: context);
+                            }
+                          },
                         ),
                         CustumButton(
                             enableButton: true,

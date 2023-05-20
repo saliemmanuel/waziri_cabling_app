@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/config/config.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 
 import '../../../../global_widget/custom_button.dart';
 import '../../../../global_widget/custom_detail_widget_2.dart';
@@ -194,7 +196,13 @@ class _DetailUtilisateurState extends State<DetailUtilisateur> {
                         bacgroundColor: isActive! ? Palette.teal : Colors.grey,
                         enableButton: isActive,
                         child: "  Enregistrez  ",
-                        onPressed: () {},
+                        onPressed: () {
+                          if (_users.toString() != widget.users.toString()) {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .updateUtilisateur(
+                                    users: _users, context: context);
+                          }
+                        },
                       ),
                       CustumButton(
                           enableButton: true,

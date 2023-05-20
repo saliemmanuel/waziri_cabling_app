@@ -529,6 +529,65 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.deleteSecteur(context: context, secteur: secteur, token: token);
+    notifyListeners();
+  }
+
+  getUpadeteSecteur({
+    Secteur? secteur,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateSecteur(context: context, secteur: secteur, token: token);
+    notifyListeners();
+  }
+
+  getUpadeteAbonne({
+    AbonneModels? abonneModels,
+    required dynamic context,
+    required Users? users,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateAbonne(
+        users: users,
+        context: context,
+        abonneModels: abonneModels,
+        token: token);
+    notifyListeners();
+  }
+
+  getUpadetePanne({
+    PannesModels? pannesModels,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updatePanne(
+        context: context, pannesModels: pannesModels, token: token);
+    notifyListeners();
+  }
+
+  getUpadeteVersement({
+    VersementModels? versementModels,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateVersement(
+        context: context, versementModels: versementModels, token: token);
+    notifyListeners();
+  }
+
+  getUpdateCharge({
+    ChargeModels? chargeModels,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateCharge(
+        context: context, chargeModels: chargeModels, token: token);
+    notifyListeners();
   }
 
   getDeleteTypeAbonnement({
@@ -538,5 +597,15 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.deleteTypeAbonnement(context: context, type: type, token: token);
+  }
+
+  getDetailFacture({
+    String? idAbonne,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    return _service.detailFactureAbonne(
+        context: context, idAbonne: idAbonne, token: token);
   }
 }

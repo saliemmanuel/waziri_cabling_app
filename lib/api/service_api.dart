@@ -391,18 +391,14 @@ class ServiceApi {
       });
 
       if (data.statusCode > 300) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         echecTransaction("Erreur lors du. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -613,6 +609,28 @@ class ServiceApi {
     }
   }
 
+  detailFactureAbonne(
+      {String? idAbonne, String? token, required var context}) async {
+    try {
+      var data = await dio.postUri(host.baseUrl(endpoint: "facture/detail"),
+          options: Options(headers: host.headers(token!)),
+          data: {
+            "id_abonne": idAbonne.toString(),
+          });
+
+      if (data.statusCode == 200) {
+        if (data.data != null) {
+          return data.data["facture"];
+        } else {
+          echecTransaction(data.data['message'], context);
+          return [];
+        }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   deleteAbonne(
       {AbonneModels? abonne, String? token, required var context}) async {
     try {
@@ -714,42 +732,6 @@ class ServiceApi {
     }
   }
 
-  updateUtilisateur(
-      {String? token,
-      Users? users,
-      required String idUtilisateurInitiateur,
-      required var context}) async {
-    try {
-      simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
-
-      var data = await http.post(host.baseUrl(endpoint: "utilisateur/update"),
-          headers: host.headers(token!),
-          body: {
-            'nom_utilisateur': users!.nomUtilisateur,
-            'prenom_utilisateur': users.prenomUtilisateur,
-            'email': users.email,
-            'telephone_utilisateur': users.telephoneUtilisateur,
-            'role_utilisateur': users.roleUtilisateur,
-            'zone_utilisateur': users.zoneUtilisateur,
-            'id_utilisateur_initiateur': idUtilisateurInitiateur
-          }).timeout(const Duration(seconds: 10), onTimeout: () {
-        throw TimeoutException(
-            'Connexion perdue, verifier votre connexion internet');
-      });
-      if (data.statusCode > 300) {
-        Navigator.pop(context);
-        echecTransaction("Erreur lors de la modification.", context);
-      }
-      if (data.statusCode == 200) {
-        var response = await jsonDecode(data.body);
-        Navigator.pop(context);
-        succesTransaction(response['message'], context);
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
   deleteSecteur({
     Secteur? secteur,
     String? token,
@@ -776,6 +758,191 @@ class ServiceApi {
           echecTransaction(response['message'], context);
           return response['statut'];
         }
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updateSecteur({
+    Secteur? secteur,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "secteur/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": secteur!.id.toString(),
+            "designation_secteur": secteur.designationSecteur,
+            "description_secteur": secteur.descriptionSecteur,
+            "nom_chef_secteur": secteur.nomChefSecteur,
+            "id_chef_secteur": secteur.idChefSecteur.toString()
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updateAbonne({
+    AbonneModels? abonneModels,
+    String? token,
+    required Users? users,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "abonne/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": abonneModels!.id,
+            "nom_abonne": abonneModels.nomAbonne,
+            "prenom_abonne": abonneModels.prenomAbonne,
+            "cni_abonne": abonneModels.cniAbonne.toString(),
+            "telephone_abonne": abonneModels.telephoneAbonne,
+            "description_zone_abonne": abonneModels.descriptionZoneAbonne,
+            "secteur_abonne": abonneModels.secteurAbonne,
+            "id_chef_secteur": abonneModels.idChefSecteur.toString(),
+            "type_abonnement": abonneModels.typeAbonnement,
+            "id_type_abonnement": abonneModels.idTypeAbonnement.toString(),
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false)
+            .provideListeAbonnes(users: users);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updateVersement({
+    VersementModels? versementModels,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "versement/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": versementModels!.id,
+            "somme_verser": versementModels.sommeVerser,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false).provideVersements();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updateCharge({
+    ChargeModels? chargeModels,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "charge/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": chargeModels!.id,
+            "designation_charge": chargeModels.designationCharge,
+            "description_charge": chargeModels.descriptionCharge,
+            "date_charge": chargeModels.dateCharge,
+            "somme_verser": chargeModels.sommeCharge.toString(),
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      print(chargeModels);
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false).provideCharge();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updatePanne({
+    PannesModels? pannesModels,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "pannes/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": pannesModels!.id,
+            "designation": pannesModels.designation,
+            "description": pannesModels.description,
+            "detected_date": pannesModels.detectedDate.toString(),
+            "secteur": pannesModels.secteur,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      print(data.body);
+      print(pannesModels);
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false).providePannes();
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -963,7 +1130,8 @@ class ServiceApi {
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
-
+        Provider.of<HomeProvider>(context, listen: false)
+            .provideListeTypeAbonnement();
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -1077,7 +1245,6 @@ class ServiceApi {
             'role_utilisateur': users.roleUtilisateur.toString()
           },
           options: Options(headers: host.headers(token!)));
-
       if (data.statusCode! > 300) {
         return [];
       }
@@ -1103,6 +1270,47 @@ class ServiceApi {
       }
       if (data.statusCode == 200) {
         return jsonDecode(data.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+// Update
+  updateUtilisateur(
+      {String? token,
+      Users? users,
+      required String idUtilisateurInitiateur,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+
+      var data = await http.post(host.baseUrl(endpoint: "utilisateur/update"),
+          headers: host.headers(token!),
+          body: {
+            'id': users!.id,
+            'nom_utilisateur': users.nomUtilisateur,
+            'prenom_utilisateur': users.prenomUtilisateur,
+            'email': users.email,
+            'telephone_utilisateur': users.telephoneUtilisateur,
+            'role_utilisateur': users.roleUtilisateur,
+            'zone_utilisateur': users.zoneUtilisateur,
+            'id_utilisateur_initiateur': idUtilisateurInitiateur
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false)
+            .providelistUtilisateur('Tout les utilisateurs');
       }
     } catch (e) {
       debugPrint(e.toString());

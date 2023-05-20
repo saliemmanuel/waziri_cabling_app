@@ -171,7 +171,15 @@ class _DetailPannesState extends State<DetailPannes> {
                               isActive! ? Palette.teal : Colors.grey,
                           enableButton: isActive,
                           child: "  Enregistrez  ",
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_pannesModels.toString() !=
+                                widget.pannes.toString()) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .getUpadetePanne(
+                                      pannesModels: _pannesModels,
+                                      context: context);
+                            }
+                          },
                         ),
                         CustumButton(
                             enableButton: true,

@@ -52,7 +52,7 @@ class FacturePdfApi {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text("Du : ${listFacture[i]['created_at']}",
+                                  Text("Du : ${listFacture[i]['create_fm']}",
                                       style: const TextStyle(fontSize: 10.0)),
                                 ]),
                             SizedBox(height: 5.0),
@@ -194,7 +194,7 @@ class FacturePdfApi {
                                   ]),
                                   SizedBox(height: 6.0),
                                   Text(
-                                      "AVIS DE COUPURES/COUPURES SANS PREAVIS A PARTIR DU :",
+                                      "AVIS DE COUPURES SANS PREAVIS A PARTIR DU :",
                                       style: TextStyle(
                                           fontSize: 7.0,
                                           fontWeight: FontWeight.bold)),

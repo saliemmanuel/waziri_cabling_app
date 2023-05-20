@@ -108,39 +108,35 @@ class FactureModels {
 
   factory FactureModels.fromMap(Map<String, dynamic> map) {
     return FactureModels(
-      idFacture: map['idFacture'] != null ? map['idFacture'] as String : null,
-      numeroFacture:
-          map['numeroFacture'] != null ? map['numeroFacture'] as String : null,
-      mensualiteFacture: map['mensualiteFacture'] != null
-          ? map['mensualiteFacture'] as String
+      idFacture: map['id_facture'].toString(),
+      numeroFacture: map['numero_facture'].toString(),
+      mensualiteFacture: map['mensualite_facture'].toString(),
+      montantVerser: map['montant_verser'].toString(),
+      resteFacture: map['reste_facture'].toString(),
+      statutFacture: map['statut_facture'] != null
+          ? map['statut_facture'] as String
           : null,
-      montantVerser:
-          map['montantVerser'] != null ? map['montantVerser'] as String : null,
-      resteFacture:
-          map['resteFacture'] != null ? map['resteFacture'] as String : null,
-      statutFacture:
-          map['statutFacture'] != null ? map['statutFacture'] as String : null,
-      impayes: map['impayes'] != null ? map['impayes'] as String : null,
-      idAbonne: map['idAbonne'] != null ? map['idAbonne'] as String : null,
-      nomAbonne: map['nomAbonne'] != null ? map['nomAbonne'] as String : null,
+      impayes: map['impayes'].toString(),
+      idAbonne: map['id_abonne'].toString(),
+      nomAbonne: map['nom_abonne'] != null ? map['nom_abonne'] as String : null,
       prenomAbonne:
-          map['prenomAbonne'] != null ? map['prenomAbonne'] as String : null,
-      cniAbonne: map['cniAbonne'] != null ? map['cniAbonne'] as String : null,
-      telephoneAbonne: map['telephoneAbonne'] != null
-          ? map['telephoneAbonne'] as String
+          map['prenom_abonne'] != null ? map['prenom_abonne'] as String : null,
+      cniAbonne: map['cni_abonne'].toString(),
+      telephoneAbonne: map['telephone_abonne'] != null
+          ? map['telephone_abonne'] as String
           : null,
-      descriptionZoneAbonne: map['descriptionZoneAbonne'] != null
-          ? map['descriptionZoneAbonne'] as String
+      descriptionZoneAbonne: map['description_zone_abonne'] != null
+          ? map['description_zone_abonne'] as String
           : null,
-      secteurAbonne:
-          map['secteurAbonne'] != null ? map['secteurAbonne'] as String : null,
-      typeAbonnement: map['typeAbonnement'] != null
-          ? map['typeAbonnement'] as String
+      secteurAbonne: map['secteur_abonne'] != null
+          ? map['secteur_abonne'] as String
           : null,
-      montant: map['montant'] != null ? map['montant'] as String : null,
-      nombreChaine:
-          map['nombreChaine'] != null ? map['nombreChaine'] as String : null,
-      createAt: map['createAt'] != null ? map['createAt'] as String : null,
+      typeAbonnement: map['type_abonnement'] != null
+          ? map['type_abonnement'] as String
+          : null,
+      montant: map['montant'].toString(),
+      nombreChaine: map['nombre_chaine'].toString(),
+      createAt: map['create_fm'].toString(),
     );
   }
 

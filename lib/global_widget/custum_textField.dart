@@ -17,6 +17,7 @@ class CustumTextField extends StatefulWidget {
   final bool? enabled;
   final double? height;
   final int? maxLines;
+  final int? minLines;
 
   const CustumTextField(
       {Key? key,
@@ -33,7 +34,8 @@ class CustumTextField extends StatefulWidget {
       this.focusNode,
       this.enabled,
       this.height = 58.0,
-      this.maxLines})
+      this.maxLines,
+      this.minLines})
       : assert(child != null, 'child ne doit pas être null'),
         super(key: key);
 
@@ -46,7 +48,6 @@ class CustumTextFieldState extends State<CustumTextField> {
   @override
   void initState() {
     obscure = widget.obscureText!;
-
     super.initState();
   }
 
@@ -55,7 +56,7 @@ class CustumTextFieldState extends State<CustumTextField> {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
       child: Container(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         height: widget.height,
         decoration: BoxDecoration(
             borderRadius: widget.borderRadius == null
@@ -66,6 +67,8 @@ class CustumTextFieldState extends State<CustumTextField> {
             child: Padding(
           padding: const EdgeInsets.only(left: 15),
           child: TextField(
+            minLines: widget.minLines,
+            maxLines: widget.maxLines,
             enabled: widget.enabled,
             focusNode: widget.focusNode,
             maxLength: widget.maxLength,

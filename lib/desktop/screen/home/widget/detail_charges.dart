@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/models/charge_models.dart';
 
 import '../../../../config/palette.dart';
@@ -114,7 +116,15 @@ class _DetailChargesState extends State<DetailCharges> {
                               isActive! ? Palette.teal : Colors.grey,
                           enableButton: isActive,
                           child: "  Enregistrez  ",
-                          onPressed: () {},
+                          onPressed: () {
+                            if (_chargeModels.toString() !=
+                                widget.chargeModels.toString()) {
+                              Provider.of<HomeProvider>(context, listen: false)
+                                  .getUpdateCharge(
+                                      chargeModels: _chargeModels,
+                                      context: context);
+                            }
+                          },
                         ),
                         CustumButton(
                             enableButton: true,

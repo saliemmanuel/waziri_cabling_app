@@ -62,16 +62,6 @@ class _AddMessageMoisState extends State<AddMessageMois> {
                               child: 'Désignation',
                               controller: designation,
                               obscureText: false),
-                          const SizedBox(height: 10.0),
-                          const SizedBox(height: 100.0)
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 15.0),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
                           const Padding(
                             padding: EdgeInsets.only(left: 10.0, bottom: 10.0),
                             child: Align(
@@ -79,14 +69,19 @@ class _AddMessageMoisState extends State<AddMessageMois> {
                                 child: CustomText(data: "Corps message")),
                           ),
                           CustumTextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLength: 6,
+                              minLines: 2,
+                              height: 150.0,
                               child: 'Corps message',
+                              maxLines: 1,
                               controller: corps,
                               obscureText: false),
-                          const SizedBox(height: 10.0),
                           const SizedBox(height: 100.0)
                         ],
                       ),
                     ),
+                    const SizedBox(width: 15.0),
                   ],
                 ),
                 Row(

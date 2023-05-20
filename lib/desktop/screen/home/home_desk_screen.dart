@@ -96,27 +96,16 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       if (widget.users!.roleUtilisateur != "chef-secteur")
         CustomPaneItem(
             body:
-                Text('Matériel', style: GoogleFonts.cabin(color: Colors.black)),
-            icon: const Icon(IconlyLight.category, color: Colors.black),
+                Text('Secteurs', style: GoogleFonts.cabin(color: Colors.black)),
+            icon: const Icon(IconlyLight.graph, color: Colors.black),
             selectedIcon:
-                const Icon(IconlyBold.category, color: Palette.primaryColor),
+                const Icon(IconlyBold.graph, color: Palette.primaryColor),
             isSelected: false,
-            index: 2,
+            index: 10,
             onPressed: () {
               Provider.of<HomeProvider>(context, listen: false)
-                  .changeBody(index: 2);
+                  .changeBody(index: 10);
             }),
-      CustomPaneItem(
-          body: Text('Pannes', style: GoogleFonts.cabin(color: Colors.black)),
-          icon: const Icon(IconlyLight.paper_fail, color: Colors.black),
-          selectedIcon:
-              const Icon(IconlyBold.paper_fail, color: Palette.primaryColor),
-          isSelected: false,
-          index: 3,
-          onPressed: () {
-            Provider.of<HomeProvider>(context, listen: false)
-                .changeBody(index: 3);
-          }),
       CustomPaneItem(
           body: Text('Abonnés', style: GoogleFonts.cabin(color: Colors.black)),
           icon: const Icon(IconlyLight.user_1, color: Colors.black),
@@ -195,6 +184,17 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                 .changeBody(index: 8);
           },
         ),
+      CustomPaneItem(
+          body: Text('Pannes', style: GoogleFonts.cabin(color: Colors.black)),
+          icon: const Icon(IconlyLight.paper_fail, color: Colors.black),
+          selectedIcon:
+              const Icon(IconlyBold.paper_fail, color: Palette.primaryColor),
+          isSelected: false,
+          index: 3,
+          onPressed: () {
+            Provider.of<HomeProvider>(context, listen: false)
+                .changeBody(index: 3);
+          }),
       if (widget.users!.roleUtilisateur != "chef-secteur")
         CustomPaneItem(
           body: Text('Message', style: GoogleFonts.cabin(color: Colors.black)),
@@ -211,15 +211,15 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
       if (widget.users!.roleUtilisateur != "chef-secteur")
         CustomPaneItem(
             body:
-                Text('Secteurs', style: GoogleFonts.cabin(color: Colors.black)),
-            icon: const Icon(IconlyLight.graph, color: Colors.black),
+                Text('Matériel', style: GoogleFonts.cabin(color: Colors.black)),
+            icon: const Icon(IconlyLight.category, color: Colors.black),
             selectedIcon:
-                const Icon(IconlyBold.graph, color: Palette.primaryColor),
+                const Icon(IconlyBold.category, color: Palette.primaryColor),
             isSelected: false,
-            index: 10,
+            index: 2,
             onPressed: () {
               Provider.of<HomeProvider>(context, listen: false)
-                  .changeBody(index: 10);
+                  .changeBody(index: 2);
             }),
       CustomPaneItem(
           body:
