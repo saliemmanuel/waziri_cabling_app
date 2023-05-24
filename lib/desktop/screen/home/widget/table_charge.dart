@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
+// import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/detail_charges.dart';
 import 'package:waziri_cabling_app/models/charge_models.dart';
@@ -39,44 +39,44 @@ class _TableChargeState extends State<TableCharge> {
                   data: "Liste charge (${widget.listCharge.length ?? ""})",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    height: 35.0,
-                    width: 200.0,
-                    margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.teal),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                            child: TextField(
-                          controller: controller,
-                          decoration: const InputDecoration(
-                              border: InputBorder.none, hintText: 'Search'),
-                          onChanged: (value) {
-                            if (value.isEmpty) {
-                              Provider.of<HomeProvider>(context, listen: false)
-                                  .providePannes();
-                            } else {
-                              // Provider.of<HomeProvider>(context, listen: false)
-                              //     .searchInlistCharge(value);
-                            }
-                          },
-                        )),
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(IconlyBold.search, color: Palette.grey),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+              // Row(
+              //   children: [
+              //     // Container(
+              //     //   alignment: Alignment.center,
+              //     //   height: 35.0,
+              //     //   width: 200.0,
+              //     //   margin: const EdgeInsets.all(8.0),
+              //     //   padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
+              //     //   decoration: BoxDecoration(
+              //     //       border: Border.all(color: Palette.teal),
+              //     //       borderRadius: BorderRadius.circular(5.0)),
+              //     //   child: Row(
+              //     //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //     //     children: [
+              //     //       Expanded(
+              //     //           child: TextField(
+              //     //         controller: controller,
+              //     //         decoration: const InputDecoration(
+              //     //             border: InputBorder.none, hintText: 'Search'),
+              //     //         onChanged: (value) {
+              //     //           if (value.isEmpty) {
+              //     //             Provider.of<HomeProvider>(context, listen: false)
+              //     //                 .providePannes();
+              //     //           } else {
+              //     //             // Provider.of<HomeProvider>(context, listen: false)
+              //     //             //     .searchInlistCharge(value);
+              //     //           }
+              //     //         },
+              //     //       )),
+              //     //       const Padding(
+              //     //         padding: EdgeInsets.all(8.0),
+              //     //         child: Icon(IconlyBold.search, color: Palette.grey),
+              //     //       )
+              //     //     ],
+              //     //   ),
+              //     // ),
+              //   ],
+              // ),
               InkWell(
                 child: Container(
                   alignment: Alignment.center,
@@ -86,9 +86,9 @@ class _TableChargeState extends State<TableCharge> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Palette.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child:const Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children:  [
+                    children: [
                       Icon(Icons.add, color: Palette.teal),
                       CustomText(
                           data: "Ajoutez une charge",

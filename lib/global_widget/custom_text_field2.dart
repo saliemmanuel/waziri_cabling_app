@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../config/config.dart';
 
-class CustumTextField extends StatefulWidget {
+class CustumTextField2 extends StatefulWidget {
   final String? child;
   final Color? bacgroundColor;
   final double? borderRadius;
@@ -17,8 +17,9 @@ class CustumTextField extends StatefulWidget {
   final bool? enabled;
   final double? height;
   final int? maxLines;
+  final int? minLines;
 
-  const CustumTextField(
+  const CustumTextField2(
       {Key? key,
       this.child,
       this.borderRadius,
@@ -33,20 +34,20 @@ class CustumTextField extends StatefulWidget {
       this.focusNode,
       this.enabled,
       this.height = 58.0,
-      this.maxLines})
+      this.maxLines,
+      this.minLines = 3})
       : assert(child != null, 'child ne doit pas être null'),
         super(key: key);
 
   @override
-  CustumTextFieldState createState() => CustumTextFieldState();
+  CustumTextField2State createState() => CustumTextField2State();
 }
 
-class CustumTextFieldState extends State<CustumTextField> {
+class CustumTextField2State extends State<CustumTextField2> {
   bool obscure = false;
   @override
   void initState() {
     obscure = widget.obscureText!;
-
     super.initState();
   }
 
@@ -55,7 +56,7 @@ class CustumTextFieldState extends State<CustumTextField> {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
       child: Container(
-        alignment: Alignment.center,
+        alignment: Alignment.topCenter,
         height: widget.height,
         decoration: BoxDecoration(
             borderRadius: widget.borderRadius == null
@@ -66,6 +67,8 @@ class CustumTextFieldState extends State<CustumTextField> {
             child: Padding(
           padding: const EdgeInsets.only(left: 15),
           child: TextField(
+            minLines: 3,
+            maxLines: 6,
             enabled: widget.enabled,
             focusNode: widget.focusNode,
             maxLength: widget.maxLength,

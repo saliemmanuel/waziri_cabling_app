@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:iconly/iconly.dart';
 
 import 'custom_text.dart';
 
 class AccueilCard extends StatelessWidget {
   final Color? containerColor;
+  final String label;
   final void Function()? onPressed;
 
   const AccueilCard({
     Key? key,
     required this.containerColor,
     this.onPressed,
+    required this.label,
   }) : super(key: key);
 
   @override
@@ -45,46 +46,29 @@ class AccueilCard extends StatelessWidget {
               padding: const EdgeInsets.only(top: 10.0),
               child: ListTile(
                 onTap: onPressed,
-                title: const CustomText(data: "Installations"),
-                subtitle: const CustomText(
-                    data:
-                        '\nEx sit reprehenderit reprehenderit non ea nostrud esse dolore magna aute minim.'),
+                title: CustomText(data: label),
               ),
             ),
+            const Divider(),
             InkWell(
               onTap: onPressed,
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: Container(
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade200),
-                      borderRadius: BorderRadius.circular(8.0),
-                      color: containerColor!.withOpacity(0.2)),
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    onTap: onPressed,
-                    leading: Container(
-                      width: 3.0,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50.0),
-                          color: Colors.purple),
-                    ),
-                    title: const CustomText(data: "TOTAL"),
-                    subtitle: const CustomText(data: "100", fontSize: 20.0),
-                  ),
-                ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(15.0),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey.shade200),
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: containerColor!.withOpacity(0.2)),
+                    margin: const EdgeInsets.all(8.0),
+                    child: const CustomText(
+                        data: "100000000000000000000000000000",
+                        fontSize: 26.0)),
               ),
             ),
-            const Divider(endIndent: 8.0, indent: 8.0),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: ListTile(
-                  onTap: onPressed,
-                  title: const CustomText(data: "Détail", color: Colors.grey),
-                  trailing: const Icon(IconlyLight.arrow_right_2)),
-            ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 40.0),
           ],
         ),
       ),

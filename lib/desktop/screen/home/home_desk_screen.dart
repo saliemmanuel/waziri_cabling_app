@@ -40,7 +40,7 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
     Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
     Provider.of<HomeProvider>(context, listen: false).provideCharge();
     Provider.of<HomeProvider>(context, listen: false).providePannes();
-    Provider.of<HomeProvider>(context, listen: false).provideListMessageMoi();
+    Provider.of<HomeProvider>(context, listen: false).provideMessageMoi();
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeAbonnes(users: widget.users);
     Provider.of<HomeProvider>(context, listen: false)

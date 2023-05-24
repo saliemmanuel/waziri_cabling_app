@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 
@@ -145,10 +147,9 @@ class _FactureTableState extends State<FactureTable> {
                                     code: code.text.toString(),
                                     context: context);
                             if (res) {
-                              // ignore: use_build_context_synchronously
                               Provider.of<HomeProvider>(context, listen: false)
-                                  .generateFacture(users: widget.users);
-                              // ignore: use_build_context_synchronously
+                                  .generateFacture(
+                                      users: widget.users, context: context);
                               Provider.of<HomeProvider>(context, listen: false)
                                   .provideListeFacture(
                                       users: widget.users,
@@ -205,14 +206,11 @@ class _FactureTableState extends State<FactureTable> {
                                   code: code.text.toString(),
                                   context: context);
                           if (res) {
-                            // ignore: use_build_context_synchronously
                             Provider.of<HomeProvider>(context, listen: false)
                                 .provideListeFacture(
                                     users: widget.users,
                                     selectedStatut: 'impayer');
-                            // ignore: use_build_context_synchronously
                             await factureApi.generateFacture(
-                                // ignore: use_build_context_synchronously
                                 await Provider.of<HomeProvider>(context,
                                         listen: false)
                                     .listTrie,

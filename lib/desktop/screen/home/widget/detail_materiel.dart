@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/action_dialogue.dart';
 import 'package:waziri_cabling_app/global_widget/custom_detail_widget.dart';
 import 'package:path_provider/path_provider.dart';
@@ -19,6 +20,7 @@ import '../../../../global_widget/custom_detail_widget_2.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/widget.dart';
+import '../provider/home_provider.dart';
 
 class DetailMateriel extends StatefulWidget {
   final MaterielModels materiel;
@@ -36,9 +38,10 @@ class _DetailMaterielState extends State<DetailMateriel> {
   late TextEditingController prix;
   MaterielModels? _materiel;
   dynamic selectedDate;
-  dynamic fileImageMateriel;
   bool imageIsLoading = false;
   dynamic fileImageFacture;
+  dynamic fileImageMateriel;
+
   bool factureIsLoading = false;
   bool? isActive = false;
   bool? activePreviewImg = true;
@@ -47,7 +50,6 @@ class _DetailMaterielState extends State<DetailMateriel> {
   bool? activeChangeFac = false;
   @override
   void initState() {
-    print(widget.materiel);
     designation =
         TextEditingController(text: widget.materiel.designationMateriel);
     prix = TextEditingController(text: widget.materiel.prixMateriel);
@@ -142,11 +144,11 @@ class _DetailMaterielState extends State<DetailMateriel> {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Helper(
-                                      value: widget.materiel.imageMateriel
+                                      value: widget.materiel.imageMateriel!
                                           .split("/")
                                           .last
                                           .contains('.pdf'),
-                                      fileName: widget.materiel.imageMateriel,
+                                      fileName: widget.materiel.imageMateriel!,
                                     )),
                               ),
                             ),
@@ -203,11 +205,12 @@ class _DetailMaterielState extends State<DetailMateriel> {
                                 child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Helper(
-                                      value: widget.materiel.factureMateriel
+                                      value: widget.materiel.factureMateriel!
                                           .split("/")
                                           .last
                                           .contains('.pdf'),
-                                      fileName: widget.materiel.factureMateriel,
+                                      fileName:
+                                          widget.materiel.factureMateriel!,
                                     )),
                               ),
                             ),
@@ -255,7 +258,15 @@ class _DetailMaterielState extends State<DetailMateriel> {
                         bacgroundColor: isActive! ? Palette.teal : Colors.grey,
                         enableButton: isActive,
                         child: "  Enregistrez  ",
-                        onPressed: () {},
+                        onPressed: () {
+                          valueIsChange();
+                          if (_materiel.toString() !=
+                              widget.materiel.toString()) {
+                            Provider.of<HomeProvider>(context, listen: false)
+                                .getUpdateMateriel(
+                                    materiel: _materiel, context: context);
+                          }
+                        },
                       ),
                       CustumButton(
                           enableButton: true,
@@ -379,12 +390,15 @@ class _DetailMaterielState extends State<DetailMateriel> {
 
   valueIsChange() {
     _materiel = MaterielModels(
+        id: widget.materiel.id,
         dateAchatMateriel: selectedDate ?? widget.materiel.dateAchatMateriel,
         designationMateriel: designation.text,
         prixMateriel: prix.text,
-        factureMateriel: widget.materiel.factureMateriel,
-        imageMateriel: widget.materiel.imageMateriel,
-        id: widget.materiel.id,
+        factureMateriel:
+            fileImageFacture != null ? fileImageFacture.path : fileImageFacture,
+        imageMateriel: fileImageMateriel != null
+            ? fileImageMateriel.path
+            : fileImageMateriel,
         createAt: widget.materiel.createAt);
 
     if (_materiel.toString() != widget.materiel.toString()) {

@@ -4,17 +4,17 @@ class MaterielModels {
   final int id;
   final String designationMateriel;
   final String prixMateriel;
-  final String imageMateriel;
+  final String? imageMateriel;
   final String dateAchatMateriel;
-  final String factureMateriel;
+  final String? factureMateriel;
   final String createAt;
   MaterielModels({
     required this.id,
     required this.designationMateriel,
     required this.prixMateriel,
-    required this.imageMateriel,
+    this.imageMateriel,
     required this.dateAchatMateriel,
-    required this.factureMateriel,
+    this.factureMateriel,
     required this.createAt,
   });
 

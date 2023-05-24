@@ -46,6 +46,7 @@ class HomeProvider extends ChangeNotifier {
   providelistUtilisateur(var selectedTypeUtilisateur) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
+    print(token);
     dynamic tmp;
     tmp = await _service.getListUtilisateur(token: token);
     try {
@@ -120,16 +121,14 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  provideListMessageMoi() async {
+  providePannes() async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
-    debugPrint(token.toString());
-
-    // _listCharget = await _service.getListMessage(token: token);
+    _listPannes = await _service.getListPannes(token: token);
     notifyListeners();
   }
 
-  providePannes() async {
+  provideComptabiliteData() async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listPannes = await _service.getListPannes(token: token);
@@ -285,10 +284,10 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  generateFacture({required Users? users}) async {
+  generateFacture({required Users? users, required var context}) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
-    await _service.getGenerateFacture(token: token);
+    await _service.getGenerateFacture(token: token,context: context);
     notifyListeners();
   }
 
@@ -309,6 +308,15 @@ class HomeProvider extends ChangeNotifier {
     var token = await storage.read(key: 'tokens');
 
     _service.addMateriel(token: token, materiel: materiel!, context: context);
+  }
+
+  getUpdateMateriel(
+      {required MaterielModels? materiel,
+      required BuildContext? context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+
+    _service.updateMateriel(token: token, materiel: materiel, context: context);
   }
 
   addVersement(
@@ -565,6 +573,17 @@ class HomeProvider extends ChangeNotifier {
     var token = await storage.read(key: 'tokens');
     _service.updatePanne(
         context: context, pannesModels: pannesModels, token: token);
+    notifyListeners();
+  }
+
+  getUpadeteMessageMois({
+    MessageMoisModel? messageMoisModel,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateMessageMois(
+        context: context, messageMoisModel: messageMoisModel, token: token);
     notifyListeners();
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
+import 'package:waziri_cabling_app/global_widget/custom_button.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
@@ -24,13 +25,6 @@ class Comptabilite extends StatelessWidget {
       _SalesData('Mars', 6),
       _SalesData('Avr', 25),
       _SalesData('Mai', 0),
-      // _SalesData('Juin', 7),
-      // _SalesData('Juil', 5),
-      // _SalesData('Août', 9),
-      // _SalesData('Sept', 6),
-      // _SalesData('Oct', 2),
-      // _SalesData('Nov', 45),
-      // _SalesData('Déc', 40),
     ];
     var data2 = [
       _ChartData('Janvier', 12),
@@ -49,118 +43,39 @@ class Comptabilite extends StatelessWidget {
           child: Column(
             children: [
               appHeader("Comptabilité"),
-              Container(
-                height: 350.0,
-                margin: const EdgeInsets.only(
+              const Padding(
+                padding: EdgeInsets.only(
                     top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18.0)),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: SfCircularChart(
-                            title: ChartTitle(
-                                text: 'Analyse des nombres d\'abonnement'),
-                            legend: Legend(isVisible: true),
-                            tooltipBehavior: TooltipBehavior(enable: true),
-                            series: [
-                          DoughnutSeries<_ChartData, String>(
-                              dataSource: data2,
-                              xValueMapper: (_ChartData data, _) => data.x,
-                              yValueMapper: (_ChartData data, _) => data.y,
-                              name: 'Gold')
-                        ])),
-                    Expanded(
-                      child: SfCartesianChart(
-                          primaryXAxis: CategoryAxis(),
-                          title: ChartTitle(text: 'Analyse des activités'),
-                          legend: Legend(isVisible: true),
-                          tooltipBehavior: TooltipBehavior(enable: true),
-                          series: <ChartSeries<_SalesData, String>>[
-                            LineSeries<_SalesData, String>(
-                                dataSource: data,
-                                xValueMapper: (_SalesData sales, _) =>
-                                    sales.year,
-                                yValueMapper: (_SalesData sales, _) =>
-                                    sales.sales,
-                                name: 'Tandence',
-                                dataLabelSettings:
-                                    const DataLabelSettings(isVisible: true))
-                          ]),
-                    ),
-                  ],
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Wrap(spacing: 18.0, runSpacing: 18.0, children: [
+                    AccueilCard(
+                        label: "Total Recette ", containerColor: Colors.yellow),
+                    AccueilCard(
+                        label: "Total Sorties ", containerColor: Colors.pink),
+                    AccueilCard(
+                        label: "Total Entrées ",
+                        containerColor: Colors.blueGrey),
+                    AccueilCard(
+                        label: "Total Dettes  ", containerColor: Colors.teal),
+                  ]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(spacing: 18.0, runSpacing: 18.0, children: const [
-                    AccueilCard(containerColor: Colors.yellow),
-                    AccueilCard(containerColor: Colors.pink),
-                    AccueilCard(containerColor: Colors.blueGrey),
-                    AccueilCard(containerColor: Colors.teal),
-                  ]),
-                ),
-              ),
-              Container(
-                height: 350.0,
-                margin: const EdgeInsets.only(
-                    top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(18.0)),
+                    top: 20.0, left: 30.0, right: 40.0, bottom: 20.0),
                 child: Row(
                   children: [
-                    Expanded(
-                        child: SfCircularChart(
-                            title: ChartTitle(
-                                text: 'Analyse des nombres d\'abonnement'),
-                            legend: Legend(isVisible: true),
-                            tooltipBehavior: TooltipBehavior(enable: true),
-                            series: [
-                          DoughnutSeries<_ChartData, String>(
-                              dataSource: data2,
-                              xValueMapper: (_ChartData data, _) => data.x,
-                              yValueMapper: (_ChartData data, _) => data.y,
-                              name: 'Gold')
-                        ])),
-                    Expanded(
-                      child: SfCartesianChart(
-                          primaryXAxis: CategoryAxis(),
-                          title: ChartTitle(text: 'Analyse des activités'),
-                          legend: Legend(isVisible: true),
-                          tooltipBehavior: TooltipBehavior(enable: true),
-                          series: <ChartSeries<_SalesData, String>>[
-                            LineSeries<_SalesData, String>(
-                                dataSource: data,
-                                xValueMapper: (_SalesData sales, _) =>
-                                    sales.year,
-                                yValueMapper: (_SalesData sales, _) =>
-                                    sales.sales,
-                                name: 'Sales',
-                                dataLabelSettings:
-                                    const DataLabelSettings(isVisible: true))
-                          ]),
-                    ),
+                    CustumButton(
+                      bacgroundColor: Palette.teal,
+                      enableButton: true,
+                      child: "   Reintialiser   ",
+                      onPressed: () {},
+                    )
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(spacing: 18.0, runSpacing: 18.0, children: const [
-                    AccueilCard(containerColor: Colors.yellow),
-                    AccueilCard(containerColor: Colors.pink),
-                    AccueilCard(containerColor: Colors.blueGrey),
-                    AccueilCard(containerColor: Colors.teal),
-                  ]),
-                ),
-              ),
+              const Divider(),
               Container(
                 height: 350.0,
                 margin: const EdgeInsets.only(
@@ -175,22 +90,6 @@ class Comptabilite extends StatelessWidget {
                           users: users,
                           listTypeAbonnement: value.listTypeAbonnement);
                 }),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(
-                      spacing: 18.0,
-                      runSpacing: 18.0,
-                      children: List.generate(
-                        4,
-                        (index) => const AccueilCard(
-                          containerColor: Colors.teal,
-                        ),
-                      )),
-                ),
               ),
               const SizedBox(height: 50.0)
             ],

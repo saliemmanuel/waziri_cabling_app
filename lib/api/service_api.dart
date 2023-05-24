@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cherry_toast/cherry_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
 import 'package:waziri_cabling_app/models/charge_models.dart';
 import 'package:waziri_cabling_app/models/facture_models.dart';
@@ -179,11 +183,9 @@ class ServiceApi {
             'Connexion perdue, verifier votre connexion internet');
       });
       if (data.statusCode > 300) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         echecTransaction(
             "Erreur lors de la création. ${response['message']}", context);
       }
@@ -220,19 +222,15 @@ class ServiceApi {
       });
       print(data.body);
       if (data.statusCode > 202) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         echecTransaction(
             "Erreur lors de la création. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -259,23 +257,19 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print(data.body);
       if (data.statusCode > 202) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
 
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         echecTransaction(
             "Erreur lors de la création. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         Provider.of<HomeProvider>(context, listen: false).provideCharge();
-        // ignore: use_build_context_synchronously
+
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
+
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -302,21 +296,15 @@ class ServiceApi {
       });
       print(data.body);
       if (data.statusCode > 202) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
         echecTransaction(
             "Erreur lors de la création. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
-        // ignore: use_build_context_synchronously
-        Provider.of<HomeProvider>(context, listen: false)
-            .provideListMessageMoi();
-        // ignore: use_build_context_synchronously
+        Provider.of<HomeProvider>(context, listen: false).provideMessageMoi();
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
         succesTransaction(response['message'], context);
       }
     } catch (e) {
@@ -341,25 +329,109 @@ class ServiceApi {
       request.fields['date_achat_materiel'] = materiel.dateAchatMateriel;
       request.fields['statut_materiel'] = 'token';
       var imageMateriel = await http.MultipartFile.fromPath(
-          "image_materiel", materiel.imageMateriel);
+          "image_materiel", materiel.imageMateriel!);
       var factureMateriel = await http.MultipartFile.fromPath(
-          "facture_materiel", materiel.factureMateriel);
+          "facture_materiel", materiel.factureMateriel!);
       request.files.add(imageMateriel);
       request.files.add(factureMateriel);
 
       http.StreamedResponse response = await request.send();
       if (response.statusCode == 200) {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
+
         succesTransaction("Ajout matériel effectué", context);
-        // ignore: use_build_context_synchronously
+
         Provider.of<HomeProvider>(context, listen: false).provideMateriels();
       } else {
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
-        // ignore: use_build_context_synchronously
+
         echecTransaction("Echec ajout matériel", context);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  updateMateriel({
+    String? token,
+    MaterielModels? materiel,
+    required BuildContext? context,
+  }) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+
+      if (materiel?.factureMateriel == null) {
+        print("factureMateriel nill");
+        var request = http.MultipartRequest(
+            "POST", host.baseUrl(endpoint: "materiel/update"));
+        request.headers['Authorization'] = 'Bearer $token';
+        request.fields['designation_materiel'] = materiel!.designationMateriel;
+        request.fields['prix_materiel'] = materiel.prixMateriel;
+        request.fields['date_achat_materiel'] = materiel.dateAchatMateriel;
+        request.fields['statut_materiel'] = 'token';
+        var imageMateriel = await http.MultipartFile.fromPath(
+            "image_materiel", materiel.imageMateriel!);
+        request.files.add(imageMateriel);
+
+        http.StreamedResponse response = await request.send();
+        if (response.statusCode == 200) {
+          Navigator.pop(context);
+          succesTransaction("Modification effectuée", context);
+          Provider.of<HomeProvider>(context, listen: false).provideMateriels();
+        } else {
+          Navigator.pop(context);
+          echecTransaction("Echec  Modification matériel", context);
+        }
+      } else if (materiel?.imageMateriel == null) {
+        print("imageMateriel nill");
+        var request = http.MultipartRequest(
+            "POST", host.baseUrl(endpoint: "materiel/update"));
+        request.headers['Authorization'] = 'Bearer $token';
+        request.fields['designation_materiel'] = materiel!.designationMateriel;
+        request.fields['prix_materiel'] = materiel.prixMateriel;
+        request.fields['date_achat_materiel'] = materiel.dateAchatMateriel;
+        request.fields['statut_materiel'] = 'token';
+
+        var factureMateriel = await http.MultipartFile.fromPath(
+            "facture_materiel", materiel.factureMateriel!);
+        request.files.add(factureMateriel);
+
+        http.StreamedResponse response = await request.send();
+        if (response.statusCode == 200) {
+          Navigator.pop(context);
+          succesTransaction("Modification effectuée", context);
+          Provider.of<HomeProvider>(context, listen: false).provideMateriels();
+        } else {
+          Navigator.pop(context);
+          echecTransaction("Echec Modification matériel", context);
+        }
+      } else if (materiel?.imageMateriel != null &&
+          materiel?.factureMateriel != null) {
+        print("Les deux differents");
+        var request = http.MultipartRequest(
+            "POST", host.baseUrl(endpoint: "materiel/update"));
+        request.headers['Authorization'] = 'Bearer $token';
+        request.fields['designation_materiel'] = materiel!.designationMateriel;
+        request.fields['prix_materiel'] = materiel.prixMateriel;
+        request.fields['date_achat_materiel'] = materiel.dateAchatMateriel;
+        request.fields['statut_materiel'] = 'token';
+        var imageMateriel = await http.MultipartFile.fromPath(
+            "image_materiel", materiel.imageMateriel!);
+        var factureMateriel = await http.MultipartFile.fromPath(
+            "facture_materiel", materiel.factureMateriel!);
+        request.files.add(imageMateriel);
+        request.files.add(factureMateriel);
+
+        http.StreamedResponse response = await request.send();
+        if (response.statusCode == 200) {
+          Navigator.pop(context);
+          succesTransaction("Modification effectuée", context);
+          Provider.of<HomeProvider>(context, listen: false).provideMateriels();
+        } else {
+          Navigator.pop(context);
+          echecTransaction("Echec Modification matériel", context);
+        }
       }
     } catch (e) {
       print(e);
@@ -538,8 +610,7 @@ class ServiceApi {
       if (data.statusCode == 200) {
         if (data.data['statut']) {
           succesTransaction(data.data['message'], context);
-          Provider.of<HomeProvider>(context, listen: false)
-              .provideListMessageMoi();
+          Provider.of<HomeProvider>(context, listen: false).provideMessageMoi();
           return data.data['statut'];
         } else {
           echecTransaction(data.data['message'], context);
@@ -931,8 +1002,7 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print(data.body);
-      print(pannesModels);
+
       if (data.statusCode > 300) {
         Navigator.pop(context);
         echecTransaction("Erreur lors de la modification.", context);
@@ -943,6 +1013,40 @@ class ServiceApi {
         Navigator.pop(context);
         succesTransaction(response['message'], context);
         Provider.of<HomeProvider>(context, listen: false).providePannes();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  updateMessageMois({
+    MessageMoisModel? messageMoisModel,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+    try {
+      var data = await http.post(host.baseUrl(endpoint: "message-mois/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": messageMoisModel!.id,
+            "designation_message": messageMoisModel.designationMessageMois,
+            "corps_message": messageMoisModel.corpsMessageMois,
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false).provideMessageMoi();
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -1067,6 +1171,30 @@ class ServiceApi {
       if (data.statusCode == 200) {
         return data.data['pannes'];
       }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getComptabiliteData({String? token}) async {
+    try {
+      var data = await dio.getUri(host.baseUrl(endpoint: "pannes/index"),
+          options: Options(headers: host.headers(token!)));
+      if (data.statusCode! > 300) {
+        return [];
+      }
+      if (data.statusCode == 200) {
+        return data.data['pannes'];
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  getUpdateComptabiliteData({String? token}) async {
+    try {
+      await dio.getUri(host.baseUrl(endpoint: "comptabilite/create"),
+          options: Options(headers: host.headers(token!)));
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -1256,7 +1384,7 @@ class ServiceApi {
     }
   }
 
-  getGenerateFacture({String? token}) async {
+  getGenerateFacture({String? token, required var context}) async {
     try {
       var data = await http
           .post(host.baseUrl(endpoint: "facture/generate-facture"),
@@ -1269,6 +1397,8 @@ class ServiceApi {
         return [];
       }
       if (data.statusCode == 200) {
+        getUpdateComptabiliteData(token: token);
+        CherryToast.success(title: const Text("Effectué")).show(context);
         return jsonDecode(data.body);
       }
     } catch (e) {

@@ -57,7 +57,8 @@ class _TablePannesState extends State<TablePannes> {
                             child: TextField(
                           controller: controller,
                           decoration: const InputDecoration(
-                              border: InputBorder.none, hintText: 'Search'),
+                              border: InputBorder.none,
+                              hintText: 'Search(désignation)'),
                           onChanged: (value) {
                             if (value.isEmpty) {
                               Provider.of<HomeProvider>(context, listen: false)

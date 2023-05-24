@@ -39,6 +39,7 @@ class _LoginCardState extends State<LoginCard> {
             controller: emailTextEditing,
           ),
           CustumTextField(
+              keyboardType: TextInputType.text,
               child: "Mot de passe",
               obscureText: true,
               controller: passTextEditing),

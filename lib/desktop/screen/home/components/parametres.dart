@@ -8,7 +8,7 @@ import '../../../../global_widget/widget.dart';
 import '../../../../models/users.dart';
 import '../widget/action_dialogue.dart';
 import '../widget/app_header.dart';
-import '../widget/edite_user.dart';
+import '../widget/detail_utilisateur.dart';
 
 class Parametres extends StatefulWidget {
   final Users? users;
@@ -50,6 +50,38 @@ class _ParametresState extends State<Parametres> {
                   ListTile(title: Text(user.roleUtilisateur.toString())),
                   ListTile(title: Text(user.telephoneUtilisateur.toString())),
                   ListTile(title: Text(user.zoneUtilisateur.toString())),
+                  Row(
+                    children: [
+                      CustumButton(
+                        enableButton: true,
+                        child: "   Editer   ",
+                        bacgroundColor: Colors.teal,
+                        onPressed: () {
+                          actionDialogue(
+                              child: DetailUtilisateur(
+                                users: Users(
+                                    id: widget.users!.id.toString(),
+                                    prenomUtilisateur:
+                                        widget.users!.prenomUtilisateur!,
+                                    nomUtilisateur:
+                                        widget.users!.nomUtilisateur,
+                                    roleUtilisateur:
+                                        widget.users!.roleUtilisateur,
+                                    email: widget.users!.email,
+                                    telephoneUtilisateur: widget
+                                        .users!.telephoneUtilisateur
+                                        .toString(),
+                                    zoneUtilisateur:
+                                        widget.users!.zoneUtilisateur,
+                                    idUtilisateurInitiateur: widget
+                                        .users!.idUtilisateurInitiateur
+                                        .toString()),
+                              ),
+                              context: context);
+                        },
+                      ),
+                    ],
+                  ),
                   Align(
                     alignment: Alignment.centerLeft,
                     child: SizedBox(
@@ -82,19 +114,6 @@ class _ParametresState extends State<Parametres> {
                       ),
                     ),
                   ),
-                  InkWell(
-                    child: const Text("Edite"),
-                    onTap: () {
-                      actionDialogue(
-                          child: EditeUser(userData: widget.users!),
-                          context: context);
-                      // Provider.of<HomeProvider>(context, listen: false)
-                      //     .updateUtilisateur(
-                      //   users: Users(),
-                      //   context: context,
-                      // );
-                    },
-                  )
                 ],
               ),
             )

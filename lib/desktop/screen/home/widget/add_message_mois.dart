@@ -7,6 +7,7 @@ import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_button.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/custom_text_field2.dart';
 import '../../../../global_widget/custum_textField.dart';
 
 class AddMessageMois extends StatefulWidget {
@@ -68,10 +69,8 @@ class _AddMessageMoisState extends State<AddMessageMois> {
                                 alignment: Alignment.centerLeft,
                                 child: CustomText(data: "Corps message")),
                           ),
-                          CustumTextField(
+                          CustumTextField2(
                               keyboardType: TextInputType.multiline,
-                              maxLength: 6,
-                              minLines: 2,
                               height: 150.0,
                               child: 'Corps message',
                               maxLines: 1,
