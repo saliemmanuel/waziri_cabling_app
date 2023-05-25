@@ -6,6 +6,7 @@ import '../../../../config/config.dart';
 import '../../../../global_widget/custom_detail_widget.dart';
 import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/custom_text_field2.dart';
 import '../../../../global_widget/widget.dart';
 import '../provider/home_provider.dart';
 
@@ -88,7 +89,10 @@ class _AddChargeState extends State<AddCharge> {
                                 alignment: Alignment.centerLeft,
                                 child: CustomText(data: "Desciption charge")),
                           ),
-                          CustumTextField(
+                          CustumTextField2(
+                              keyboardType: TextInputType.multiline,
+                              height: 150.0,
+                              maxLines: 1,
                               child: 'Description',
                               controller: description,
                               obscureText: false),
@@ -101,7 +105,7 @@ class _AddChargeState extends State<AddCharge> {
                               _selectDate(context);
                             },
                           ),
-                          const SizedBox(height: 100.0)
+                          const SizedBox(height: 20.0)
                         ],
                       ),
                     ),

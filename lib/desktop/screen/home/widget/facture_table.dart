@@ -402,7 +402,7 @@ class _FactureTableState extends State<FactureTable> {
                             const SizedBox(width: 5.0),
                             Expanded(
                               child: MaterialButton(
-                                  color: Palette.teal,
+                                  color: Palette.paiement,
                                   child: const CustomText(
                                       data: "Payement", color: Palette.white),
                                   onPressed: () {

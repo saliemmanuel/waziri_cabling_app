@@ -6,6 +6,7 @@ import 'package:waziri_cabling_app/models/secteur.dart';
 import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_button.dart';
 import '../../../../global_widget/custom_detail_widget_2.dart';
+import '../../../../global_widget/custom_text_field2.dart';
 import '../../../../models/users.dart';
 import '../provider/home_provider.dart';
 
@@ -92,8 +93,10 @@ class _DetailSecteurState extends State<DetailSecteur> {
                                   valueIsChange();
                                 },
                               ),
-                              CustomDetailWidget2(
-                                title: "Description secteur",
+                              CustumTextField2(
+                                height: 150.0,
+                                child: "Description secteur",
+                                obscureText: false,
                                 controller: description,
                                 onChanged: (value) {
                                   valueIsChange();
@@ -161,7 +164,7 @@ class _DetailSecteurState extends State<DetailSecteur> {
                                     ),
                                   )),
                           ),
-                          const SizedBox(height: 110.0),
+                          const SizedBox(height: 165.0),
                         ],
                       ))
                     ],

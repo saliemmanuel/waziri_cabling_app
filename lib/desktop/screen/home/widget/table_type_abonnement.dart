@@ -88,9 +88,9 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.teal),
                       borderRadius: BorderRadius.circular(5.0)),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Icon(Icons.add, color: Colors.teal),
                       CustomText(
                           data: "Ajoutez un type d'abonnement",

@@ -7,6 +7,7 @@ import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/palette.dart';
 import '../../../../global_widget/custom_text.dart';
+import '../../../../global_widget/custom_text_field2.dart';
 import '../../../../global_widget/widget.dart';
 
 class AddSecteur extends StatefulWidget {
@@ -95,7 +96,8 @@ class _AddSecteurState extends State<AddSecteur> {
                                 child: CustomText(
                                     data: "Description zône secteur")),
                           ),
-                          CustumTextField(
+                          CustumTextField2(
+                            height: 150.0,
                             child: "Description zône secteur",
                             obscureText: false,
                             controller: description,
@@ -158,7 +160,7 @@ class _AddSecteurState extends State<AddSecteur> {
                                   ),
                                 )),
                         ),
-                        const SizedBox(height: 110.0),
+                        const SizedBox(height: 202.0),
                       ],
                     ))
                   ],

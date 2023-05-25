@@ -35,7 +35,8 @@ class Palette {
     colors: [Color(0xFF1B00FF), Color(0xFFCE48B1)],
   );
   static const Color appBarBackgroundColor = Color(0xFFFFFFFF);
-  static const Color online = Color(0xFF4BCB1F);
+  static const Color online = Colors.teal;
+  static const Color paiement = Colors.indigo;
 
   static const LinearGradient storyGradient = LinearGradient(
     begin: Alignment.topCenter,

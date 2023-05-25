@@ -5,6 +5,7 @@ import 'custom_text.dart';
 class AccueilCard extends StatelessWidget {
   final Color? containerColor;
   final String label;
+  final String data;
   final void Function()? onPressed;
 
   const AccueilCard({
@@ -12,6 +13,7 @@ class AccueilCard extends StatelessWidget {
     required this.containerColor,
     this.onPressed,
     required this.label,
+    required this.data,
   }) : super(key: key);
 
   @override
@@ -63,9 +65,7 @@ class AccueilCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(8.0),
                         color: containerColor!.withOpacity(0.2)),
                     margin: const EdgeInsets.all(8.0),
-                    child: const CustomText(
-                        data: "100000000000000000000000000000",
-                        fontSize: 26.0)),
+                    child: CustomText(data: data, fontSize: 26.0)),
               ),
             ),
             const SizedBox(height: 40.0),

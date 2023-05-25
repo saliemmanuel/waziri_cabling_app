@@ -3,11 +3,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cherry_toast/cherry_toast.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/global_widget/custom_text.dart';
 import 'package:waziri_cabling_app/models/abonne_models.dart';
 import 'package:waziri_cabling_app/models/charge_models.dart';
 import 'package:waziri_cabling_app/models/facture_models.dart';
@@ -106,7 +104,9 @@ class ServiceApi {
       if (data.statusCode == 200) {
         return jsonDecode(data.body);
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   deconnexion({String? token, var context}) async {
@@ -128,7 +128,9 @@ class ServiceApi {
         Navigator.pop(context);
         return false;
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   getListUtilisateur({String? token}) async {
@@ -147,7 +149,7 @@ class ServiceApi {
         return data.data;
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -161,7 +163,9 @@ class ServiceApi {
       if (data.statusCode == 200) {
         return data.data['secteurs'];
       }
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   addSecteur(
@@ -195,7 +199,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -220,7 +224,7 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print(data.body);
+
       if (data.statusCode > 202) {
         Navigator.pop(context);
 
@@ -234,7 +238,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -273,7 +277,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -294,7 +298,7 @@ class ServiceApi {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
       });
-      print(data.body);
+
       if (data.statusCode > 202) {
         Navigator.pop(context);
         var response = await jsonDecode(data.body);
@@ -308,7 +312,7 @@ class ServiceApi {
         succesTransaction(response['message'], context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -348,7 +352,7 @@ class ServiceApi {
         echecTransaction("Echec ajout matériel", context);
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -362,7 +366,6 @@ class ServiceApi {
           msg: "Patientez svp...", context: context!, barrierDismissible: true);
 
       if (materiel?.factureMateriel == null) {
-        print("factureMateriel nill");
         var request = http.MultipartRequest(
             "POST", host.baseUrl(endpoint: "materiel/update"));
         request.headers['Authorization'] = 'Bearer $token';
@@ -434,7 +437,7 @@ class ServiceApi {
         }
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -464,17 +467,19 @@ class ServiceApi {
 
       if (data.statusCode > 300) {
         Navigator.pop(context);
-
         var response = await jsonDecode(data.body);
         echecTransaction("Erreur lors du. ${response['message']}", context);
       }
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
-        succesTransaction(response['message'], context);
+        succesTransaction(response['message'], context).then((value) {
+          Navigator.pop(context);
+          getUpdateComptabiliteData(token: token);
+        });
       }
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -1178,13 +1183,15 @@ class ServiceApi {
 
   getComptabiliteData({String? token}) async {
     try {
-      var data = await dio.getUri(host.baseUrl(endpoint: "pannes/index"),
+      print('data');
+
+      var data = await dio.getUri(host.baseUrl(endpoint: "comptabilite/index"),
           options: Options(headers: host.headers(token!)));
       if (data.statusCode! > 300) {
         return [];
       }
       if (data.statusCode == 200) {
-        return data.data['pannes'];
+        return data.data['message'][0];
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -1398,7 +1405,7 @@ class ServiceApi {
       }
       if (data.statusCode == 200) {
         getUpdateComptabiliteData(token: token);
-        CherryToast.success(title: const Text("Effectué")).show(context);
+        succesTransaction("Effectué", context);
         return jsonDecode(data.body);
       }
     } catch (e) {

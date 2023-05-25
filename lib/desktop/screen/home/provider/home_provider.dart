@@ -23,6 +23,7 @@ class HomeProvider extends ChangeNotifier {
   dynamic _listAbonnes = [];
   dynamic _listMateriels = [];
   dynamic _listPannes = [];
+  dynamic _listComptaData = [];
   dynamic _listVersements = [];
   dynamic _listMessageMois = [];
   dynamic _listCharget = [];
@@ -42,6 +43,7 @@ class HomeProvider extends ChangeNotifier {
   get listFactures => _listFactures;
   get topIndex => _topIndex;
   get listTrie => _listTrie;
+  get listComptaData => _listComptaData;
 
   providelistUtilisateur(var selectedTypeUtilisateur) async {
     var storage = const FlutterSecureStorage();
@@ -131,7 +133,7 @@ class HomeProvider extends ChangeNotifier {
   provideComptabiliteData() async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
-    _listPannes = await _service.getListPannes(token: token);
+    _listComptaData = await _service.getComptabiliteData(token: token);
     notifyListeners();
   }
 
@@ -287,7 +289,7 @@ class HomeProvider extends ChangeNotifier {
   generateFacture({required Users? users, required var context}) async {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
-    await _service.getGenerateFacture(token: token,context: context);
+    await _service.getGenerateFacture(token: token, context: context);
     notifyListeners();
   }
 

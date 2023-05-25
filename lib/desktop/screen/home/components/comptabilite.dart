@@ -19,6 +19,7 @@ class Comptabilite extends StatelessWidget {
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeTypeAbonnement();
+    Provider.of<HomeProvider>(context, listen: false).provideComptabiliteData();
     List<_SalesData> data = [
       _SalesData('Jan', 12),
       _SalesData('Fev', 2),
@@ -43,23 +44,38 @@ class Comptabilite extends StatelessWidget {
           child: Column(
             children: [
               appHeader("Comptabilité"),
-              const Padding(
-                padding: EdgeInsets.only(
-                    top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Wrap(spacing: 18.0, runSpacing: 18.0, children: [
-                    AccueilCard(
-                        label: "Total Recette ", containerColor: Colors.yellow),
-                    AccueilCard(
-                        label: "Total Sorties ", containerColor: Colors.pink),
-                    AccueilCard(
-                        label: "Total Entrées ",
-                        containerColor: Colors.blueGrey),
-                    AccueilCard(
-                        label: "Total Dettes  ", containerColor: Colors.teal),
-                  ]),
-                ),
+              Consumer<HomeProvider>(
+                builder: (context, value, child) => value.listComptaData == null
+                    ? const CircularProgressIndicator()
+                    : Padding(
+                        padding: const EdgeInsets.only(
+                            top: 20.0, left: 40.0, right: 40.0, bottom: 20.0),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child:
+                              Wrap(spacing: 18.0, runSpacing: 18.0, children: [
+                            AccueilCard(
+                                label: "Total Recette ",
+                                data:
+                                    value.listComptaData["recette"].toString(),
+                                containerColor: Colors.yellow),
+                            AccueilCard(
+                                label: "Total Sorties ",
+                                data:
+                                    value.listComptaData["sorties"].toString(),
+                                containerColor: Colors.pink),
+                            AccueilCard(
+                                label: "Total Entrées ",
+                                data:
+                                    value.listComptaData["entrees"].toString(),
+                                containerColor: Colors.blueGrey),
+                            AccueilCard(
+                                label: "Total Dettes  ",
+                                data: value.listComptaData["dettes"].toString(),
+                                containerColor: Colors.teal),
+                          ]),
+                        ),
+                      ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
@@ -70,7 +86,10 @@ class Comptabilite extends StatelessWidget {
                       bacgroundColor: Palette.teal,
                       enableButton: true,
                       child: "   Reintialiser   ",
-                      onPressed: () {},
+                      onPressed: () {
+                        Provider.of<HomeProvider>(context, listen: false)
+                            .provideComptabiliteData();
+                      },
                     )
                   ],
                 ),
