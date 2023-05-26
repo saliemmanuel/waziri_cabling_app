@@ -13,7 +13,7 @@ void main() async {
 
   if (Platform.isWindows) {
     WindowOptions windowOptions = const WindowOptions(
-      minimumSize: Size(1200, 600),
+      minimumSize: Size(1320, 600),
       center: true,
       title: "BW - IMAGE",
     );

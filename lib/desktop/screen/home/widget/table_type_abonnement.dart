@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:iconly/iconly.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ import '../../log/provider/auth_provider.dart';
 import '../home_desk_screen.dart';
 import '../provider/home_provider.dart';
 import 'add_type_abonnemet.dart';
+import 'detail_type_abonnement.dart';
 
 class TableTypeAbonnement extends StatefulWidget {
   final dynamic listTypeAbonnement;
@@ -28,6 +31,7 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.listTypeAbonnement);
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -155,9 +159,31 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
                           Expanded(
                               child: MaterialButton(
                                   color: Colors.teal,
-                                  child: const Icon(Icons.edit,
-                                      color: Colors.white),
-                                  onPressed: () {})),
+                                  child: const CustomText(
+                                      data: "Détail", color: Colors.white),
+                                  onPressed: () {
+                                    actionDialogue(
+                                        context: context,
+                                        child: DetailTypeAbonnement(
+                                          users: widget.users,
+                                          type: TypeAbonnement(
+                                              id: widget.listTypeAbonnement[i]['id']
+                                                  .toString(),
+                                              designationTypeAbonnement: widget
+                                                  .listTypeAbonnement[i][
+                                                      'designation_type_abonnement']
+                                                  .toString(),
+                                              montant: widget.listTypeAbonnement[i]
+                                                      ['montant']
+                                                  .toString(),
+                                              nombreChaine: widget.listTypeAbonnement[i]
+                                                      ['nombre_chaine']
+                                                  .toString(),
+                                              idInitiateur: widget.listTypeAbonnement[i]
+                                                      ['id_initiateur']
+                                                  .toString()),
+                                        ));
+                                  })),
                           const SizedBox(width: 10.0),
                           Expanded(
                               child: MaterialButton(
@@ -178,8 +204,6 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
                                         context: context,
                                       );
                                       if (res) {
-                                        print(res);
-                                        // ignore: use_build_context_synchronously
                                         Provider.of<HomeProvider>(context, listen: false)
                                             .getDeleteTypeAbonnement(
                                                 type: TypeAbonnement(
@@ -200,9 +224,7 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
                                                             ['id_initiateur']
                                                         .toString()),
                                                 context: context);
-                                        print("delete");
                                         print(widget.listTypeAbonnement[i]);
-                                        // ignore: use_build_context_synchronously
                                         Provider.of<HomeProvider>(context,
                                                 listen: false)
                                             .provideListeTypeAbonnement();

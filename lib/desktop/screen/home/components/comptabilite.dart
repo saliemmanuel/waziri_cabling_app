@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/widget/shimmer_table.dart';
-import 'package:waziri_cabling_app/global_widget/custom_button.dart';
 import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
@@ -11,26 +9,25 @@ import '../provider/home_provider.dart';
 import '../widget/app_header.dart';
 import '../widget/table_type_abonnement.dart';
 
-class Comptabilite extends StatelessWidget {
+class Comptabilite extends StatefulWidget {
   final Users users;
   const Comptabilite({super.key, required this.users});
 
   @override
-  Widget build(BuildContext context) {
+  State<Comptabilite> createState() => _ComptabiliteState();
+}
+
+class _ComptabiliteState extends State<Comptabilite> {
+  @override
+  void initState() {
+    Provider.of<HomeProvider>(context, listen: false).provideComptabiliteData();
     Provider.of<HomeProvider>(context, listen: false)
         .provideListeTypeAbonnement();
-    Provider.of<HomeProvider>(context, listen: false).provideComptabiliteData();
-    List<_SalesData> data = [
-      _SalesData('Jan', 12),
-      _SalesData('Fev', 2),
-      _SalesData('Mars', 6),
-      _SalesData('Avr', 25),
-      _SalesData('Mai', 0),
-    ];
-    var data2 = [
-      _ChartData('Janvier', 12),
-      _ChartData('Fevrier', 0),
-    ];
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Palette.scaffold,
       body: Container(
@@ -54,11 +51,11 @@ class Comptabilite extends StatelessWidget {
                           width: double.infinity,
                           child:
                               Wrap(spacing: 18.0, runSpacing: 18.0, children: [
-                            AccueilCard(
-                                label: "Total Recette ",
-                                data:
-                                    value.listComptaData["recette"].toString(),
-                                containerColor: Colors.yellow),
+                            // AccueilCard(
+                            //     label: "Total Recette ",
+                            //     data:
+                            //         value.listComptaData["recette"].toString(),
+                            //     containerColor: Colors.yellow),
                             AccueilCard(
                                 label: "Total Sorties ",
                                 data:
@@ -77,23 +74,23 @@ class Comptabilite extends StatelessWidget {
                         ),
                       ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20.0, left: 30.0, right: 40.0, bottom: 20.0),
-                child: Row(
-                  children: [
-                    CustumButton(
-                      bacgroundColor: Palette.teal,
-                      enableButton: true,
-                      child: "   Reintialiser   ",
-                      onPressed: () {
-                        Provider.of<HomeProvider>(context, listen: false)
-                            .provideComptabiliteData();
-                      },
-                    )
-                  ],
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //       top: 20.0, left: 30.0, right: 40.0, bottom: 20.0),
+              //   child: Row(
+              //     children: [
+              //       CustumButton(
+              //         bacgroundColor: Palette.teal,
+              //         enableButton: true,
+              //         child: "   Reintialiser   ",
+              //         onPressed: () {
+              //           Provider.of<HomeProvider>(context, listen: false)
+              //               .provideComptabiliteData();
+              //         },
+              //       )
+              //     ],
+              //   ),
+              // ),
               const Divider(),
               Container(
                 height: 350.0,
@@ -106,7 +103,7 @@ class Comptabilite extends StatelessWidget {
                   return value.listTypeAbonnement == null
                       ? const ShimmerTable()
                       : TableTypeAbonnement(
-                          users: users,
+                          users: widget.users,
                           listTypeAbonnement: value.listTypeAbonnement);
                 }),
               ),

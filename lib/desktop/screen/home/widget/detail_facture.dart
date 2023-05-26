@@ -32,7 +32,6 @@ class _DetailFactureState extends State<DetailFacture> {
 
   @override
   void initState() {
-    // tmp = FactureModels.fromMap(tmp!.toMap());
     initData();
     super.initState();
   }
@@ -232,53 +231,28 @@ class _DetailFactureState extends State<DetailFacture> {
                             const SizedBox(height: 15.0),
                             dotLine(),
                             const SizedBox(height: 15.0),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                DataTable(columns: const [
-                                  DataColumn(
-                                      label: CustomText(data: "Mensualité ")),
-                                  DataColumn(
-                                      label:
-                                          CustomText(data: "Montant verser ")),
-                                  DataColumn(
-                                      label:
-                                          CustomText(data: "Reste facture ")),
-                                  DataColumn(
-                                      label: CustomText(data: "Statut ")),
-                                  DataColumn(
-                                      label: CustomText(data: "Impayers ")),
-                                ], rows: [
-                                  DataRow(cells: [
-                                    DataCell(
-                                      CustomText(
-                                        data: tmp!.mensualiteFacture!,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      CustomText(
-                                        data: tmp!.montantVerser!,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      CustomText(
-                                        data: tmp!.resteFacture!,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      CustomText(
-                                        data: tmp!.statutFacture!,
-                                      ),
-                                    ),
-                                    DataCell(
-                                      CustomText(
-                                        data: tmp!.impayes!,
-                                      ),
-                                    ),
-                                  ])
-                                ]),
-                              ],
-                            ),
+                            DataTable(columns: const [
+                              DataColumn(
+                                  label: CustomText(data: "Mensualité ")),
+                              DataColumn(
+                                  label: CustomText(data: "Montant verser ")),
+                              DataColumn(label: CustomText(data: "Reste  ")),
+                              DataColumn(label: CustomText(data: "Statut ")),
+                              DataColumn(label: CustomText(data: "Impayers ")),
+                            ], rows: [
+                              DataRow(cells: [
+                                DataCell(
+                                    CustomText(data: tmp!.mensualiteFacture!)),
+                                DataCell(CustomText(data: tmp!.montantVerser!)),
+                                DataCell(CustomText(data: tmp!.resteFacture!)),
+                                DataCell(CustomText(data: tmp!.statutFacture!)),
+                                DataCell(
+                                  CustomText(
+                                    data: tmp!.impayes!,
+                                  ),
+                                ),
+                              ])
+                            ]),
                           ],
                         ),
                         const SizedBox(height: 15.0),
@@ -312,35 +286,6 @@ class _DetailFactureState extends State<DetailFacture> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              Container(
-                                alignment: Alignment.center,
-                                height: 35.0,
-                                width: 200.0,
-                                margin: const EdgeInsets.all(8.0),
-                                padding: const EdgeInsets.only(
-                                    left: 10.0, bottom: 8.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(color: Palette.teal),
-                                    borderRadius: BorderRadius.circular(5.0)),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
-                                        child: TextField(
-                                      onChanged: (value) {},
-                                      decoration: const InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'Search'),
-                                    )),
-                                    const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Icon(IconlyBold.search,
-                                          color: Palette.grey),
-                                    )
-                                  ],
-                                ),
-                              ),
                               const SizedBox(height: 15.0),
                               more == null
                                   ? const CircularProgressIndicator()

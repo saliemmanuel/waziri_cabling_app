@@ -24,6 +24,8 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
   @override
   Widget build(BuildContext context) {
     return Badge(
+      largeSize: 30,
+      smallSize: 50,
       label: InkWell(
         child: const Icon(Icons.close, color: Colors.white),
         onTap: () {
@@ -40,10 +42,10 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomText(
-                    data: "Espace ajours type abonnement",
+                    data: "Ajout type abonnement",
                     color: Colors.red,
                     fontSize: 30.0),
-                const SizedBox(height: 15.0),
+                const SizedBox(height: 30.0),
                 Row(
                   children: [
                     Expanded(
@@ -106,7 +108,7 @@ class _AddTypeAbonnementState extends State<AddTypeAbonnement> {
                           Provider.of<HomeProvider>(context, listen: false)
                               .addTypeAbonnement(
                                   type: TypeAbonnement(
-                                      id: 0,
+                                      id: "",
                                       designationTypeAbonnement:
                                           designation.text,
                                       montant: montant.text,

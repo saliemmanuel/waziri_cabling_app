@@ -25,8 +25,8 @@ import 'package:http/http.dart' as http;
 
 class ServiceApi {
   var host = Host();
-
   var dio = Dio();
+
   bool isEmail(String email) {
     String p =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
@@ -875,6 +875,43 @@ class ServiceApi {
     }
   }
 
+  updateTypeAbonnement({
+    TypeAbonnement? type,
+    String? token,
+    required var context,
+  }) async {
+    simpleDialogueCardSansTitle(msg: "Patientez svp...", context: context!);
+    try {
+      var data = await http.post(
+          host.baseUrl(endpoint: "type-abonnemnt/update"),
+          headers: host.headers(token!),
+          body: {
+            "id": type!.id.toString(),
+            "montant": type.montant,
+            "nombre_chaine": type.nombreChaine,
+            "id_initiateur": type.id.toString(),
+            "designation_type_abonnement":
+                type.designationTypeAbonnement.toString(),
+          }).timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            'Connexion perdue, verifier votre connexion internet');
+      });
+      if (data.statusCode > 300) {
+        Navigator.pop(context);
+        echecTransaction("Erreur lors de la modification.", context);
+      }
+      if (data.statusCode == 200) {
+        var response = await jsonDecode(data.body);
+        Navigator.pop(context);
+        succesTransaction(response['message'], context);
+        Provider.of<HomeProvider>(context, listen: false)
+            .provideListeTypeAbonnement();
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   updateAbonne({
     AbonneModels? abonneModels,
     String? token,
@@ -1183,8 +1220,6 @@ class ServiceApi {
 
   getComptabiliteData({String? token}) async {
     try {
-      print('data');
-
       var data = await dio.getUri(host.baseUrl(endpoint: "comptabilite/index"),
           options: Options(headers: host.headers(token!)));
       if (data.statusCode! > 300) {

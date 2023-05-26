@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class TypeAbonnement {
-  final int id;
+  final String id;
   final String designationTypeAbonnement;
   final String montant;
   final String nombreChaine;
@@ -15,7 +15,7 @@ class TypeAbonnement {
   });
 
   TypeAbonnement copyWith({
-    int? id,
+    String? id,
     String? designationTypeAbonnement,
     String? montant,
     String? nombreChaine,
@@ -43,7 +43,7 @@ class TypeAbonnement {
 
   factory TypeAbonnement.fromMap(Map<String, dynamic> map) {
     return TypeAbonnement(
-      id: map['id'] as int,
+      id: map['id'] as String,
       designationTypeAbonnement: map['designationTypeAbonnement'] as String,
       montant: map['montant'] as String,
       nombreChaine: map['nombreChaine'] as String,

@@ -137,6 +137,13 @@ class HomeProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  updateComptabiliteData() async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _listComptaData = await _service.getUpdateComptabiliteData(token: token!);
+    notifyListeners();
+  }
+
   provideListeFacture(
       {required Users? users, required String? selectedStatut}) async {
     var storage = const FlutterSecureStorage();
@@ -549,6 +556,16 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _service.updateSecteur(context: context, secteur: secteur, token: token);
+    notifyListeners();
+  }
+
+  getUpdateTypeAbonnement({
+    TypeAbonnement? type,
+    required dynamic context,
+  }) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    _service.updateTypeAbonnement(context: context, type: type, token: token);
     notifyListeners();
   }
 

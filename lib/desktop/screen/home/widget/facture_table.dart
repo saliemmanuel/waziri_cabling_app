@@ -79,9 +79,9 @@ class _FactureTableState extends State<FactureTable> {
                   Container(
                     alignment: Alignment.center,
                     height: 35.0,
-                    width: 200.0,
+                    width: 150.0,
                     margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
+                    padding: const EdgeInsets.only(left: 10.0, bottom: 5.0),
                     decoration: BoxDecoration(
                         border: Border.all(color: Palette.teal),
                         borderRadius: BorderRadius.circular(5.0)),
