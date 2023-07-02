@@ -41,8 +41,8 @@ class _AddSecteurState extends State<AddSecteur> {
   initListUser() async {
     List list =
         await Provider.of<HomeProvider>(context, listen: false).listUtilisateur;
-
     if (list != []) {
+      print(list);
       for (var i = 0; i < list.length; i++) {
         listUtilisateur!.add(
             '${list[i]['id']} - ${list[i]['nom_utilisateur']} ${list[i]['prenom_utilisateur']}');

@@ -36,7 +36,7 @@ class _TablePannesState extends State<TablePannes> {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste matériels (${widget.listPannes.length ?? ""})",
+                  data: "Liste matériels ",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
               Row(

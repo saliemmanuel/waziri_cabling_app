@@ -38,9 +38,7 @@ class _SecteurTableState extends State<SecteurTable> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
-                  data:
-                      "Liste des secteurs (${widget.listSecteur.length ?? ""})"),
+              const CustomText(data: "Liste des secteurs"),
               const SizedBox(width: 70.0),
               Row(
                 children: [

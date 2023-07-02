@@ -35,48 +35,8 @@ class _TableChargeState extends State<TableCharge> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
-                  data: "Liste charge (${widget.listCharge.length ?? ""})",
-                  fontWeight: FontWeight.bold),
+              CustomText(data: "Liste charge ", fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
-              // Row(
-              //   children: [
-              //     // Container(
-              //     //   alignment: Alignment.center,
-              //     //   height: 35.0,
-              //     //   width: 200.0,
-              //     //   margin: const EdgeInsets.all(8.0),
-              //     //   padding: const EdgeInsets.only(left: 10.0, bottom: 8.0),
-              //     //   decoration: BoxDecoration(
-              //     //       border: Border.all(color: Palette.teal),
-              //     //       borderRadius: BorderRadius.circular(5.0)),
-              //     //   child: Row(
-              //     //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     //     children: [
-              //     //       Expanded(
-              //     //           child: TextField(
-              //     //         controller: controller,
-              //     //         decoration: const InputDecoration(
-              //     //             border: InputBorder.none, hintText: 'Search'),
-              //     //         onChanged: (value) {
-              //     //           if (value.isEmpty) {
-              //     //             Provider.of<HomeProvider>(context, listen: false)
-              //     //                 .providePannes();
-              //     //           } else {
-              //     //             // Provider.of<HomeProvider>(context, listen: false)
-              //     //             //     .searchInlistCharge(value);
-              //     //           }
-              //     //         },
-              //     //       )),
-              //     //       const Padding(
-              //     //         padding: EdgeInsets.all(8.0),
-              //     //         child: Icon(IconlyBold.search, color: Palette.grey),
-              //     //       )
-              //     //     ],
-              //     //   ),
-              //     // ),
-              //   ],
-              // ),
               InkWell(
                 child: Container(
                   alignment: Alignment.center,

@@ -8,7 +8,7 @@ class ThemeApp {
         primaryColor: Palette.primaryColor,
         shadowColor: Colors.white,
         iconTheme: const IconThemeData(
-          color: Colors.black,
+          color: Colors.black
         ),
         appBarTheme: const AppBarTheme(
             backgroundColor: Colors.white,

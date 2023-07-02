@@ -35,9 +35,8 @@ class _TableVersementState extends State<TableVersement> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
-                  data:
-                      "Liste versement des secteurs (${widget.listVersements.length ?? ""})",
+              const CustomText(
+                  data: "Liste versement des secteurs",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
               Row(

@@ -37,7 +37,7 @@ class TableMaterielState extends State<TableMateriel> {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste matériels (${widget.listMateriel.length ?? ""})",
+                  data: "Liste matériels",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
               Row(

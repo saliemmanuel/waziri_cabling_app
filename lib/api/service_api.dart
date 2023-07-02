@@ -64,6 +64,8 @@ class ServiceApi {
           "email": email,
           'password': password,
           "device_name": 'telephone.$email'
+        }).timeout(const Duration(seconds: 10), onTimeout: () {
+          throw TimeoutException('Time out');
         });
         var response = await jsonDecode(data.body);
         if (data.statusCode > 201) {
@@ -81,9 +83,9 @@ class ServiceApi {
         echecTransaction("Entrez un e-mail valide", context!);
         return false;
       }
-    } catch (e) {
+    } on Exception catch (e) {
       errorDialogueCard("Erreur",
-              'Connexion perdue, verifier votre connexion internet', context)
+              'Connexion perdue, verifier votre connexion internet$e', context)
           .then((value) => Navigator.pop(context));
       return false;
     }
@@ -460,6 +462,7 @@ class ServiceApi {
             "statut_facture": facture.statutFacture,
             "impayes": facture.impayes,
             "id_abonne": facture.idAbonne,
+            "telephone_abonne": facture.telephoneAbonne,
           }).timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException(
             'Connexion perdue, verifier votre connexion internet');
@@ -473,9 +476,9 @@ class ServiceApi {
       if (data.statusCode == 200) {
         var response = await jsonDecode(data.body);
         Navigator.pop(context);
-        succesTransaction(response['message'], context).then((value) {
+        succesTransaction(response['message'], context).then((value) async {
           Navigator.pop(context);
-          getUpdateComptabiliteData(token: token);
+          await getUpdateComptabiliteData(token: token);
         });
       }
     } catch (e) {
@@ -1235,7 +1238,7 @@ class ServiceApi {
 
   getUpdateComptabiliteData({String? token}) async {
     try {
-      await dio.getUri(host.baseUrl(endpoint: "comptabilite/create"),
+      await dio.get(host.baseUrl2(endpoint: "comptabilite/create"),
           options: Options(headers: host.headers(token!)));
     } catch (e) {
       debugPrint(e.toString());
@@ -1439,7 +1442,7 @@ class ServiceApi {
         return [];
       }
       if (data.statusCode == 200) {
-        getUpdateComptabiliteData(token: token);
+        await getUpdateComptabiliteData(token: token);
         succesTransaction("Effectué", context);
         return jsonDecode(data.body);
       }
@@ -1486,6 +1489,81 @@ class ServiceApi {
       }
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  reninitComptabilite({String? token, required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...",
+          context: context!,
+          barrierDismissible: false);
+
+      var data = await dio
+          .get(host.baseUrl2(endpoint: 'comptabilite/update'),
+              options: Options(headers: host.headers(token!)))
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+        throw TimeoutException(
+            "Connexion perdue vérifiez votre connexion internet");
+      });
+
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        succesTransaction(data.data['message'], context);
+      }
+    } on TimeoutException catch (e) {
+      Navigator.pop(context);
+      echecTransaction(e.message.toString(), context);
+    } catch (e) {
+      Navigator.pop(context);
+      echecTransaction(e.toString(), context);
+    }
+  }
+
+  getUpdatePassword(
+      {String? newpass,
+      String? oldpass,
+      String? email,
+      String? token,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+      var data = await dio.postUri(
+          host.baseUrl(endpoint: "utilisateur/updatePassword"),
+          options: Options(headers: host.headers(token!)),
+          data: {"email": email, "password": oldpass, "new_password": newpass});
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        succesTransaction(data.data['message'], context);
+      }
+      if (data.statusCode! > 200) {
+        Navigator.pop(context);
+        echecTransaction(data.data['message'], context);
+      }
+    } catch (e) {
+      print("code $e");
+    }
+  }
+
+  getcodeAdministration(
+      {String? newcode,
+      String? oldcode,
+      String? id,
+      String? token,
+      required var context}) async {
+    try {
+      simpleDialogueCardSansTitle(
+          msg: "Patientez svp...", context: context!, barrierDismissible: true);
+      var data = await dio.postUri(host.baseUrl(endpoint: "code/edite"),
+          options: Options(headers: host.headers(token!)),
+          data: {"code_admin": oldcode, "id_admin": id, "new_code": newcode});
+      if (data.statusCode == 200) {
+        Navigator.pop(context);
+        errorDialogueCard("Message", data.data['message'], context);
+      }
+    } catch (e) {
+      print("code $e");
     }
   }
 }

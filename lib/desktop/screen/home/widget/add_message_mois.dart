@@ -1,3 +1,4 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
@@ -9,6 +10,7 @@ import '../../../../global_widget/custom_dialogue_card.dart';
 import '../../../../global_widget/custom_text.dart';
 import '../../../../global_widget/custom_text_field2.dart';
 import '../../../../global_widget/custum_textField.dart';
+import '../../log/provider/auth_provider.dart';
 
 class AddMessageMois extends StatefulWidget {
   const AddMessageMois({super.key});
@@ -20,14 +22,13 @@ class AddMessageMois extends StatefulWidget {
 class _AddMessageMoisState extends State<AddMessageMois> {
   var designation = TextEditingController();
   var corps = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Badge(
       largeSize: 30,
       smallSize: 50,
       label: InkWell(
-        child: const Icon(Icons.close, color: Colors.white),
+        child: const Icon(Icons.close, color: Palette.white),
         onTap: () {
           Navigator.pop(context);
         },
@@ -42,11 +43,23 @@ class _AddMessageMoisState extends State<AddMessageMois> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const CustomText(
-                    data: "Ajout message mois",
-                    color: Colors.red,
-                    fontSize: 30.0),
+                    data: "Ajout message", color: Palette.red, fontSize: 30.0),
                 const SizedBox(height: 25.0),
                 const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ToggleSwitch(
+                      checked: Provider.of<AuthProvider>(context).sessionActive,
+                      content: const Text("Garder ma session active"),
+                      onChanged: (bool value) {
+                        Provider.of<AuthProvider>(context, listen: false)
+                            .setSessionActive(session: value);
+                      },
+                    ),
+                  ),
+                ),
                 Row(
                   children: [
                     Expanded(

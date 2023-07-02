@@ -41,7 +41,7 @@ class _TableTypeAbonnementState extends State<TableTypeAbonnement> {
               const SizedBox(width: 15.0),
               CustomText(
                   data:
-                      "Liste types abonnements (${widget.listTypeAbonnement.length ?? ""})",
+                      "Liste types abonnements ",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
               Row(

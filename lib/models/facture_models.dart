@@ -31,7 +31,7 @@ class FactureModels {
     this.nomAbonne,
     this.prenomAbonne,
     this.cniAbonne,
-    this.telephoneAbonne,
+    required this.telephoneAbonne,
     this.descriptionZoneAbonne,
     this.secteurAbonne,
     this.typeAbonnement,

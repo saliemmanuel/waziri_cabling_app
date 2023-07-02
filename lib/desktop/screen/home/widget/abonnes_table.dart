@@ -37,9 +37,9 @@ class _AbonnesTableState extends State<AbonnesTable> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
+             const CustomText(
                   data:
-                      "Liste des abonnées (${widget.abonnesList.length ?? ""})"),
+                      "Liste des abonnées"),
               const SizedBox(width: 70.0),
               Row(
                 children: [

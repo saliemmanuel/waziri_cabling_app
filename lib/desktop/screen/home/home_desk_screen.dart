@@ -35,6 +35,7 @@ class HomeDeskScreen extends StatefulWidget {
 var code = TextEditingController();
 
 class _HomeDeskScreenState extends State<HomeDeskScreen> {
+  final comptaCode = "19586388911345317";
   @override
   Widget build(BuildContext context) {
     Provider.of<HomeProvider>(context, listen: false).provideListSecteur();
@@ -155,16 +156,13 @@ class _HomeDeskScreenState extends State<HomeDeskScreen> {
                   context: context,
                   onCall: () async {
                     if (code.text.isNotEmpty) {
-                      var res = await Provider.of<AuthProvider>(context,
-                              listen: false)
-                          .codeAuth(
-                              idAmin: widget.users!.id.toString(),
-                              code: code.text.toString(),
-                              context: context);
-                      if (res) {
-                        // ignore: use_build_context_synchronously
+                      if (code.text == comptaCode) {
+                        Navigator.pop(context);
                         Provider.of<HomeProvider>(context, listen: false)
                             .changeBody(index: 7);
+                        code.clear();
+                      } else {
+                        echecTransaction("Code incorrect", context);
                         code.clear();
                       }
                     } else {

@@ -8,11 +8,13 @@ class CustomDetailWidget2 extends StatelessWidget {
   final String title;
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final bool? obscureText;
   const CustomDetailWidget2(
       {super.key,
       required this.controller,
       required this.title,
-      required this.onChanged});
+      required this.onChanged,
+      this.obscureText = false});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class CustomDetailWidget2 extends StatelessWidget {
             bacgroundColor: Palette.teal,
             child: title,
             controller: controller,
-            obscureText: false),
+            obscureText: obscureText),
       ],
     );
   }

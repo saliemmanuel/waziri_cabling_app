@@ -38,38 +38,35 @@ class _TableMessageState extends State<TableMessage> {
             children: [
               const SizedBox(width: 15.0),
               CustomText(
-                  data: "Liste message (${widget.listMessage.length})",
+                  data: "Liste message ",
                   fontWeight: FontWeight.bold),
               const SizedBox(width: 50.0),
-              Visibility(
-                visible: widget.listMessage.length.toInt() == 0,
-                child: InkWell(
-                  child: Container(
-                    alignment: Alignment.center,
-                    height: 35.0,
-                    margin: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Palette.teal),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.add, color: Palette.teal),
-                        CustomText(
-                            data: "Ajoutez un message",
-                            color: Palette.teal,
-                            fontWeight: FontWeight.bold),
-                      ],
-                    ),
+              InkWell(
+                child: Container(
+                  alignment: Alignment.center,
+                  height: 35.0,
+                  margin: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Palette.teal),
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.add, color: Palette.teal),
+                      CustomText(
+                          data: "Ajoutez un message",
+                          color: Palette.teal,
+                          fontWeight: FontWeight.bold),
+                    ],
                   ),
-                  onTap: () {
-                    actionDialogue(
-                      context: context,
-                      child: const AddMessageMois(),
-                    );
-                  },
                 ),
+                onTap: () {
+                  actionDialogue(
+                    context: context,
+                    child: const AddMessageMois(),
+                  );
+                },
               ),
             ],
           ),

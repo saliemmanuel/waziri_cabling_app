@@ -38,9 +38,7 @@ class _UserTableState extends State<UserTable> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
-                  data:
-                      "Liste des utilisateurs (${widget.userList.length ?? ""})"),
+              const CustomText(data: "Liste des utilisateurs"),
               const SizedBox(width: 35.0),
               Row(
                 children: [

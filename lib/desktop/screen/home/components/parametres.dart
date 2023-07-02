@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import 'package:waziri_cabling_app/desktop/screen/home/provider/home_provider.dart';
 import 'package:waziri_cabling_app/desktop/screen/log/provider/auth_provider.dart';
 
 import '../../../../api/service_api.dart';
@@ -11,6 +10,8 @@ import '../../../../models/users.dart';
 import '../widget/action_dialogue.dart';
 import '../widget/app_header.dart';
 import '../widget/detail_utilisateur.dart';
+import '../widget/modifier_mot_de_passe.dart';
+import '../widget/update_code.dart';
 
 class Parametres extends StatefulWidget {
   final Users? users;
@@ -91,11 +92,12 @@ class _ParametresState extends State<Parametres> {
                             title: Text(user!.telephoneUtilisateur.toString())),
                         ListTile(title: Text(user!.zoneUtilisateur.toString())),
                         ListTile(title: Text(user!.roleUtilisateur.toString())),
+                        const SizedBox(height: 20.0),
                         Row(
                           children: [
                             CustumButton(
                               enableButton: true,
-                              child: "   Editer   ",
+                              child: "   Editer votre profil  ",
                               bacgroundColor: Colors.teal,
                               onPressed: () {
                                 actionDialogue(
@@ -121,41 +123,28 @@ class _ParametresState extends State<Parametres> {
                                 initData();
                               },
                             ),
+                            CustumButton(
+                                enableButton: true,
+                                child: "   Modifier mot de passe   ",
+                                bacgroundColor: Colors.teal,
+                                onPressed: () {
+                                  actionDialogue(
+                                      child: const ModifierMotDePasse(),
+                                      context: context);
+                                }),
+                            CustumButton(
+                              enableButton: true,
+                              child: "   Modifier votre code   ",
+                              bacgroundColor: Colors.teal,
+                              onPressed: () {
+                                actionDialogue(
+                                    child: const UpdateCodeAdministration(),
+                                    context: context);
+                              },
+                            )
                           ],
                         ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: SizedBox(
-                            width: 375.0,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(top: 12.0),
-                                    child: CustumTextField(
-                                      child: "Code",
-                                      obscureText: true,
-                                      controller: code,
-                                    ),
-                                  ),
-                                ),
-                                CustumButton(
-                                  enableButton: true,
-                                  child: "   Enregistrez   ",
-                                  bacgroundColor: Colors.teal,
-                                  onPressed: () {
-                                    Provider.of<HomeProvider>(context,
-                                            listen: false)
-                                        .getInsertAdministrationCode(
-                                            idUser: widget.users!.id.toString(),
-                                            codeAdmin: code.text,
-                                            context: context);
-                                  },
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                        const SizedBox(height: 20.0),
                       ],
                     ),
             )

@@ -45,7 +45,7 @@ class _PayementFactureState extends State<PayementFacture> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomText(
-                        data: "FACTURE N0 : # ${widget.facture.numeroFacture}"),
+                        data: "FACTURE N° :  ${widget.facture.numeroFacture}"),
                     CustomText(data: "Du :  ${widget.facture.createAt}"),
                   ],
                 ),
@@ -232,6 +232,9 @@ class _PayementFactureState extends State<PayementFacture> {
                                             widget.facture.impayes.toString(),
                                         idAbonne:
                                             widget.facture.idAbonne.toString(),
+                                        telephoneAbonne: widget
+                                            .facture.telephoneAbonne
+                                            .toString(),
                                         createAt:
                                             widget.facture.createAt.toString(),
                                       ),

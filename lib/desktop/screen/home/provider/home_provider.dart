@@ -23,13 +23,13 @@ class HomeProvider extends ChangeNotifier {
   dynamic _listAbonnes = [];
   dynamic _listMateriels = [];
   dynamic _listPannes = [];
-  dynamic _listComptaData = [];
   dynamic _listVersements = [];
   dynamic _listMessageMois = [];
   dynamic _listCharget = [];
   dynamic _listFactures;
   int _topIndex = 0;
   dynamic _listTrie = [];
+  Map<String, dynamic>? _listComptaData;
 
   get listUtilisateur => _listUtilisateur;
   get listSecteur => _listSecteur;
@@ -43,7 +43,7 @@ class HomeProvider extends ChangeNotifier {
   get listFactures => _listFactures;
   get topIndex => _topIndex;
   get listTrie => _listTrie;
-  get listComptaData => _listComptaData;
+  Map<String, dynamic>? get listComptaData => _listComptaData;
 
   providelistUtilisateur(var selectedTypeUtilisateur) async {
     var storage = const FlutterSecureStorage();
@@ -141,6 +141,38 @@ class HomeProvider extends ChangeNotifier {
     var storage = const FlutterSecureStorage();
     var token = await storage.read(key: 'tokens');
     _listComptaData = await _service.getUpdateComptabiliteData(token: token!);
+    notifyListeners();
+  }
+
+  updatePassword(
+      {String? newpass,
+      String? email,
+      String? oldpass,
+      required var context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    await _service.getUpdatePassword(
+        token: token!,
+        context: context,
+        newpass: newpass,
+        oldpass: oldpass,
+        email: email);
+    notifyListeners();
+  }
+
+  updateCodeAdministration(
+      {String? newcode,
+      String? id,
+      String? oldcode,
+      required var context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    await _service.getcodeAdministration(
+        token: token!,
+        context: context,
+        id: id,
+        newcode: newcode,
+        oldcode: oldcode);
     notifyListeners();
   }
 
@@ -645,5 +677,12 @@ class HomeProvider extends ChangeNotifier {
     var token = await storage.read(key: 'tokens');
     return _service.detailFactureAbonne(
         context: context, idAbonne: idAbonne, token: token);
+  }
+
+  provideReinitComptabilite({required dynamic context}) async {
+    var storage = const FlutterSecureStorage();
+    var token = await storage.read(key: 'tokens');
+    await _service.reninitComptabilite(token: token, context: context);
+    notifyListeners();
   }
 }

@@ -52,6 +52,8 @@ class _AddBonnesState extends State<AddBonnes> {
   initListSecteur() async {
     dynamic list =
         await Provider.of<HomeProvider>(context, listen: false).listSecteur;
+    print('dksld');
+    print(list);
     if (list != []) {
       for (var i = 0; i < list.length; i++) {
         if (widget.users.roleUtilisateur == 'admin') {
@@ -64,6 +66,9 @@ class _AddBonnesState extends State<AddBonnes> {
                 '${list[i]['designation_secteur']} - ${list[i]['nom_chef_secteur']} - ${list[i]['id_chef_secteur']}');
           }
         }
+        print(list[i]['id_chef_secteur']);
+        print(widget.users.id.toString());
+        print(listSecteur);
       }
     }
     setState(() {});

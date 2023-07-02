@@ -5,6 +5,9 @@ import 'package:waziri_cabling_app/models/users.dart';
 
 import '../../../../config/config.dart';
 import '../../../../global_widget/accueil_card.dart';
+import '../../../../global_widget/custom_dialogue_card.dart';
+import '../../../../global_widget/widget.dart';
+import '../home_desk_screen.dart';
 import '../provider/home_provider.dart';
 import '../widget/app_header.dart';
 import '../widget/table_type_abonnement.dart';
@@ -18,6 +21,8 @@ class Comptabilite extends StatefulWidget {
 }
 
 class _ComptabiliteState extends State<Comptabilite> {
+  final comptaCode = "19586388911345317";
+
   @override
   void initState() {
     Provider.of<HomeProvider>(context, listen: false).provideComptabiliteData();
@@ -51,46 +56,65 @@ class _ComptabiliteState extends State<Comptabilite> {
                           width: double.infinity,
                           child:
                               Wrap(spacing: 18.0, runSpacing: 18.0, children: [
-                            // AccueilCard(
-                            //     label: "Total Recette ",
-                            //     data:
-                            //         value.listComptaData["recette"].toString(),
-                            //     containerColor: Colors.yellow),
+                            AccueilCard(
+                                label: "Total Recette ",
+                                data: value.listComptaData!['recette'],
+                                containerColor: Colors.yellow),
                             AccueilCard(
                                 label: "Total Sorties ",
-                                data:
-                                    value.listComptaData["sorties"].toString(),
+                                data: value.listComptaData!['sorties'],
                                 containerColor: Colors.pink),
                             AccueilCard(
                                 label: "Total Entrées ",
-                                data:
-                                    value.listComptaData["entrees"].toString(),
+                                data: value.listComptaData!['entrees'],
                                 containerColor: Colors.blueGrey),
                             AccueilCard(
                                 label: "Total Dettes  ",
-                                data: value.listComptaData["dettes"].toString(),
+                                data: value.listComptaData!['dettes'],
                                 containerColor: Colors.teal),
                           ]),
                         ),
                       ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.only(
-              //       top: 20.0, left: 30.0, right: 40.0, bottom: 20.0),
-              //   child: Row(
-              //     children: [
-              //       CustumButton(
-              //         bacgroundColor: Palette.teal,
-              //         enableButton: true,
-              //         child: "   Reintialiser   ",
-              //         onPressed: () {
-              //           Provider.of<HomeProvider>(context, listen: false)
-              //               .provideComptabiliteData();
-              //         },
-              //       )
-              //     ],
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20.0, left: 30.0, right: 40.0, bottom: 20.0),
+                child: Row(
+                  children: [
+                    CustumButton(
+                      bacgroundColor: Palette.teal,
+                      enableButton: true,
+                      child: "   Reintialiser   ",
+                      onPressed: () {
+                        getCodeAuth(
+                            context: context,
+                            onCall: () async {
+                              if (code.text.isNotEmpty) {
+                                if (code.text == comptaCode) {
+                                  Navigator.pop(context);
+                                  Provider.of<HomeProvider>(context,
+                                          listen: false)
+                                      .provideReinitComptabilite(
+                                          context: context);
+                                  Provider.of<HomeProvider>(context,
+                                          listen: false)
+                                      .provideComptabiliteData();
+
+                                  code.clear();
+                                } else {
+                                  echecTransaction("Code incorrect", context);
+                                  code.clear();
+                                }
+                              } else {
+                                echecTransaction(
+                                    "Entrez le code svp!", context);
+                              }
+                            });
+                      },
+                    )
+                  ],
+                ),
+              ),
               const Divider(),
               Container(
                 height: 350.0,

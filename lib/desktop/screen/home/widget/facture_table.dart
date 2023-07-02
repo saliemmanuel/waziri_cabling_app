@@ -51,9 +51,7 @@ class _FactureTableState extends State<FactureTable> {
           Row(
             children: [
               const SizedBox(width: 15.0),
-              CustomText(
-                  data:
-                      "Liste des factures (${widget.listFacture.length ?? ""})"),
+              const CustomText(data: "Liste des factures"),
               const SizedBox(width: 10.0),
               Row(
                 children: [
